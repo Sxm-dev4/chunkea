@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+blob-report/
+.netlify/
+.env.local
+.env.*.local
+*.log
+.DS_Store
+Thumbs.db

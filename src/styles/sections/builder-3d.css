@@ -1,0 +1,138 @@
+.stage-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
+  cursor: grab;
+  animation: fade-in 0.6s ease both;
+}
+
+.stage-3d.over-charm {
+  cursor: pointer;
+}
+
+.stage-3d.grabbing {
+  cursor: grabbing;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.stage.is-3d .device {
+  visibility: hidden;
+}
+
+.stage.is-3d .stage-empty {
+  z-index: 2;
+}
+
+.stage-tools {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-3d {
+  padding: 3px 10px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--tinta);
+  background: var(--lila);
+  border: 2px solid var(--tinta);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--tinta);
+}
+
+.tool {
+  --li-accent: var(--lila);
+
+  display: inline-grid;
+  place-items: center;
+  height: 34px;
+  min-width: 34px;
+  padding: 0 10px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: #fff;
+  cursor: pointer;
+  background: rgb(20 12 22 / 55%);
+  border: 2px solid rgb(255 255 255 / 35%);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
+}
+
+.tool:hover {
+  border-color: #fff;
+  transform: translateY(-1px);
+}
+
+.tool[aria-pressed='true'] {
+  --li-accent: var(--fucsia);
+
+  color: var(--tinta);
+  background: var(--lila);
+  border-color: var(--lila);
+}
+
+.tool .ico {
+  width: 18px;
+  height: 18px;
+}
+
+.stage.loading3d::after {
+  content: 'Cargando 3D…';
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  z-index: 3;
+  translate: -50% 0;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--tinta);
+  background: var(--lila);
+  border-radius: 999px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* En móvil los botones van en columna a la derecha para no tapar el forro. */
+@media (max-width: 899px) {
+  .stage-tools {
+    top: 50%;
+    right: 8px;
+    translate: 0 -50%;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tool {
+    height: 30px;
+    min-width: 30px;
+  }
+
+  .badge-3d {
+    padding: 2px 8px;
+    font-size: 0.75rem;
+  }
+}

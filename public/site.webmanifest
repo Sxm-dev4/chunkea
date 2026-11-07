@@ -1,0 +1,14 @@
+{
+  "name": "Chunkea",
+  "short_name": "Chunkea",
+  "description": "Forros chunky personalizados hechos a mano en Cali.",
+  "lang": "es-CO",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#FFF6FA",
+  "theme_color": "#E384E6",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}

@@ -1,0 +1,26 @@
+/* Colores y medidas de la marca: cambiarlos aquí actualiza todo el sitio. */
+:root {
+  --lila: #e384e6;
+  --lila-2: #f4c9f3;
+  --lila-3: #fbe9fa;
+  --fucsia: #c8237a;
+  --fucsia-d: #9c135c;
+  --fucsia-dd: #7a0f48;
+  --rosa: #ffd3ec;
+  --crema: #fff6fa;
+  --tinta: #2a0f24;
+  --tinta-2: #5e3a55;
+  --noche: #150e17;
+  --rojo: #c8102e;
+  --wa: #15803d;
+  --wa-d: #116932;
+  --muted-dark: #cdb8cb;
+  --r-sm: 12px;
+  --r: 20px;
+  --r-lg: 32px;
+  --shadow: 0 10px 30px -12px rgb(80 10 60 / 35%);
+  --shadow-pop: 4px 4px 0 var(--tinta);
+  --font-display: 'Bagel Fat One', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --font: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --header-h: 64px;
+}

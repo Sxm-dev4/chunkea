@@ -1,0 +1,94 @@
+/* ---------- Iconos de línea dentro de textos ---------- */
+.ico {
+  display: inline-block;
+  flex: none;
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: -0.22em;
+  fill: none;
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ico .l1 {
+  stroke: currentcolor;
+}
+
+.ico .l2 {
+  stroke: var(--li-accent, var(--fucsia));
+}
+
+.ico .d,
+.ai-line .d {
+  stroke-width: 7;
+}
+
+/* ---------- Iconos animados (AnimatedIcons) ---------- */
+.ai {
+  --ai-s: 22px;
+
+  display: inline-block;
+  flex: none;
+  width: var(--ai-s);
+  height: var(--ai-s);
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.ai svg {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: visible;
+}
+
+.ai-line svg {
+  fill: none;
+  stroke-width: var(--ai-sw, 3);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ai-line .l1 {
+  stroke: var(--ai-g1);
+}
+
+.ai-line .l2 {
+  stroke: var(--ai-g2);
+}
+
+.ai-line.wig svg {
+  animation: wiggle 0.6s ease;
+}
+
+.ai-badge {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+}
+
+.ai-badge.sm {
+  width: 24px;
+  height: 24px;
+}
+
+.btn .ai,
+.filter .ai-badge {
+  margin: -4px 0;
+}
+
+@keyframes wiggle {
+  25% {
+    transform: rotate(-12deg) scale(1.08);
+  }
+
+  75% {
+    transform: rotate(10deg) scale(1.08);
+  }
+}

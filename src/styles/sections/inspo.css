@@ -1,0 +1,67 @@
+.inspo {
+  background: var(--lila-3);
+  border-block: 2.5px solid var(--tinta);
+}
+
+.inspo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+@media (min-width: 760px) {
+  .inspo-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+  }
+}
+
+.inspo-card {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 16px 10px 14px;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+  background: var(--noche);
+  border: 2.5px solid var(--tinta);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-pop);
+  transition:
+    transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1),
+    box-shadow 0.2s;
+}
+
+.inspo-card:hover {
+  transform: translate(-3px, -3px) rotate(-1.5deg);
+  box-shadow: 7px 7px 0 var(--tinta);
+}
+
+.inspo-card .mini-case {
+  height: 210px;
+}
+
+@media (min-width: 1000px) {
+  .inspo-card .mini-case {
+    height: 260px;
+  }
+}
+
+@media (max-width: 420px) {
+  .inspo-card .mini-case {
+    height: 170px;
+  }
+}
+
+.inspo-card strong {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--rosa);
+}
+
+.inspo-card span {
+  font-size: 0.8rem;
+  color: #d9c5d7;
+}

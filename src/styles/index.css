@@ -1,0 +1,16 @@
+/* Punto de entrada de estilos: el orden importa (variables → base → componentes → secciones). */
+@import url('./tokens.css');
+@import url('./base.css');
+@import url('./components.css');
+@import url('./icons.css');
+@import url('./sections/header.css');
+@import url('./sections/hero.css');
+@import url('./sections/marquee.css');
+@import url('./sections/builder.css');
+@import url('./sections/builder-3d.css');
+@import url('./sections/how.css');
+@import url('./sections/inspo.css');
+@import url('./sections/prices.css');
+@import url('./sections/faq.css');
+@import url('./sections/footer.css');
+@import url('./motion.css');

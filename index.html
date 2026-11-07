@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chunkea | Forros chunky personalizados hechos a mano en Cali</title>
+    <meta
+      name="description"
+      content="Arma tu forro chunky: elige tu tamaño, escoge hasta 13 chunkis en el armador 3D y pídelo por WhatsApp. Hecho a mano en Cali, envíos a toda Colombia."
+    />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
+    <meta name="theme-color" content="#E384E6" />
+    <meta name="color-scheme" content="light" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:site_name" content="Chunkea" />
+    <meta property="og:title" content="Chunkea | La vida es muy corta para no chunkear" />
+    <meta
+      property="og:description"
+      content="Forros transparentes llenos de chunkis. Arma el tuyo en 3D y pídelo por WhatsApp."
+    />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Forro transparente de Chunkea lleno de chunkis plateados y corazones rojos"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Store",
+            "@id": "%VITE_SITE_URL%/#tienda",
+            "name": "Chunkea",
+            "url": "%VITE_SITE_URL%/",
+            "image": "%VITE_SITE_URL%/og-image.png",
+            "description": "Forros de celular transparentes con chunkis, hechos a mano en Cali.",
+            "telephone": "+%VITE_WHATSAPP%",
+            "address": { "@type": "PostalAddress", "addressLocality": "Cali", "addressCountry": "CO" },
+            "areaServed": { "@type": "Country", "name": "Colombia" },
+            "sameAs": ["https://www.instagram.com/chunkea.col/", "https://www.tiktok.com/@chunkea.col"]
+          },
+          {
+            "@type": "Product",
+            "name": "Forro chunky pequeño",
+            "description": "Forro transparente con hasta 9 chunkis incluidos.",
+            "image": "%VITE_SITE_URL%/og-image.png",
+            "brand": { "@id": "%VITE_SITE_URL%/#tienda" },
+            "offers": {
+              "@type": "Offer",
+              "price": "55000",
+              "priceCurrency": "COP",
+              "availability": "https://schema.org/InStock",
+              "seller": { "@id": "%VITE_SITE_URL%/#tienda" }
+            }
+          },
+          {
+            "@type": "Product",
+            "name": "Forro chunky grande",
+            "description": "Forro transparente con hasta 13 chunkis incluidos.",
+            "image": "%VITE_SITE_URL%/og-image.png",
+            "brand": { "@id": "%VITE_SITE_URL%/#tienda" },
+            "offers": {
+              "@type": "Offer",
+              "price": "60000",
+              "priceCurrency": "COP",
+              "availability": "https://schema.org/InStock",
+              "seller": { "@id": "%VITE_SITE_URL%/#tienda" }
+            }
+          }
+        ]
+      }
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#arma">Saltar al armador</a>
+
+    <header class="header" id="top">
+      <div class="container header-inner">
+        <a href="#top" class="logo" aria-label="Chunkea, ir al inicio">
+          <span aria-hidden="true">C</span><span aria-hidden="true">h</span><span aria-hidden="true">u</span
+          ><span aria-hidden="true">n</span><span aria-hidden="true">k</span><span aria-hidden="true">e</span
+          ><span aria-hidden="true">a</span>
+        </a>
+        <nav class="nav" aria-label="Principal">
+          <a href="#arma">Arma el tuyo</a>
+          <a href="#como">Cómo funciona</a>
+          <a href="#precios">Precios</a>
+          <a href="#faq">Preguntas</a>
+        </nav>
+        <a href="#arma" class="btn btn-sm btn-dark"
+          ><span class="ai" data-ai="chat" data-theme="dark"></span> Pedir</a
+        >
+      </div>
+    </header>
+
+    <main>
+      <!-- ============ HERO ============ -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow eyebrow-icons">
+              <span class="nw"
+                ><span class="ai" data-ai="location" data-size="20"></span> Hecho a mano en Cali</span
+              >
+              <span class="sep" aria-hidden="true">·</span>
+              <span class="nw"
+                ><span class="ai" data-ai="fast-delivery" data-size="22"></span> Envíos a toda Colombia</span
+              >
+            </p>
+            <h1 id="hero-title">La vida es muy corta para <span class="wiggle-word">no chunkear</span></h1>
+            <p class="lead">
+              Forros transparentes llenos de chunkis que <strong>tú eliges</strong>. Diseña el tuyo aquí en un
+              minuto y pídelo directo por WhatsApp.
+            </p>
+            <div class="hero-ctas">
+              <a href="#arma" class="btn btn-primary btn-lg"
+                ><span class="ai" data-ai="phone" data-theme="white" data-size="24"></span> Arma tu forro</a
+              >
+              <a href="#como" class="btn btn-ghost btn-lg">¿Cómo funciona?</a>
+            </div>
+            <ul class="hero-facts">
+              <li>
+                <span class="ai" data-ai="currency" data-size="32"></span>
+                <div><strong>$55.000</strong><span>precio desde</span></div>
+              </li>
+              <li>
+                <span class="ai" data-ai="choose" data-size="32"></span>
+                <div><strong>Hasta 13</strong><span>chunkis por forro</span></div>
+              </li>
+              <li>
+                <span class="ai" data-ai="audience-reach" data-size="32"></span>
+                <div><strong>+700</strong><span>chunkers felices</span></div>
+              </li>
+            </ul>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="hero-blob"></div>
+            <div class="hero-case" id="heroCase"></div>
+            <span class="sticker s1">¡Chunkea<br />tu vida!</span>
+            <span class="sticker s2"><i data-ico="heart"></i> 100% tú</span>
+            <span class="sticker s3"><i data-ico="sparkle"></i> hasta 13 chunkis</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="marquee" aria-hidden="true">
+        <!-- El carrusel se repite solo (ui/marquee.ts): edita sólo este grupo -->
+        <div class="marquee-track">
+          <div class="marquee-group">
+            <span>CHUNKEA TU VIDA <i data-ico="sparkle"></i></span
+            ><span>FORROS CHUNKY <i data-ico="heart"></i></span
+            ><span>HECHO EN CALI <i data-ico="pin"></i></span
+            ><span>ENVÍOS A TODA COLOMBIA <i data-ico="truck"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ ARMADOR ============ -->
+      <section class="builder" id="arma" aria-labelledby="arma-title">
+        <div class="container">
+          <div class="section-head light">
+            <p class="eyebrow">El armador chunky</p>
+            <h2 id="arma-title">Arma tu Chunky</h2>
+            <p>Elige, mira cómo queda y pide. Así de fácil.</p>
+          </div>
+
+          <div class="builder-grid">
+            <div class="stage-wrap">
+              <div class="stage">
+                <div class="stage-glow"></div>
+                <div class="device" id="device">
+                  <div class="device-art" id="deviceArt"></div>
+                  <div
+                    class="charm-layer"
+                    id="charmLayer"
+                    role="group"
+                    aria-label="Chunkis puestos en tu forro"
+                  ></div>
+                </div>
+                <div class="stage-tools" id="stageTools" hidden>
+                  <span class="badge-3d" aria-hidden="true">3D</span>
+                  <button
+                    type="button"
+                    class="tool"
+                    id="tool3dSpin"
+                    aria-pressed="false"
+                    aria-label="Girar el forro solo"
+                  >
+                    360°
+                  </button>
+                  <button type="button" class="tool" id="tool3dReset" aria-label="Volver a la vista inicial">
+                    <i data-ico="rotate"></i>
+                  </button>
+                </div>
+                <div class="stage-empty" id="stageEmpty"></div>
+              </div>
+              <p class="stage-hint" id="stageHint"></p>
+            </div>
+
+            <div class="controls">
+              <fieldset class="step">
+                <legend><span class="step-n">1</span> Tu celular</legend>
+                <div class="size-cards" role="radiogroup" aria-label="Tamaño del forro">
+                  <button
+                    type="button"
+                    class="size-card"
+                    role="radio"
+                    data-size="pequeno"
+                    aria-checked="false"
+                  >
+                    <span class="size-ico s-small" aria-hidden="true"></span>
+                    <span class="size-name">Pequeño</span>
+                    <span class="size-meta">hasta 9 chunkis</span>
+                    <span class="size-price">$55.000</span>
+                  </button>
+                  <button type="button" class="size-card" role="radio" data-size="grande" aria-checked="true">
+                    <span class="size-ico s-big" aria-hidden="true"></span>
+                    <span class="size-name">Grande</span>
+                    <span class="size-meta">hasta 13 chunkis</span>
+                    <span class="size-price">$60.000</span>
+                  </button>
+                </div>
+                <div class="field">
+                  <label for="model">Modelo de tu cel</label>
+                  <input
+                    type="text"
+                    id="model"
+                    name="model"
+                    list="models"
+                    placeholder="Ej: iPhone 15 Pro Max"
+                    autocomplete="off"
+                    maxlength="40"
+                    aria-describedby="model-help"
+                  />
+                </div>
+                <datalist id="models">
+                  <option value="iPhone 13"></option>
+                  <option value="iPhone 13 Pro Max"></option>
+                  <option value="iPhone 14"></option>
+                  <option value="iPhone 14 Pro Max"></option>
+                  <option value="iPhone 15"></option>
+                  <option value="iPhone 15 Pro"></option>
+                  <option value="iPhone 15 Pro Max"></option>
+                  <option value="iPhone 16"></option>
+                  <option value="iPhone 16 Pro"></option>
+                  <option value="iPhone 16 Pro Max"></option>
+                  <option value="iPhone 17"></option>
+                  <option value="iPhone 17 Pro"></option>
+                  <option value="iPhone 17 Pro Max"></option>
+                  <option value="Samsung Galaxy S24"></option>
+                  <option value="Samsung Galaxy S24 Ultra"></option>
+                  <option value="Samsung Galaxy A55"></option>
+                  <option value="Xiaomi Redmi Note 13"></option>
+                </datalist>
+                <p class="help" id="model-help">
+                  ¿No sabes si es pequeño o grande? Escribe tu modelo y te confirmamos por WhatsApp
+                  <i data-ico="chat"></i>
+                </p>
+              </fieldset>
+
+              <fieldset class="step">
+                <legend><span class="step-n">2</span> Escoge tus chunkis</legend>
+                <div class="counter" id="counter" aria-live="polite">
+                  <div class="counter-top">
+                    <span class="counter-num"
+                      ><strong id="countNow">0</strong>/<span id="countMax">13</span> chunkis</span
+                    >
+                    <span class="counter-msg" id="counterMsg"></span>
+                  </div>
+                  <div class="counter-bar" aria-hidden="true"><span id="counterFill"></span></div>
+                </div>
+                <div class="filters" role="group" aria-label="Filtrar chunkis por tipo">
+                  <button type="button" class="filter" data-cat="todos" aria-pressed="true">Todos</button>
+                  <button type="button" class="filter" data-cat="corazones" aria-pressed="false">
+                    <span class="ai-badge sm"><span class="ai" data-line="heart" data-size="18"></span></span>
+                    Corazones
+                  </button>
+                  <button type="button" class="filter" data-cat="misticos" aria-pressed="false">
+                    <span class="ai-badge sm"><span class="ai" data-ai="eye" data-size="18"></span></span>
+                    Místicos
+                  </button>
+                  <button type="button" class="filter" data-cat="animalitos" aria-pressed="false">
+                    <span class="ai-badge sm"><span class="ai" data-ai="fox" data-size="18"></span></span>
+                    Animalitos
+                  </button>
+                  <button type="button" class="filter" data-cat="random" aria-pressed="false">
+                    <span class="ai-badge sm"
+                      ><span class="ai" data-line="cherry" data-size="18"></span
+                    ></span>
+                    Random
+                  </button>
+                </div>
+                <ul class="picker" id="picker" aria-label="Catálogo de chunkis"></ul>
+                <div class="quick">
+                  <button type="button" class="btn btn-sm btn-ghost-light" id="btnRandom">
+                    <span class="ai-badge"><span class="ai" data-ai="magic-box"></span></span> Sorpréndeme
+                  </button>
+                  <button type="button" class="btn btn-sm btn-ghost-light" id="btnClear">
+                    <span class="ai-badge"><span class="ai" data-ai="delete"></span></span> Vaciar
+                  </button>
+                </div>
+              </fieldset>
+
+              <div class="summary" id="summary">
+                <div class="summary-row">
+                  <div>
+                    <p class="summary-title" id="sumTitle">Forro grande</p>
+                    <p class="summary-sub" id="sumSub">0 chunkis</p>
+                  </div>
+                  <p class="summary-price" id="sumPrice">$60.000</p>
+                </div>
+                <button type="button" class="btn btn-wa btn-lg btn-block" id="btnOrder" data-order>
+                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+                    <path
+                      fill="currentColor"
+                      d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3Z"
+                    />
+                  </svg>
+                  Pedir mi Chunky por WhatsApp
+                </button>
+                <p class="summary-note">
+                  Te llega tu diseño en el mensaje y coordinamos pago y envío <i data-ico="heart"></i>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CÓMO FUNCIONA ============ -->
+      <section class="how" id="como" aria-labelledby="como-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Súper fácil</p>
+            <h2 id="como-title">Chunkear en 3 pasos</h2>
+          </div>
+          <ol class="how-grid">
+            <li class="how-card reveal">
+              <span class="how-n" aria-hidden="true">1</span>
+              <span class="how-emoji"><span class="ai" data-ai="phone" data-size="64"></span></span>
+              <h3>Elige tu forro</h3>
+              <p>Pequeño o grande según tu cel. Si dudas, te ayudamos.</p>
+            </li>
+            <li class="how-card reveal">
+              <span class="how-n" aria-hidden="true">2</span>
+              <span class="how-emoji"><span class="ai" data-ai="choose" data-size="64"></span></span>
+              <h3>Escoge tus chunkis</h3>
+              <p>Hasta 9 o 13 chunkis, todos incluidos en el precio. ¡Mézclalos como quieras!</p>
+            </li>
+            <li class="how-card reveal">
+              <span class="how-n" aria-hidden="true">3</span>
+              <span class="how-emoji"><span class="ai" data-ai="fast-delivery" data-size="64"></span></span>
+              <h3>Pide por WhatsApp</h3>
+              <p>Tu diseño viaja en el mensaje. Confirmamos, pagas y te llega a casa.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ============ INSPÍRATE ============ -->
+      <section class="inspo" id="inspo" aria-labelledby="inspo-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">¿Sin ideas? Tranqui</p>
+            <h2 id="inspo-title">Inspírate</h2>
+            <p>Toca un combo para cargarlo en el armador y cambiarlo a tu gusto.</p>
+          </div>
+          <div class="inspo-grid" id="inspoGrid"></div>
+        </div>
+      </section>
+
+      <!-- ============ PRECIOS ============ -->
+      <section class="prices" id="precios" aria-labelledby="precios-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Sin letra pequeña</p>
+            <h2 id="precios-title">Precios</h2>
+          </div>
+          <div class="price-grid">
+            <article class="price-card reveal" aria-labelledby="precio-pequeno">
+              <span class="ai price-ico" data-ai="phone" data-size="52"></span>
+              <h3 class="price-tag" id="precio-pequeno">Forro pequeño</h3>
+              <p class="price-num">$55.000</p>
+              <ul>
+                <li>Hasta <strong>9 chunkis</strong> incluidos</li>
+                <li>Para celulares de referencia pequeña</li>
+              </ul>
+              <button type="button" class="btn btn-dark btn-block" data-start="pequeno">Armar el mío</button>
+            </article>
+            <article class="price-card featured reveal" aria-labelledby="precio-grande">
+              <span class="badge-top">El más chunky <i data-ico="sparkle"></i></span>
+              <span class="ai price-ico" data-ai="phone" data-size="52"></span>
+              <h3 class="price-tag" id="precio-grande">Forro grande</h3>
+              <p class="price-num">$60.000</p>
+              <ul>
+                <li>Hasta <strong>13 chunkis</strong> incluidos</li>
+                <li>Para celulares de referencia grande</li>
+              </ul>
+              <button type="button" class="btn btn-primary btn-block" data-start="grande">
+                Armar el mío
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PREGUNTAS ============ -->
+      <section class="faq" id="faq" aria-labelledby="faq-title">
+        <div class="container narrow">
+          <div class="section-head">
+            <span class="ai faq-ico" data-ai="faq" data-size="64"></span>
+            <p class="eyebrow">Dudas chunky</p>
+            <h2 id="faq-title">Preguntas frecuentes</h2>
+          </div>
+          <details>
+            <summary>¿Qué es un chunki?</summary>
+            <p>
+              Son los dijes en relieve que decoran tu forro: corazones, soles, ositos, cerezas y muchos más.
+              Tú escoges cuáles y cuántos.
+            </p>
+          </details>
+          <details>
+            <summary>¿Cómo sé si mi celular es pequeño o grande?</summary>
+            <p>
+              Escribe el modelo de tu celular en el armador y te confirmamos por WhatsApp antes de hacer tu
+              forro.
+            </p>
+          </details>
+          <details>
+            <summary>¿Hacen envíos?</summary>
+            <p>
+              ¡Sí! Enviamos desde Cali a toda Colombia. El costo y el tiempo de envío te los confirmamos por
+              WhatsApp según tu ciudad.
+            </p>
+          </details>
+          <details>
+            <summary>¿Cómo pago?</summary>
+            <p>
+              Cuando nos llegue tu pedido por WhatsApp te confirmamos el diseño y te compartimos los medios de
+              pago.
+            </p>
+          </details>
+          <details>
+            <summary>¿Y si un chunki está agotado?</summary>
+            <p>Te avisamos de una y te ayudamos a escoger otro igual de lindo.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="final" aria-labelledby="final-title">
+        <div class="container final-inner">
+          <h2 id="final-title">¿Te animas a chunkear tu vida?</h2>
+          <a href="#arma" class="btn btn-dark btn-lg"
+            ><span class="ai" data-ai="magic-box" data-theme="dark" data-size="26"></span> Arma tu Chunky</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>
+          <p class="logo logo-footer" aria-hidden="true">
+            <span>C</span><span>h</span><span>u</span><span>n</span><span>k</span><span>e</span><span>a</span>
+          </p>
+          <p>Chunkea tu vida <i data-ico="sparkle"></i><i data-ico="heart"></i></p>
+          <p class="footer-place">
+            <span class="ai" data-ai="location" data-theme="dark" data-size="22"></span> Cali, Colombia
+          </p>
+        </div>
+        <nav class="footer-links" aria-label="Redes sociales">
+          <a href="https://www.instagram.com/chunkea.col/" target="_blank" rel="noopener noreferrer"
+            ><span class="ai" data-ai="camera" data-theme="dark"></span> Instagram</a
+          >
+          <a href="https://www.tiktok.com/@chunkea.col" target="_blank" rel="noopener noreferrer"
+            ><span class="ai" data-ai="video-camera" data-theme="dark"></span> TikTok</a
+          >
+          <a href="https://wa.me/%VITE_WHATSAPP%" target="_blank" rel="noopener noreferrer"
+            ><span class="ai" data-ai="chat" data-theme="dark"></span> WhatsApp</a
+          >
+        </nav>
+      </div>
+      <p class="container copy">
+        © <span id="year">2026</span> Chunkea · Hecho con <i data-ico="heart"></i> en Cali
+      </p>
+    </footer>
+
+    <div class="order-bar" id="orderBar" inert>
+      <div class="order-bar-info">
+        <strong id="barPrice">$60.000</strong>
+        <span id="barCount">0/13 chunkis</span>
+      </div>
+      <button type="button" class="btn btn-wa" id="barOrder" data-order tabindex="-1">
+        <span class="ai" data-ai="chat" data-theme="white"></span> Pedir
+      </button>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+    <noscript><p class="noscript">Activa JavaScript para usar el armador de forros.</p></noscript>
+  </body>
+</html>

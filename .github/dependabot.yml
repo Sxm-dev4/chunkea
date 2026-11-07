@@ -1,0 +1,18 @@
+# Revisa dependencias una vez al mes y propone actualizaciones agrupadas (la CI las prueba).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    groups:
+      dev-tools:
+        dependency-type: development
+      runtime:
+        dependency-type: production
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

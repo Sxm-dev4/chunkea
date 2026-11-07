@@ -1,0 +1,56 @@
+.marquee {
+  --li-accent: var(--lila);
+
+  background: var(--tinta);
+  color: var(--rosa);
+  overflow: hidden;
+  border-block: 2.5px solid var(--tinta);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  padding: 12px 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+  will-change: transform;
+}
+
+.marquee-track.ready {
+  animation: marquee var(--mq-dur, 20s) linear infinite;
+}
+
+/* El espacio va como padding (no gap) para que cada grupo mida exactamente lo que se desplaza. */
+.marquee-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.marquee-group > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 44px;
+  white-space: nowrap;
+}
+
+.marquee-group .ico {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(calc(-1 * var(--mq-w, 50%)), 0, 0);
+  }
+}

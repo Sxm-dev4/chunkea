@@ -1,0 +1,62 @@
+.how-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 18px;
+}
+
+@media (min-width: 760px) {
+  .how-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+.how-card {
+  position: relative;
+  padding: 26px 22px;
+  background: #fff;
+  border: 2.5px solid var(--tinta);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-pop);
+}
+
+.how-card:nth-child(2) {
+  background: var(--lila-3);
+}
+
+.how-card:nth-child(3) {
+  background: var(--rosa);
+}
+
+.how-n {
+  position: absolute;
+  top: -18px;
+  left: 20px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #fff;
+  background: var(--fucsia);
+  border: 2.5px solid var(--tinta);
+  border-radius: 50%;
+}
+
+.how-emoji {
+  display: block;
+  margin: 8px 0 10px;
+  line-height: 0;
+}
+
+.how-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+
+.how-card p {
+  color: var(--tinta-2);
+}

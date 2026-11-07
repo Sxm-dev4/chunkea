@@ -1,0 +1,241 @@
+/* ---------- Botones ---------- */
+.btn {
+  --bg: var(--tinta);
+  --fg: #fff;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2.5px solid var(--tinta);
+  background: var(--bg);
+  color: var(--fg);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-pop);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--tinta);
+}
+
+.btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--tinta);
+}
+
+.btn-sm {
+  padding: 8px 14px;
+  font-size: 0.92rem;
+}
+
+.btn-lg {
+  padding: 15px 26px;
+  font-size: 1.06rem;
+}
+
+.btn-block {
+  width: 100%;
+  white-space: normal;
+}
+
+.btn-primary {
+  --bg: var(--fucsia);
+}
+
+.btn-dark {
+  --bg: var(--tinta);
+}
+
+.btn-ghost {
+  --bg: #fff;
+  --fg: var(--tinta);
+}
+
+.btn-wa {
+  --bg: var(--wa);
+}
+
+.btn-wa:hover {
+  --bg: var(--wa-d);
+}
+
+.btn-ghost-light {
+  --bg: transparent;
+  --fg: #fff;
+
+  border-color: rgb(255 255 255 / 55%);
+  box-shadow: none;
+}
+
+.btn-ghost-light:hover {
+  box-shadow: none;
+  transform: translateY(-2px);
+  border-color: #fff;
+  background: rgb(255 255 255 / 8%);
+}
+
+/* ---------- Encabezados de sección ---------- */
+.eyebrow {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  color: var(--fucsia-dd);
+  margin-bottom: 12px;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.section-head h2 {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  color: var(--fucsia-d);
+}
+
+.section-head p:not(.eyebrow) {
+  margin-top: 10px;
+  color: var(--tinta-2);
+  font-size: 1.05rem;
+}
+
+.section-head.light h2 {
+  color: var(--rosa);
+}
+
+.section-head.light .eyebrow {
+  color: var(--lila);
+}
+
+.section-head.light p:not(.eyebrow) {
+  color: #e6d3e4;
+}
+
+/* ---------- Aparición al hacer scroll ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Barra de pedido (móvil), avisos y confeti ---------- */
+.order-bar {
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  color: var(--tinta);
+  border: 2.5px solid var(--tinta);
+  border-radius: 999px;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0) * 0.3) 20px;
+  box-shadow: 4px 4px 0 var(--tinta);
+  transform: translateY(160%);
+  transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.order-bar.show {
+  transform: none;
+}
+
+.order-bar-info {
+  display: grid;
+  line-height: 1.1;
+}
+
+.order-bar-info strong {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: var(--fucsia);
+}
+
+.order-bar-info span {
+  font-size: 0.8rem;
+  color: var(--tinta-2);
+}
+
+.order-bar .btn {
+  box-shadow: none;
+  padding: 11px 20px;
+}
+
+@media (min-width: 900px) {
+  .order-bar {
+    display: none;
+  }
+}
+
+.toast {
+  --li-accent: var(--lila);
+
+  position: fixed;
+  left: 50%;
+  bottom: 88px;
+  z-index: 80;
+  translate: -50% 20px;
+  opacity: 0;
+  pointer-events: none;
+  background: var(--tinta);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  max-width: calc(100vw - 32px);
+  width: max-content;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition:
+    opacity 0.25s,
+    translate 0.25s;
+}
+
+.toast.show {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+@media (min-width: 900px) {
+  .toast {
+    bottom: 28px;
+  }
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  overflow: hidden;
+}
+
+.confetti span {
+  position: absolute;
+  will-change: transform, opacity;
+  line-height: 0;
+}
