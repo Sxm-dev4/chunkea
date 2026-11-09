@@ -1,7 +1,8 @@
 import { getChunki } from '../data/chunkis';
+import { caseBox, getPhone, renderIdFor } from '../data/phones';
 import { glyphSvg } from '../icons/glyphs';
 import { prefersReducedMotion, replayClass } from '../lib/env';
-import { caseSvg, placeCharmElement } from './caseArt';
+import { createCaseImage, fitLayerToCase, placeCharmElement } from './caseArt';
 import type { BuilderEvent, BuilderState, BuilderStore } from './store';
 
 const DRAG_THRESHOLD_PX = 6;
@@ -15,18 +16,33 @@ export interface View2DElements {
 }
 
 /**
- * Vista 2D del forro: dibuja el forro y los chunkis, y permite arrastrarlos
- * (o tocarlos para quitarlos). Es la vista de respaldo cuando no hay 3D.
+ * Vista principal: el render realista del forro con los chunkis encima,
+ * que se pueden arrastrar o tocar para quitarlos.
  */
 export function mountView2D(store: BuilderStore, els: View2DElements): { bump(): void } {
   const nodes = new Map<number, HTMLButtonElement>();
-  let renderedSize: string | null = null;
+  let renderedId: string | null = null;
+  let currentImage: HTMLImageElement | null = null;
 
   const renderDevice = (state: Readonly<BuilderState>): void => {
-    if (renderedSize === state.size) return;
-    renderedSize = state.size;
-    els.device.classList.toggle('size-pequeno', state.size === 'pequeno');
-    els.art.innerHTML = caseSvg(state.size);
+    const renderId = renderIdFor(state.phoneId, state.size);
+    const alt = `Forro transparente para ${getPhone(state.phoneId)?.name ?? 'tu celular'}`;
+    if (renderedId === renderId && currentImage) {
+      // La misma foto puede ser la genérica o la del iPhone elegido: sólo cambia la descripción
+      currentImage.alt = alt;
+      return;
+    }
+    renderedId = renderId;
+    const image = createCaseImage(renderId, alt, true);
+    currentImage = image;
+    const show = (): void => {
+      if (renderedId !== renderId) return; // ya eligió otro modelo mientras cargaba
+      els.art.replaceChildren(image);
+      fitLayerToCase(els.layer, caseBox(renderId));
+    };
+    // La imagen anterior se queda hasta que la nueva esté lista: sin parpadeos
+    if (els.art.firstChild) image.decode().then(show, show);
+    else show();
   };
 
   const createNode = (uid: number, chunkiId: string): HTMLButtonElement | null => {
@@ -69,6 +85,7 @@ export function mountView2D(store: BuilderStore, els: View2DElements): { bump():
     switch (event.type) {
       case 'init':
       case 'size-changed':
+      case 'phone-changed':
       case 'combo-loaded':
       case 'cleared':
         renderDevice(state);

@@ -3,7 +3,7 @@
 Landing de **Chunkea**: forros chunky personalizables. Las personas arman su forro (en 3D o 2D),
 eligen hasta 13 chunkis y envían el pedido por WhatsApp con el diseño escrito en el mensaje.
 
-- Sitio: https://chunkea-col.netlify.app
+- Sitio: https://chunkea.netlify.app
 - Stack: [Vite](https://vite.dev) + TypeScript (sin framework), [three.js](https://threejs.org) para el armador 3D,
   [Lottie](https://airbnb.io/lottie) para los iconos animados de [AnimatedIcons](https://animatedicons.co).
 
@@ -46,12 +46,42 @@ Abre la URL que muestra la terminal (normalmente http://localhost:5173).
 | Precios o máximo de chunkis       | `src/config/site.ts` → `PRODUCTS` (y los textos de `index.html`) |
 | Agregar / quitar / agotar chunkis | `src/data/chunkis.ts` (`soldOut: true` para agotado)             |
 | Combos de "Inspírate"             | `src/data/combos.ts`                                             |
+| iPhones y tamaño de cada uno      | `src/data/phones.ts`                                             |
 | Colores de la marca               | `src/styles/tokens.css`                                          |
 | Textos de avisos y contador       | `src/copy.ts`                                                    |
 | Textos fijos de la página         | `index.html`                                                     |
 
 > Los precios aparecen también en `index.html` (tarjetas y datos estructurados para Google).
 > Si cambias un precio, búscalo en ambos lugares.
+
+### Regenerar los renders de los forros
+
+Salen de Blender y no se versionan los PNG, sólo los WebP de `src/assets/cases/` y las medidas de
+`src/data/caseRenders.json` (dónde está el forro y la cámara dentro de cada imagen).
+
+```bash
+blender --background --factory-startup --disable-autoexec chunkea.blend --python scripts/render-cases.py -- --outdir renders --height 1280 --samples 160 --skip-existing
+```
+
+```bash
+npm run renders:process -- renders
+```
+
+Para un modelo nuevo: agrégalo a `src/data/phones.ts` con el mismo nombre de archivo que su render.
+`npm test` avisa si a un modelo le falta la imagen o las medidas.
+
+### Regenerar los modelos 3D
+
+La vista 3D usa los mismos modelos del render, optimizados en `src/assets/cases3d/` (unos 175 KB cada
+uno; sólo se descarga el del iPhone elegido).
+
+```bash
+blender --background --factory-startup --disable-autoexec chunkea.blend --python scripts/export-cases-3d.py -- --outdir modelos
+```
+
+```bash
+npm run models:process -- modelos
+```
 
 ### Agregar un chunki nuevo
 
@@ -76,21 +106,23 @@ src/
   main.ts                Punto de entrada: fuentes, estilos y arranque
   app.ts                 Conecta el armador, la UI y los efectos
   config/site.ts         Datos del negocio y productos
-  data/                  Catálogo de chunkis y combos
+  data/                  Catálogo de chunkis, combos, iPhones y medidas de los renders
+  assets/cases/          Renders de los forros (WebP)
+  assets/cases3d/        Modelos 3D de los forros (GLB)
   builder/
     store.ts             Estado del armador + acciones + guardado (sin DOM, probado)
     placement.ts         Posiciones sugeridas, límites y zona de la cámara
     order.ts             Validación y mensaje de WhatsApp
     controls.ts          Catálogo, filtros, tamaño, contador y resumen
-    view2d.ts            Vista 2D (respaldo sin WebGL)
-    view3d/              Vista 3D (se descarga sólo al llegar al armador)
+    view2d.ts            Vista principal: render del forro + chunkis arrastrables
+    view3d/              Vista 3D (se descarga sólo al tocar "Ver en 3D")
   icons/                 Dibujos de chunkis, iconos de línea e iconos animados
   ui/                    Avisos, confeti, carrusel y animaciones de aparición
   styles/                CSS por capas: tokens → base → componentes → secciones
 tests/
   unit/                  Vitest
   e2e/                   Playwright (+ axe para accesibilidad)
-scripts/                 Utilidades (generar imágenes)
+scripts/                 Utilidades (imágenes para redes y renders de los forros)
 ```
 
 ## Calidad y producción
@@ -123,7 +155,7 @@ El sitio se publica en **Netlify** desde la rama `main` de GitHub. La CI de GitH
    git remote add origin https://github.com/<tu-usuario>/chunkea-web.git
    git push -u origin main
    ```
-2. En Netlify abre el proyecto **chunkea-col** → _Project configuration → Build & deploy →
+2. En Netlify abre el proyecto **chunkea** → _Project configuration → Build & deploy →
    Link repository_ y elige el repositorio. Netlify usa `netlify.toml` (build `npm run build`, carpeta `dist`).
 3. (Recomendado) En GitHub → _Settings → Branches_, protege `main` y exige que pase la CI antes de fusionar.
 

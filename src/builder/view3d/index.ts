@@ -5,42 +5,55 @@ import type { SceneController } from './scene';
 export interface View3DOptions {
   stage: HTMLElement;
   store: BuilderStore;
-  onActive(controller: SceneController): void;
+  /** La escena ya cargó (ocurre una sola vez). */
+  onLoaded(controller: SceneController): void;
+  /** Se abrió o se cerró la vista 3D. */
+  onToggle(active: boolean): void;
 }
 
 /**
- * Carga el armador 3D (three.js va en un chunk aparte) sólo cuando el armador
- * está cerca de la pantalla. Si no hay WebGL o algo falla, se queda la vista 2D.
+ * Vista 3D bajo demanda: three.js va en un chunk aparte y sólo se descarga la
+ * primera vez que se pide. Sin WebGL, o si falla, se queda la vista con el render.
  */
-export function mountView3D({ stage, store, onActive }: View3DOptions): void {
-  if (!supportsWebGL() || !('IntersectionObserver' in window)) return;
+export function mountView3D({ stage, store, onLoaded, onToggle }: View3DOptions): void {
+  const tools = stage.querySelector<HTMLElement>('#stageTools');
+  const toggle = stage.querySelector<HTMLButtonElement>('#tool3dToggle');
+  if (!tools || !toggle || !supportsWebGL()) return;
+  tools.hidden = false;
 
-  const start = async (): Promise<void> => {
+  let loaded = false;
+  let active = false;
+
+  const setActive = (next: boolean): void => {
+    active = next;
+    stage.classList.toggle('is-3d', next);
+    toggle.textContent = next ? 'Ver foto' : 'Ver en 3D';
+    onToggle(next);
+  };
+
+  const load = async (): Promise<void> => {
     stage.classList.add('loading3d');
+    toggle.disabled = true;
     try {
       const [{ mountScene }] = await Promise.all([import('./scene'), document.fonts.ready]);
-      const controller = mountScene(stage, store, {
+      const controller = await mountScene(stage, store, {
         reset: stage.querySelector<HTMLButtonElement>('#tool3dReset'),
         spin: stage.querySelector<HTMLButtonElement>('#tool3dSpin'),
       });
-      stage.classList.add('is-3d');
-      const tools = stage.querySelector<HTMLElement>('#stageTools');
-      if (tools) tools.hidden = false;
-      onActive(controller);
+      loaded = true;
+      onLoaded(controller);
+      setActive(true);
     } catch (err) {
-      console.warn('El armador 3D no está disponible; se usa la vista 2D.', err);
+      console.warn('La vista 3D no está disponible; se queda la foto del forro.', err);
+      tools.hidden = true;
     } finally {
       stage.classList.remove('loading3d');
+      toggle.disabled = false;
     }
   };
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (!entries.some((e) => e.isIntersecting)) return;
-      observer.disconnect();
-      void start();
-    },
-    { rootMargin: '500px 0px' },
-  );
-  observer.observe(stage);
+  toggle.addEventListener('click', () => {
+    if (loaded) setActive(!active);
+    else void load();
+  });
 }

@@ -190,17 +190,22 @@
                   ></div>
                 </div>
                 <div class="stage-tools" id="stageTools" hidden>
-                  <span class="badge-3d" aria-hidden="true">3D</span>
+                  <button type="button" class="tool tool-toggle" id="tool3dToggle">Ver en 3D</button>
                   <button
                     type="button"
-                    class="tool"
+                    class="tool only-3d"
                     id="tool3dSpin"
                     aria-pressed="false"
                     aria-label="Girar el forro solo"
                   >
                     360°
                   </button>
-                  <button type="button" class="tool" id="tool3dReset" aria-label="Volver a la vista inicial">
+                  <button
+                    type="button"
+                    class="tool only-3d"
+                    id="tool3dReset"
+                    aria-label="Volver a la vista inicial"
+                  >
                     <i data-ico="rotate"></i>
                   </button>
                 </div>
@@ -212,60 +217,53 @@
             <div class="controls">
               <fieldset class="step">
                 <legend><span class="step-n">1</span> Tu celular</legend>
-                <div class="size-cards" role="radiogroup" aria-label="Tamaño del forro">
-                  <button
-                    type="button"
-                    class="size-card"
-                    role="radio"
-                    data-size="pequeno"
-                    aria-checked="false"
-                  >
-                    <span class="size-ico s-small" aria-hidden="true"></span>
-                    <span class="size-name">Pequeño</span>
-                    <span class="size-meta">hasta 9 chunkis</span>
-                    <span class="size-price">$55.000</span>
-                  </button>
-                  <button type="button" class="size-card" role="radio" data-size="grande" aria-checked="true">
-                    <span class="size-ico s-big" aria-hidden="true"></span>
-                    <span class="size-name">Grande</span>
-                    <span class="size-meta">hasta 13 chunkis</span>
-                    <span class="size-price">$60.000</span>
-                  </button>
+                <div class="field field-first">
+                  <label for="phone">Modelo de tu celular</label>
+                  <select id="phone" name="phone"></select>
                 </div>
-                <div class="field">
-                  <label for="model">Modelo de tu cel</label>
+                <p class="phone-info" id="phoneInfo" hidden></p>
+                <div class="size-area" id="sizeArea">
+                  <div class="size-cards" role="radiogroup" aria-label="Tamaño del forro">
+                    <button
+                      type="button"
+                      class="size-card"
+                      role="radio"
+                      data-size="pequeno"
+                      aria-checked="false"
+                    >
+                      <span class="size-ico s-small" aria-hidden="true"></span>
+                      <span class="size-name">Pequeño</span>
+                      <span class="size-meta">hasta 9 chunkis</span>
+                      <span class="size-price">$55.000</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="size-card"
+                      role="radio"
+                      data-size="grande"
+                      aria-checked="true"
+                    >
+                      <span class="size-ico s-big" aria-hidden="true"></span>
+                      <span class="size-name">Grande</span>
+                      <span class="size-meta">hasta 13 chunkis</span>
+                      <span class="size-price">$60.000</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="field" id="modelField" hidden>
+                  <label for="model">¿Cuál es tu celular?</label>
                   <input
                     type="text"
                     id="model"
                     name="model"
-                    list="models"
-                    placeholder="Ej: iPhone 15 Pro Max"
+                    placeholder="Ej: Samsung Galaxy S24"
                     autocomplete="off"
                     maxlength="40"
                     aria-describedby="model-help"
                   />
                 </div>
-                <datalist id="models">
-                  <option value="iPhone 13"></option>
-                  <option value="iPhone 13 Pro Max"></option>
-                  <option value="iPhone 14"></option>
-                  <option value="iPhone 14 Pro Max"></option>
-                  <option value="iPhone 15"></option>
-                  <option value="iPhone 15 Pro"></option>
-                  <option value="iPhone 15 Pro Max"></option>
-                  <option value="iPhone 16"></option>
-                  <option value="iPhone 16 Pro"></option>
-                  <option value="iPhone 16 Pro Max"></option>
-                  <option value="iPhone 17"></option>
-                  <option value="iPhone 17 Pro"></option>
-                  <option value="iPhone 17 Pro Max"></option>
-                  <option value="Samsung Galaxy S24"></option>
-                  <option value="Samsung Galaxy S24 Ultra"></option>
-                  <option value="Samsung Galaxy A55"></option>
-                  <option value="Xiaomi Redmi Note 13"></option>
-                </datalist>
                 <p class="help" id="model-help">
-                  ¿No sabes si es pequeño o grande? Escribe tu modelo y te confirmamos por WhatsApp
+                  ¿No ves tu celular? Elige «Otro celular» y te confirmamos el tamaño por WhatsApp
                   <i data-ico="chat"></i>
                 </p>
               </fieldset>
@@ -395,7 +393,7 @@
               <p class="price-num">$55.000</p>
               <ul>
                 <li>Hasta <strong>9 chunkis</strong> incluidos</li>
-                <li>Para celulares de referencia pequeña</li>
+                <li>iPhone estándar, Pro, mini y SE</li>
               </ul>
               <button type="button" class="btn btn-dark btn-block" data-start="pequeno">Armar el mío</button>
             </article>
@@ -406,7 +404,7 @@
               <p class="price-num">$60.000</p>
               <ul>
                 <li>Hasta <strong>13 chunkis</strong> incluidos</li>
-                <li>Para celulares de referencia grande</li>
+                <li>iPhone Plus, Pro Max y Air</li>
               </ul>
               <button type="button" class="btn btn-primary btn-block" data-start="grande">
                 Armar el mío
@@ -434,7 +432,8 @@
           <details>
             <summary>¿Cómo sé si mi celular es pequeño o grande?</summary>
             <p>
-              Escribe el modelo de tu celular en el armador y te confirmamos por WhatsApp antes de hacer tu
+              Si tienes iPhone, elige tu modelo en el armador y el tamaño se ajusta solo. Si tienes otro
+              celular, elige «Otro celular», escribe el modelo y te confirmamos por WhatsApp antes de hacer tu
               forro.
             </p>
           </details>

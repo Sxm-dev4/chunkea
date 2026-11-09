@@ -4,3 +4,4 @@ playwright-report/
 test-results/
 package-lock.json
 src/assets/icons/*.json
+src/data/caseRenders.json

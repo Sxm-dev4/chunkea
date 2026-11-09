@@ -114,26 +114,27 @@
   transform: translateY(-50%) rotate(4deg) scale(0.8);
 }
 
-/* ---------- Forro 2D ---------- */
+/* ---------- Forro (render) ---------- */
+
+/* Los renders traen aire alrededor para la sombra: se amplían para aprovechar el espacio. */
 .device {
   position: relative;
   height: 100%;
   aspect-ratio: 1 / 2;
-  transition: transform 0.45s cubic-bezier(0.3, 1.6, 0.5, 1);
-}
-
-.device.size-pequeno {
-  transform: scale(0.88);
+  transform: scale(1.26);
 }
 
 .device-art,
-.device-art svg {
+.device-art img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
+/* Ocupa el área del forro dentro de la imagen (se ajusta desde caseArt.ts). */
 .charm-layer {
   position: absolute;
   inset: 0;
@@ -214,6 +215,7 @@
 .mini-case {
   position: relative;
   aspect-ratio: 1 / 2;
+  transform: scale(1.26);
 }
 
 .mini-case .charm {
@@ -351,7 +353,12 @@
   font-size: 0.92rem;
 }
 
-.field input {
+.field-first {
+  margin-top: 0;
+}
+
+.field input,
+.field select {
   width: 100%;
   padding: 12px 14px;
   font-weight: 500;
@@ -362,15 +369,32 @@
   border-radius: var(--r-sm);
 }
 
-.field input:focus {
+.field input:focus,
+.field select:focus {
   outline: none;
   border-color: var(--lila);
   box-shadow: 0 0 0 4px rgb(227 132 230 / 35%);
 }
 
-.field.invalid input {
+.field.invalid input,
+.field.invalid select {
   border-color: #ff6b8a;
   animation: shake 0.4s;
+}
+
+.phone-info {
+  margin-top: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--rosa);
+  background: rgb(227 132 230 / 14%);
+  border: 2px solid var(--lila);
+  border-radius: var(--r-sm);
+}
+
+.size-area {
+  margin-top: 14px;
 }
 
 .counter {

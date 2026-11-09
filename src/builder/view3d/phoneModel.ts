@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import type { SizeId } from '../../config/site';
-import { CAMERA_ZONE } from '../placement';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 /** Medidas del modelo (unidades de la escena). */
 export interface PhoneDims {
@@ -10,56 +9,24 @@ export interface PhoneDims {
   readonly backTop: number;
 }
 
-const SIZES: Readonly<
-  Record<
-    SizeId,
-    { scale: number; lenses: readonly (readonly [number, number])[]; flash: readonly [number, number] }
-  >
-> = {
-  grande: {
-    scale: 1,
-    lenses: [
-      [20, 9.7],
-      [20, 19.3],
-      [38, 14.5],
-    ],
-    flash: [39.3, 6.7],
-  },
-  pequeno: {
-    scale: 0.9,
-    lenses: [
-      [20, 10],
-      [37.3, 18.7],
-    ],
-    flash: [39.3, 8.7],
-  },
-};
-
-const BASE_W = 0.78;
-const BASE_H = 1.6;
-const PHONE_DEPTH = 0.085;
-
-function roundRect<T extends THREE.Path>(
-  target: T,
-  cx: number,
-  cy: number,
-  w: number,
-  h: number,
-  r: number,
-): T {
-  const x = cx - w / 2;
-  const y = cy - h / 2;
-  target.moveTo(x + r, y);
-  target.lineTo(x + w - r, y);
-  target.absarc(x + w - r, y + r, r, -Math.PI / 2, 0, false);
-  target.lineTo(x + w, y + h - r);
-  target.absarc(x + w - r, y + h - r, r, 0, Math.PI / 2, false);
-  target.lineTo(x + r, y + h);
-  target.absarc(x + r, y + h - r, r, Math.PI / 2, Math.PI, false);
-  target.lineTo(x, y + r);
-  target.absarc(x + r, y + r, r, Math.PI, Math.PI * 1.5, false);
-  return target;
+export interface PhoneModel {
+  readonly group: THREE.Group;
+  readonly dims: PhoneDims;
+  readonly hitTargets: THREE.Object3D[];
 }
+
+/** Los modelos vienen en metros; la escena trabaja con un celular de unas 1.6 unidades de alto. */
+const MODEL_SCALE = 10;
+const CHARM_REST_OFFSET = 0.002;
+
+const modelUrls = import.meta.glob<string>('../../assets/cases3d/*.glb', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
+/** Color lineal, igual al que usa el material en Blender. */
+const linear = (r: number, g: number, b: number): THREE.Color => new THREE.Color().setRGB(r, g, b);
 
 function screenTexture(): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
@@ -90,177 +57,209 @@ function screenTexture(): THREE.CanvasTexture {
   return texture;
 }
 
-/** Celular dentro del forro transparente. Devuelve el grupo, las medidas y las piezas "tocables". */
-export function buildPhone(size: SizeId): {
-  group: THREE.Group;
-  dims: PhoneDims;
-  hitTargets: THREE.Object3D[];
-} {
-  const spec = SIZES[size];
-  const W = BASE_W * spec.scale;
-  const H = BASE_H * spec.scale;
-  const R = 0.13 * spec.scale;
-  const PD = PHONE_DEPTH;
-  const group = new THREE.Group();
-  const toLocal = (px: number, py: number): [number, number] => [(px / 100 - 0.5) * W, (0.5 - py / 100) * H];
-
-  // Isla de la cámara (misma zona que en la vista 2D)
-  const [ix, iy] = toLocal((CAMERA_ZONE.x0 + CAMERA_ZONE.x1) / 2, (CAMERA_ZONE.y0 + CAMERA_ZONE.y1) / 2);
-  const iw = ((CAMERA_ZONE.x1 - CAMERA_ZONE.x0) / 100) * W;
-  const ih = ((CAMERA_ZONE.y1 - CAMERA_ZONE.y0) / 100) * H;
-  const ir = 0.095 * W;
-
-  // Celular
-  const body = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(roundRect(new THREE.Shape(), 0, 0, W - 0.05, H - 0.05, R - 0.025), {
-      depth: PD - 0.02,
-      bevelEnabled: true,
-      bevelThickness: 0.01,
-      bevelSize: 0.01,
-      bevelSegments: 4,
-      curveSegments: 24,
-    }),
-    new THREE.MeshStandardMaterial({ color: 0x1c1722, metalness: 0.55, roughness: 0.28 }),
-  );
-  body.geometry.translate(0, 0, -(PD - 0.02) / 2);
-  body.receiveShadow = true;
-
-  const sw = W - 0.085;
-  const sh = H - 0.085;
-  const screenGeometry = new THREE.ShapeGeometry(roundRect(new THREE.Shape(), 0, 0, sw, sh, R - 0.045), 24);
-  const uv = screenGeometry.attributes.uv as THREE.BufferAttribute;
-  const pos = screenGeometry.attributes.position as THREE.BufferAttribute;
-  for (let i = 0; i < uv.count; i++) uv.setXY(i, pos.getX(i) / sw + 0.5, pos.getY(i) / sh + 0.5);
-  const screen = new THREE.Mesh(
-    screenGeometry,
-    new THREE.MeshBasicMaterial({ map: screenTexture(), toneMapped: false }),
-  );
-  screen.rotation.y = Math.PI;
-  screen.position.z = -PD / 2 - 0.0015;
-
-  const island = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(roundRect(new THREE.Shape(), ix, iy, iw - 0.03, ih - 0.03, ir - 0.012), {
-      depth: 0.022,
-      bevelEnabled: true,
-      bevelThickness: 0.006,
-      bevelSize: 0.006,
-      bevelSegments: 3,
-      curveSegments: 16,
-    }),
-    new THREE.MeshStandardMaterial({ color: 0x2b2431, metalness: 0.6, roughness: 0.22 }),
-  );
-  island.position.z = PD / 2 - 0.006;
-  island.castShadow = true;
-  island.receiveShadow = true;
-  group.add(body, screen, island);
-
-  // Lentes y flash
-  const ringMaterial = new THREE.MeshStandardMaterial({ color: 0xa5a5b2, metalness: 1, roughness: 0.18 });
-  const glassMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x07070c,
-    roughness: 0.04,
-    metalness: 0.2,
-    clearcoat: 1,
-  });
-  const tintMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x24305a,
-    roughness: 0.05,
-    metalness: 0.3,
-    clearcoat: 1,
-  });
-  const lensR = 0.077 * W;
-  const lensZ = PD / 2 + 0.024;
-  for (const [lx, ly] of spec.lenses) {
-    const [x, y] = toLocal(lx, ly);
-    const ring = new THREE.Mesh(new THREE.CylinderGeometry(lensR, lensR * 1.02, 0.03, 40), ringMaterial);
-    ring.rotation.x = Math.PI / 2;
-    ring.position.set(x, y, lensZ);
-    ring.castShadow = true;
-    const glass = new THREE.Mesh(
-      new THREE.CylinderGeometry(lensR * 0.78, lensR * 0.78, 0.032, 40),
-      glassMaterial,
-    );
-    glass.rotation.x = Math.PI / 2;
-    glass.position.set(x, y, lensZ + 0.002);
-    const tint = new THREE.Mesh(new THREE.CircleGeometry(lensR * 0.36, 32), tintMaterial);
-    tint.position.set(x - lensR * 0.12, y + lensR * 0.12, lensZ + 0.0185);
-    group.add(ring, glass, tint);
+/** Anillos concéntricos del lente (los mismos del material de Blender). */
+function lensTexture(): THREE.CanvasTexture {
+  const size = 128;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    const stops: readonly (readonly [number, number, number, number])[] = [
+      [0, 0.002, 0.002, 0.004],
+      [0.24, 0.002, 0.003, 0.006],
+      [0.3, 0.009, 0.012, 0.024],
+      [0.44, 0.003, 0.004, 0.007],
+      [0.66, 0.006, 0.006, 0.008],
+      [0.7, 0.022, 0.022, 0.026],
+      [0.74, 0.004, 0.004, 0.005],
+      [1, 0.003, 0.003, 0.004],
+    ];
+    for (const [position, r, g, b] of stops)
+      gradient.addColorStop(position, `#${linear(r, g, b).getHexString()}`);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
   }
-  const [fx, fy] = toLocal(spec.flash[0], spec.flash[1]);
-  const flash = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.018 * spec.scale, 0.018 * spec.scale, 0.02, 24),
-    new THREE.MeshStandardMaterial({
-      color: 0xfff6d0,
-      emissive: 0xfff1b8,
-      emissiveIntensity: 0.35,
-      roughness: 0.3,
-    }),
-  );
-  flash.rotation.x = Math.PI / 2;
-  flash.position.set(fx, fy, lensZ - 0.004);
-  group.add(flash);
-
-  // Forro transparente: tapa trasera (con hueco para la cámara) + bordes
-  const caseMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
-    roughness: 0.08,
-    transmission: 1,
-    thickness: 0.05,
-    ior: 1.42,
-    clearcoat: 1,
-    clearcoatRoughness: 0.04,
-    attenuationColor: new THREE.Color(0xf6e8f6),
-    attenuationDistance: 2,
-  });
-  const backZ0 = PD / 2 + 0.004;
-  const plateThickness = 0.014;
-  const plateShape = roundRect(new THREE.Shape(), 0, 0, W, H, R);
-  plateShape.holes.push(roundRect(new THREE.Path(), ix, iy, iw + 0.01, ih + 0.01, ir + 0.004));
-  const plate = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(plateShape, {
-      depth: plateThickness,
-      bevelEnabled: true,
-      bevelThickness: 0.004,
-      bevelSize: 0.004,
-      bevelSegments: 2,
-      curveSegments: 28,
-    }),
-    caseMaterial,
-  );
-  plate.position.z = backZ0;
-  plate.receiveShadow = true;
-  const wallShape = roundRect(new THREE.Shape(), 0, 0, W, H, R);
-  wallShape.holes.push(roundRect(new THREE.Path(), 0, 0, W - 0.032, H - 0.032, R - 0.016));
-  const walls = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(wallShape, {
-      depth: PD + 0.01,
-      bevelEnabled: true,
-      bevelThickness: 0.006,
-      bevelSize: 0.006,
-      bevelSegments: 3,
-      curveSegments: 28,
-    }),
-    caseMaterial,
-  );
-  walls.position.z = -PD / 2 - 0.006;
-  group.add(plate, walls);
-
-  return {
-    group,
-    dims: { W, H, backTop: backZ0 + plateThickness + 0.004 },
-    hitTargets: [plate, walls, body, island, screen],
-  };
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
 }
 
-/** Libera la memoria de GPU de un grupo (geometrías, materiales y texturas). */
-export function disposeObject(object: THREE.Object3D): void {
-  object.traverse((child) => {
-    if (!(child instanceof THREE.Mesh)) return;
-    child.geometry.dispose();
-    const materials: THREE.Material[] = Array.isArray(child.material) ? child.material : [child.material];
-    materials.forEach((m) => {
-      if ('map' in m && m.map instanceof THREE.Texture) m.map.dispose();
-      m.dispose();
-    });
+/**
+ * Sin brillos de las luces puntuales: en el render todo reflejo viene de paneles grandes y suaves.
+ * Una luz puntual agrisa el vidrio esmerilado y deja un punto blanco en el plástico; el estudio ya
+ * da los reflejos correctos, y las luces puntuales quedan para iluminar los chunkis.
+ */
+function studioReflectionsOnly<T extends THREE.Material>(material: T): T {
+  material.onBeforeCompile = (shader) => {
+    shader.fragmentShader = shader.fragmentShader.replace(
+      '#include <aomap_fragment>',
+      `reflectedLight.directSpecular = vec3(0.0);
+      #ifdef USE_CLEARCOAT
+        clearcoatSpecularDirect = vec3(0.0);
+      #endif
+      #include <aomap_fragment>`,
+    );
+  };
+  return material;
+}
+
+type Materials = Readonly<Record<string, THREE.Material>>;
+let sharedMaterials: Materials | null = null;
+
+/** Equivalentes en tiempo real de los materiales del render, según el nombre que traen del .blend. */
+function getMaterials(): Materials {
+  sharedMaterials ??= {
+    Case_Transparente: studioReflectionsOnly(
+      new THREE.MeshPhysicalMaterial({
+        color: linear(0.985, 0.99, 0.995),
+        roughness: 0.02,
+        transmission: 1,
+        thickness: 0.02,
+        ior: 1.49,
+        attenuationColor: new THREE.Color(0xf6eef6),
+        attenuationDistance: 2,
+      }),
+    ),
+    Tel_Trasera: studioReflectionsOnly(
+      new THREE.MeshPhysicalMaterial({
+        color: linear(0.012, 0.012, 0.015),
+        roughness: 0.33,
+        clearcoat: 0.15,
+        clearcoatRoughness: 0.3,
+      }),
+    ),
+    Tel_Modulo: studioReflectionsOnly(
+      new THREE.MeshPhysicalMaterial({
+        color: linear(0.012, 0.012, 0.015),
+        roughness: 0.17,
+        clearcoat: 0.3,
+        clearcoatRoughness: 0.08,
+      }),
+    ),
+    Tel_AroLente: new THREE.MeshStandardMaterial({
+      color: linear(0.22, 0.225, 0.24),
+      metalness: 1,
+      roughness: 0.2,
+    }),
+    Tel_Lente: studioReflectionsOnly(
+      new THREE.MeshPhysicalMaterial({
+        map: lensTexture(),
+        roughness: 0.03,
+        clearcoat: 0.5,
+        clearcoatRoughness: 0.01,
+        specularIntensity: 0.5,
+        specularColor: linear(0.65, 0.75, 1),
+        // Película delgada: el tono iridiscente de las lentes reales
+        iridescence: 0.6,
+        iridescenceIOR: 1.38,
+        iridescenceThicknessMinimum: 420,
+        iridescenceThicknessMaximum: 420,
+      }),
+    ),
+    Tel_Pantalla: new THREE.MeshBasicMaterial({ map: screenTexture(), toneMapped: false }),
+    Render_Flash: new THREE.MeshPhysicalMaterial({
+      color: linear(0.97, 0.9, 0.68),
+      emissive: linear(0.97, 0.9, 0.68),
+      emissiveIntensity: 0.15,
+      roughness: 0.25,
+      clearcoat: 1,
+      clearcoatRoughness: 0.04,
+    }),
+    Render_Sensor: studioReflectionsOnly(
+      new THREE.MeshPhysicalMaterial({
+        color: linear(0.006, 0.006, 0.008),
+        roughness: 0.08,
+        clearcoat: 1,
+        clearcoatRoughness: 0.02,
+      }),
+    ),
+  };
+  return sharedMaterials;
+}
+
+/** UV plana sobre los dos ejes más largos de la geometría (para el lente, que es un disco). */
+function addPlanarUv(mesh: THREE.Mesh): void {
+  const position = mesh.geometry.getAttribute('position');
+  mesh.geometry.computeBoundingBox();
+  const box = mesh.geometry.boundingBox;
+  if (!box) return;
+  const size = box.getSize(new THREE.Vector3());
+  const axes = (['x', 'y', 'z'] as const).toSorted((a, b) => size[b] - size[a]);
+  const [u, v] = [axes[0] ?? 'x', axes[1] ?? 'y'];
+  const uv = new Float32Array(position.count * 2);
+  const p = new THREE.Vector3();
+  for (let i = 0; i < position.count; i++) {
+    p.fromBufferAttribute(position, i);
+    uv[i * 2] = (p[u] - box.min[u]) / (size[u] || 1);
+    uv[i * 2 + 1] = (p[v] - box.min[v]) / (size[v] || 1);
+  }
+  mesh.geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+}
+
+/** UV de la pantalla en coordenadas de la escena: se ve desde el frente del celular (-z). */
+function addScreenUv(mesh: THREE.Mesh, bounds: THREE.Box3): void {
+  const position = mesh.geometry.getAttribute('position');
+  const size = bounds.getSize(new THREE.Vector3());
+  const uv = new Float32Array(position.count * 2);
+  const p = new THREE.Vector3();
+  for (let i = 0; i < position.count; i++) {
+    p.fromBufferAttribute(position, i).applyMatrix4(mesh.matrixWorld);
+    uv[i * 2] = 1 - (p.x - bounds.min.x) / size.x;
+    uv[i * 2 + 1] = (p.y - bounds.min.y) / size.y;
+  }
+  mesh.geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+}
+
+function buildPhone(scene: THREE.Group): PhoneModel {
+  const materials = getMaterials();
+  const group = new THREE.Group();
+  group.scale.setScalar(MODEL_SCALE);
+  group.add(scene);
+  group.updateMatrixWorld(true);
+
+  const meshes: THREE.Mesh[] = [];
+  scene.traverse((object) => {
+    if ((object as THREE.Mesh).isMesh) meshes.push(object as THREE.Mesh);
   });
+  const nameOf = (mesh: THREE.Mesh): string => (mesh.material as THREE.Material).name;
+  const caseMesh = meshes.find((mesh) => nameOf(mesh) === 'Case_Transparente');
+  if (!caseMesh) throw new Error('El modelo no trae el forro');
+
+  for (const mesh of meshes) {
+    const name = nameOf(mesh);
+    if (name === 'Tel_Lente') addPlanarUv(mesh);
+    if (name === 'Tel_Pantalla') addScreenUv(mesh, new THREE.Box3().setFromObject(mesh));
+    mesh.material = materials[name] ?? mesh.material;
+    mesh.receiveShadow = true;
+    // El plástico deja pasar la luz: su sombra oscurecería el celular de adentro
+    mesh.castShadow = mesh !== caseMesh && name !== 'Tel_Pantalla';
+  }
+
+  const size = new THREE.Box3().setFromObject(caseMesh).getSize(new THREE.Vector3());
+  // Altura de la tapa: se mide en la zona plana, debajo de la cámara
+  const ray = new THREE.Raycaster(
+    new THREE.Vector3(0, -size.y * 0.25, 5),
+    new THREE.Vector3(0, 0, -1),
+  ).intersectObject(caseMesh)[0];
+  const backTop = (ray?.point.z ?? size.z / 2) + CHARM_REST_OFFSET;
+
+  return { group, dims: { W: size.x, H: size.y, backTop }, hitTargets: meshes };
+}
+
+const loader = new GLTFLoader();
+const cache = new Map<string, Promise<PhoneModel>>();
+
+/** Carga una sola vez el modelo de un celular (se descarga al pedirlo). */
+export function loadPhone(renderId: string): Promise<PhoneModel> {
+  const cached = cache.get(renderId);
+  if (cached) return cached;
+  const url = modelUrls[`../../assets/cases3d/${renderId}.glb`];
+  if (!url) return Promise.reject(new Error(`No hay modelo 3D para ${renderId}`));
+  const loading = loader.loadAsync(url).then((gltf) => buildPhone(gltf.scene));
+  cache.set(renderId, loading);
+  // Si falla la descarga, se puede volver a intentar
+  loading.catch(() => cache.delete(renderId));
+  return loading;
 }

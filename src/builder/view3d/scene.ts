@@ -1,11 +1,12 @@
 import * as THREE from 'three';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { getChunki } from '../../data/chunkis';
+import { cameraZoneFor, renderIdFor } from '../../data/phones';
 import { prefersReducedMotion } from '../../lib/env';
 import { clampToCase } from '../placement';
 import type { BuilderState, BuilderStore, PlacedCharm } from '../store';
 import { charmTemplate } from './charmModels';
-import { buildPhone, disposeObject, type PhoneDims } from './phoneModel';
+import { loadPhone, type PhoneDims, type PhoneModel } from './phoneModel';
+import { createStudio } from './studio';
 
 export interface SceneController {
   /** Posición en pantalla de un chunki (para pruebas automáticas). */
@@ -35,12 +36,16 @@ const ease = {
   outCubic: (t: number): number => 1 - Math.pow(1 - t, 3),
 };
 
-/** Monta el armador 3D dentro de `stage`. Lanza error si WebGL falla (el llamador vuelve a 2D). */
-export function mountScene(
+/** Monta el armador 3D dentro de `stage`. Falla si no hay WebGL o no carga el modelo. */
+export async function mountScene(
   stage: HTMLElement,
   store: BuilderStore,
   controls: { reset?: HTMLButtonElement | null; spin?: HTMLButtonElement | null },
-): SceneController {
+): Promise<SceneController> {
+  const firstState = store.getState();
+  const firstRender = renderIdFor(firstState.phoneId, firstState.size);
+  const firstPhone = await loadPhone(firstRender);
+
   /* ---------- Escena ---------- */
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -48,8 +53,9 @@ export function mountScene(
     powerPreference: 'high-performance',
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMapping = THREE.NeutralToneMapping; // conserva el negro del celular y el color de los chunkis
+  renderer.toneMappingExposure = 1;
+  renderer.transmissionResolutionScale = 0.75; // el plástico es lo más costoso de dibujar
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   const canvas = renderer.domElement;
@@ -60,13 +66,13 @@ export function mountScene(
 
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environment = pmrem.fromScene(createStudio(), 0.02).texture;
   pmrem.dispose();
 
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
   camera.position.set(0, 0, 4.4);
 
-  const key = new THREE.DirectionalLight(0xffffff, 2.4);
+  const key = new THREE.DirectionalLight(0xffffff, 2.2);
   key.position.set(1.6, 2.4, 4.2);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
@@ -74,9 +80,12 @@ export function mountScene(
   key.shadow.bias = -0.0004;
   key.shadow.normalBias = 0.01;
   key.shadow.radius = 5;
-  const rim = new THREE.DirectionalLight(0xe384e6, 1.6);
+  const rim = new THREE.DirectionalLight(0xe384e6, 0.8);
   rim.position.set(-3, 1.5, -2.5);
-  scene.add(key, rim, new THREE.AmbientLight(0xffffff, 0.25));
+  // Los chunkis son de metal: con la luz ambiente y el estudio tenue necesitan su propia luz
+  const fill = new THREE.DirectionalLight(0xffffff, 1.2);
+  fill.position.set(-2, -0.5, 4);
+  scene.add(key, rim, fill, new THREE.AmbientLight(0xffffff, 0.15));
 
   const root = new THREE.Group(); // se gira con el dedo / mouse
   const charmGroup = new THREE.Group();
@@ -84,19 +93,18 @@ export function mountScene(
   scene.add(root);
 
   /* ---------- Celular ---------- */
-  let phone: ReturnType<typeof buildPhone> | null = null;
+  let phone: PhoneModel | null = null;
   let dims: PhoneDims = { W: 1, H: 1, backTop: 0 };
-  let currentSize: string | null = null;
+  /** El modelo en pantalla y el que se pidió (pueden diferir mientras descarga). */
+  let shownRender = firstRender;
+  let wantedRender = firstRender;
 
-  const rebuildPhone = (size: BuilderState['size']): void => {
-    if (phone) {
-      root.remove(phone.group);
-      disposeObject(phone.group);
-    }
-    phone = buildPhone(size);
-    dims = phone.dims;
-    currentSize = size;
-    root.add(phone.group);
+  const setPhone = (next: PhoneModel, renderId: string): void => {
+    if (phone) root.remove(phone.group);
+    phone = next;
+    dims = next.dims;
+    shownRender = renderId;
+    root.add(next.group);
   };
 
   const toLocal = (x: number, y: number): [number, number] => [
@@ -141,14 +149,36 @@ export function mountScene(
   };
 
   let dragging: CharmObject | null = null;
+  let hovered: CharmObject | null = null;
+
+  const clearCharms = (): void => {
+    objects.forEach((o) => charmGroup.remove(o.root));
+    objects.clear();
+    dragging = null;
+    hovered = null;
+    stagger = 0;
+  };
+
+  const showPhone = async (renderId: string): Promise<void> => {
+    try {
+      const next = await loadPhone(renderId);
+      if (renderId !== wantedRender) return; // ya eligió otro mientras descargaba
+      setPhone(next, renderId);
+      clearCharms(); // cada modelo tiene sus medidas: los chunkis se vuelven a ubicar
+      sync(store.getState(), false);
+    } catch (err) {
+      console.warn(`No se pudo cargar el modelo 3D de ${renderId}.`, err);
+      if (renderId === wantedRender) wantedRender = shownRender;
+    }
+  };
 
   const sync = (state: Readonly<BuilderState>, rebuild: boolean): void => {
-    if (state.size !== currentSize || rebuild) {
-      if (state.size !== currentSize) rebuildPhone(state.size);
-      objects.forEach((o) => charmGroup.remove(o.root));
-      objects.clear();
-      stagger = 0;
+    const renderId = renderIdFor(state.phoneId, state.size);
+    if (renderId !== wantedRender) {
+      wantedRender = renderId;
+      void showPhone(renderId);
     }
+    if (rebuild) clearCharms();
     const initial = objects.size === 0;
     const alive = new Set<number>();
     for (const charm of state.charms) {
@@ -200,8 +230,6 @@ export function mountScene(
     moved: boolean;
     onCase: boolean;
   } | null = null;
-  let hovered: CharmObject | null = null;
-
   const setRay = (e: PointerEvent): void => {
     const r = canvas.getBoundingClientRect();
     ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
@@ -275,7 +303,7 @@ export function mountScene(
       const p = pointOnBack(e);
       if (!p) return;
       const [px, py] = toPercent(p.x, p.y);
-      const clamped = clampToCase({ x: px, y: py });
+      const clamped = clampToCase({ x: px, y: py }, cameraZoneFor(shownRender));
       dragging.target = toLocal(clamped.x, clamped.y);
     } else {
       spinning = false;
@@ -422,7 +450,7 @@ export function mountScene(
   // Se dibuja sólo con la pestaña visible y el armador en pantalla
   const tick = (now: number): void => {
     if (document.hidden) return;
-    if (onScreen()) frame(now);
+    if (stage.classList.contains('is-3d') && onScreen()) frame(now);
     else last = now;
     requestAnimationFrame(tick);
   };
@@ -434,7 +462,7 @@ export function mountScene(
   });
 
   /* ---------- Arranque ---------- */
-  rebuildPhone(store.getState().size);
+  setPhone(firstPhone, firstRender);
   resize();
   sync(store.getState(), false);
   frame(performance.now());
