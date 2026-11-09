@@ -3,7 +3,7 @@
 Landing de **Chunkea**: forros chunky personalizables. Las personas arman su forro (en 3D o 2D),
 eligen hasta 13 chunkis y envían el pedido por WhatsApp con el diseño escrito en el mensaje.
 
-- Sitio: https://chunkea-col.netlify.app
+- Sitio: https://chunkea.netlify.app
 - Stack: [Vite](https://vite.dev) + TypeScript (sin framework), [three.js](https://threejs.org) para el armador 3D,
   [Lottie](https://airbnb.io/lottie) para los iconos animados de [AnimatedIcons](https://animatedicons.co).
 
@@ -155,7 +155,7 @@ El sitio se publica en **Netlify** desde la rama `main` de GitHub. La CI de GitH
    git remote add origin https://github.com/<tu-usuario>/chunkea-web.git
    git push -u origin main
    ```
-2. En Netlify abre el proyecto **chunkea-col** → _Project configuration → Build & deploy →
+2. En Netlify abre el proyecto **chunkea** → _Project configuration → Build & deploy →
    Link repository_ y elige el repositorio. Netlify usa `netlify.toml` (build `npm run build`, carpeta `dist`).
 3. (Recomendado) En GitHub → _Settings → Branches_, protege `main` y exige que pase la CI antes de fusionar.
 
