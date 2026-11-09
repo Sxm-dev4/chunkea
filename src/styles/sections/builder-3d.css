@@ -129,14 +129,18 @@
   }
 }
 
-/* En móvil los botones van en columna a la derecha para no tapar el forro. */
+/* En móvil los botones van en columna arriba a la derecha: no tapan el forro ni el globo de ayuda. */
 @media (max-width: 899px) {
   .stage-tools {
-    top: 50%;
+    top: 8px;
     right: 8px;
-    translate: 0 -50%;
     flex-direction: column;
+    align-items: flex-end;
     gap: 6px;
+  }
+
+  .stage-empty {
+    top: 66%;
   }
 
   .tool {
