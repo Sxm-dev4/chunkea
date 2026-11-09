@@ -8,6 +8,21 @@ type TestWindow = Window & { __chunkea3d?: Scene3D };
 test.describe('Armador 3D', () => {
   test.use({ webgl: true });
 
+  test('el botón del 3D no tapa el globo de ayuda', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#arma').scrollIntoViewIfNeeded();
+    await expect(page.locator('#tool3dToggle')).toBeVisible();
+    const toggle = await page.locator('#tool3dToggle').boundingBox();
+    const bubble = await page.locator('#stageEmpty').boundingBox();
+    expect(toggle && bubble).toBeTruthy();
+    const separated =
+      toggle!.y + toggle!.height <= bubble!.y ||
+      bubble!.y + bubble!.height <= toggle!.y ||
+      toggle!.x + toggle!.width <= bubble!.x ||
+      bubble!.x + bubble!.width <= toggle!.x;
+    expect(separated).toBe(true);
+  });
+
   test('sólo carga three.js al pedirlo y vuelve a la foto', async ({ page }) => {
     test.slow(); // sin GPU, el 3D corre por software
     const scripts: string[] = [];
