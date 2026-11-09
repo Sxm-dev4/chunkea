@@ -60,14 +60,14 @@ test.describe('Armador', () => {
   test('pide el modelo antes de abrir WhatsApp', async ({ page }) => {
     await addCharms(page, ['osito']);
     await page.locator('#btnOrder').click();
-    await expect(page.locator('#toast')).toContainText('modelo');
-    await expect(page.locator('#model')).toBeFocused();
+    await expect(page.locator('#toast')).toContainText('celular');
+    await expect(page.locator('#phone')).toBeFocused();
     expect(await openedUrls(page)).toEqual([]);
   });
 
   test('abre WhatsApp con el diseño en el mensaje', async ({ page }) => {
     await addCharms(page, ['osito', 'cereza', 'osito']);
-    await page.locator('#model').fill('iPhone 15');
+    await page.locator('#phone').selectOption('iphone-15');
     await page.locator('#btnOrder').click();
     await expect.poll(() => openedUrls(page)).toHaveLength(1);
     const [url] = await openedUrls(page);
@@ -75,7 +75,45 @@ test.describe('Armador', () => {
     const text = decodeURIComponent(url?.split('text=')[1] ?? '');
     expect(text).toContain('*Celular:* iPhone 15');
     expect(text).toContain('• Osito x2');
-    expect(text).toContain('*Total:* $60.000');
+    expect(text).toContain('*Total:* $55.000');
+  });
+
+  test('un iPhone define el tamaño, el precio y la foto del forro', async ({ page }) => {
+    await page.locator('#phone').selectOption('iphone-16-pro-max');
+    await expect(page.locator('#phoneInfo')).toContainText('$60.000');
+    await expect(page.locator('#sizeArea')).toBeHidden();
+    await expect(page.locator('#modelField')).toBeHidden();
+    await expect(page.locator('#deviceArt img')).toHaveAttribute('src', /iphone-16-pro-max/);
+    await expect(page.locator('#deviceArt img')).toHaveAttribute('alt', /iPhone 16 Pro Max/);
+
+    await page.locator('#phone').selectOption('iphone-se');
+    await expect(page.locator('#phoneInfo')).toContainText('$55.000');
+    await expect(page.locator('#countMax')).toHaveText('9');
+    await expect(page.locator('#deviceArt img')).toHaveAttribute('src', /iphone-se/);
+  });
+
+  test('las fotos de los forros cargan sin errores', async ({ page, problems }) => {
+    await page.locator('#phone').selectOption('iphone-17-pro');
+    const image = page.locator('#deviceArt img');
+    await expect(image).toHaveAttribute('src', /iphone-17-pro/);
+    await expect.poll(() => image.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
+    expect(problems.list).toEqual([]);
+  });
+
+  test('con otra marca se escribe el modelo y se elige el tamaño', async ({ page }) => {
+    await addCharms(page, ['osito']);
+    await page.locator('#phone').selectOption('otro');
+    await expect(page.locator('#sizeArea')).toBeVisible();
+    await page.locator('#btnOrder').click();
+    await expect(page.locator('#model')).toBeFocused();
+    await page.locator('#model').fill('Galaxy S24');
+    await page.locator('[data-size="pequeno"]').click();
+    await page.locator('#btnOrder').click();
+    await expect.poll(() => openedUrls(page)).toHaveLength(1);
+    const [url] = await openedUrls(page);
+    const text = decodeURIComponent(url?.split('text=')[1] ?? '');
+    expect(text).toContain('*Celular:* Galaxy S24');
+    expect(text).toContain('*Total:* $55.000');
   });
 
   test('al cambiar a pequeño recorta a 9 y avisa', async ({ page }) => {
@@ -96,9 +134,11 @@ test.describe('Armador', () => {
 
   test('recuerda el diseño al recargar', async ({ page }) => {
     await addCharms(page, ['osito', 'hongo']);
+    await page.locator('#phone').selectOption('otro');
     await page.locator('#model').fill('Galaxy S24');
     await page.reload();
     await expect(page.locator('#countNow')).toHaveText('2');
+    await expect(page.locator('#phone')).toHaveValue('otro');
     await expect(page.locator('#model')).toHaveValue('Galaxy S24');
   });
 

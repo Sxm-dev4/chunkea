@@ -23,7 +23,7 @@ export const COPY = {
     combo: (name: string): string => `${lineIcon('sparkle')} Cargamos “${escapeHtml(name)}”. ¡Hazlo tuyo!`,
     trimmed: (n: number, max: number): string =>
       `Quitamos ${n} chunki${n > 1 ? 's' : ''}: aquí caben hasta ${max}`,
-    missingModel: `${lineIcon('phone')} Cuéntanos el modelo de tu cel para hacer tu forro`,
+    missingModel: `${lineIcon('phone')} Cuéntanos cuál es tu celular para hacer tu forro`,
     noCharms: `${lineIcon('heart')} Elige al menos un chunki`,
     opening: `${lineIcon('chat')} ¡Abriendo WhatsApp! Tu diseño ya va en el mensaje`,
   },

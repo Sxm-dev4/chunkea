@@ -1,40 +1,34 @@
 import type { SizeId } from '../config/site';
 import { getChunki } from '../data/chunkis';
+import { caseBox, caseImageUrl, cameraZoneFor, type Box } from '../data/phones';
 import { glyphSvg } from '../icons/glyphs';
 import { seededRng } from '../lib/random';
-import { SLOTS } from './placement';
+import { SLOTS, touchesCamera } from './placement';
 
-/** Dibujo 2D del forro transparente (lienzo 300×600). */
-export function caseSvg(size: SizeId): string {
-  const lenses: readonly (readonly [number, number])[] =
-    size === 'pequeno'
-      ? [
-          [60, 60],
-          [112, 112],
-        ]
-      : [
-          [60, 58],
-          [60, 116],
-          [114, 87],
-        ];
-  const lensSvg = lenses
-    .map(
-      ([x, y]) =>
-        `<circle cx="${x}" cy="${y}" r="23" fill="#0d0b10" stroke="#9b9ba8" stroke-width="4"/>` +
-        `<circle cx="${x}" cy="${y}" r="11" fill="#1c2236"/><circle cx="${x - 4}" cy="${y - 4}" r="3.2" fill="#7f94c9" opacity=".7"/>`,
-    )
-    .join('');
-  return `<svg viewBox="0 0 300 600" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <rect x="9" y="9" width="282" height="582" rx="48" fill="url(#glass)" stroke="rgba(255,255,255,.85)" stroke-width="5"/>
-    <rect x="19" y="19" width="262" height="562" rx="40" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
-    <rect x="24" y="22" width="128" height="128" rx="34" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.75)" stroke-width="3"/>
-    ${lensSvg}
-    <circle cx="118" cy="${size === 'pequeno' ? 52 : 40}" r="6.5" fill="#fff6d0" stroke="#9b9ba8" stroke-width="2"/>
-    <rect x="291" y="150" width="6" height="70" rx="3" fill="rgba(255,255,255,.55)"/>
-    <rect x="3" y="140" width="6" height="40" rx="3" fill="rgba(255,255,255,.55)"/>
-    <rect x="3" y="195" width="6" height="40" rx="3" fill="rgba(255,255,255,.55)"/>
-    <path d="M40 600L300 120V60L0 600z" fill="#fff" opacity=".06"/>
-  </svg>`;
+/** Ancho y alto reales de los renders: reservan el espacio antes de que cargue la imagen. */
+const IMAGE_WIDTH = 640;
+const IMAGE_HEIGHT = 1280;
+
+/** Imagen del forro (sólo vía atributos y CSSOM: compatible con la CSP). */
+export function createCaseImage(renderId: string, alt: string, priority = false): HTMLImageElement {
+  const img = document.createElement('img');
+  img.src = caseImageUrl(renderId);
+  img.alt = alt;
+  img.width = IMAGE_WIDTH;
+  img.height = IMAGE_HEIGHT;
+  img.decoding = 'async';
+  img.draggable = false;
+  if (priority) img.setAttribute('fetchpriority', 'high');
+  else img.loading = 'lazy';
+  return img;
+}
+
+/** Ajusta la capa de chunkis al área del forro dentro de la imagen. */
+export function fitLayerToCase(layer: HTMLElement, box: Box): void {
+  layer.style.left = `${box.x0 * 100}%`;
+  layer.style.top = `${box.y0 * 100}%`;
+  layer.style.width = `${(box.x1 - box.x0) * 100}%`;
+  layer.style.height = `${(box.y1 - box.y0) * 100}%`;
 }
 
 /** Posiciona un elemento de chunki (sólo vía CSSOM: compatible con la CSP). */
@@ -45,18 +39,29 @@ export function placeCharmElement(el: HTMLElement, x: number, y: number, rotatio
 }
 
 /** Forro decorativo (hero e "Inspírate") con chunkis en posiciones fijas. */
-export function createMiniCase(size: SizeId, ids: readonly string[], seed: number): HTMLElement {
+export function createMiniCase(
+  renderId: string,
+  size: SizeId,
+  ids: readonly string[],
+  seed: number,
+  priority = false,
+): HTMLElement {
   const rng = seededRng(seed);
   const wrap = document.createElement('div');
   wrap.className = 'mini-case';
   const art = document.createElement('div');
   art.className = 'device-art';
-  art.innerHTML = caseSvg(size);
-  wrap.append(art);
+  art.append(createCaseImage(renderId, '', priority));
+  const layer = document.createElement('div');
+  layer.className = 'charm-layer';
+  fitLayerToCase(layer, caseBox(renderId));
+  wrap.append(art, layer);
 
-  ids.slice(0, SLOTS[size].length).forEach((id, i) => {
+  const zone = cameraZoneFor(renderId);
+  const slots = SLOTS[size].filter(([x, y]) => !touchesCamera({ x, y }, zone));
+  ids.slice(0, slots.length).forEach((id, i) => {
     const chunki = getChunki(id);
-    const slot = SLOTS[size][i];
+    const slot = slots[i];
     if (!chunki || !slot) return;
     const charm = document.createElement('span');
     charm.className = chunki.mini ? 'charm mini' : 'charm';
@@ -67,7 +72,7 @@ export function createMiniCase(size: SizeId, ids: readonly string[], seed: numbe
       slot[1] + (rng() - 0.5) * 3,
       Math.round((rng() - 0.5) * 50),
     );
-    wrap.append(charm);
+    layer.append(charm);
   });
   return wrap;
 }

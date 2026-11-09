@@ -120,8 +120,7 @@ const GRADIENTS = `
   <linearGradient id="gd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".4" stop-color="#d6a536"/><stop offset=".6" stop-color="#fbe39a"/><stop offset="1" stop-color="#94680f"/></linearGradient>
   <radialGradient id="rb" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#ff7084"/><stop offset=".45" stop-color="#c8102e"/><stop offset="1" stop-color="#560615"/></radialGradient>
   <radialGradient id="bl" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#d7f0ff"/><stop offset=".5" stop-color="#6e9fd8"/><stop offset="1" stop-color="#253f73"/></radialGradient>
-  <linearGradient id="mr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4fbff"/><stop offset=".5" stop-color="#b9cfe0"/><stop offset="1" stop-color="#6d8399"/></linearGradient>
-  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset=".5" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient>`;
+  <linearGradient id="mr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4fbff"/><stop offset=".5" stop-color="#b9cfe0"/><stop offset="1" stop-color="#6d8399"/></linearGradient>`;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 

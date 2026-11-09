@@ -1,6 +1,7 @@
 import { PRODUCTS, isSizeId } from '../config/site';
 import { COPY } from '../copy';
 import { CHUNKIS, isCategoryFilter } from '../data/chunkis';
+import { OTHER_PHONE, PHONES, getPhone } from '../data/phones';
 import { glyphSvg } from '../icons/glyphs';
 import { escapeHtml } from '../lib/html';
 import { requireEl } from '../lib/env';
@@ -16,6 +17,10 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
   const counterMsg = requireEl('#counterMsg', root);
   const counterFill = requireEl('#counterFill', root);
   const model = requireEl<HTMLInputElement>('#model', root);
+  const phoneSelect = requireEl<HTMLSelectElement>('#phone', root);
+  const phoneInfo = requireEl('#phoneInfo', root);
+  const sizeArea = requireEl('#sizeArea', root);
+  const modelField = requireEl('#modelField', root);
   const sumTitle = requireEl('#sumTitle', root);
   const sumSub = requireEl('#sumSub', root);
   const sumPrice = requireEl('#sumPrice', root);
@@ -69,7 +74,25 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
     next?.click();
   });
 
-  /* ---------- Modelo del celular ---------- */
+  /* ---------- Celular ---------- */
+  const families = [...new Set(PHONES.map((p) => p.family))];
+  phoneSelect.innerHTML =
+    `<option value="">Elige tu celular…</option>` +
+    families
+      .map((family) => {
+        const options = PHONES.filter((p) => p.family === family)
+          .map((p) => `<option value="${p.id}">${escapeHtml(p.name)}</option>`)
+          .join('');
+        return `<optgroup label="${escapeHtml(family)}">${options}</optgroup>`;
+      })
+      .join('') +
+    `<option value="${OTHER_PHONE}">Otro celular (Samsung, Xiaomi…)</option>`;
+  phoneSelect.addEventListener('change', () => {
+    phoneSelect.closest('.field')?.classList.remove('invalid');
+    store.setPhone(phoneSelect.value || null);
+  });
+
+  /* ---------- Modelo escrito a mano (otras marcas) ---------- */
   model.addEventListener('input', () => {
     model.closest('.field')?.classList.remove('invalid');
     store.setModel(model.value.trim());
@@ -86,6 +109,14 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
       b.tabIndex = checked ? 0 : -1;
     });
     filterButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === state.filter)));
+    const listed = getPhone(state.phoneId);
+    phoneSelect.value = state.phoneId ?? '';
+    sizeArea.hidden = !!listed;
+    modelField.hidden = state.phoneId !== OTHER_PHONE;
+    phoneInfo.hidden = !listed;
+    phoneInfo.textContent = listed
+      ? `${product.name} · hasta ${product.maxCharms} chunkis · ${formatCOP(product.price)}`
+      : '';
     if (document.activeElement !== model && model.value !== state.model) model.value = state.model;
 
     const perId = new Map<string, number>();

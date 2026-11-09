@@ -8,6 +8,7 @@ import type { SceneController } from './builder/view3d/scene';
 import { PRODUCTS, isSizeId } from './config/site';
 import { COPY } from './copy';
 import { COMBOS } from './data/combos';
+import { GENERIC_RENDER, OTHER_PHONE } from './data/phones';
 import { mountAnimatedIcons } from './icons/animatedIcons';
 import { mountGlyphSprite } from './icons/glyphs';
 import { hydrateInlineIcons } from './icons/lineIcons';
@@ -31,7 +32,9 @@ const scrollBehavior = (): ScrollBehavior => (prefersReducedMotion() ? 'auto' : 
 function mountDecorations(): void {
   const hero = document.getElementById('heroCase');
   const first = COMBOS[0];
-  if (hero && first) hero.append(createMiniCase('grande', first.items, 7));
+  if (hero && first) {
+    hero.append(createMiniCase(GENERIC_RENDER[first.size], first.size, first.items, 7, true));
+  }
 
   const grid = document.getElementById('inspoGrid');
   if (!grid) return;
@@ -41,7 +44,7 @@ function mountDecorations(): void {
     card.className = 'inspo-card reveal';
     card.dataset.combo = String(i);
     card.setAttribute('aria-label', `Cargar el combo ${combo.name} en el armador`);
-    card.append(createMiniCase(combo.size, combo.items, i + 3));
+    card.append(createMiniCase(GENERIC_RENDER[combo.size], combo.size, combo.items, i + 3));
     const title = document.createElement('strong');
     title.textContent = combo.name;
     const desc = document.createElement('span');
@@ -53,16 +56,19 @@ function mountDecorations(): void {
 
 function mountOrdering(store: BuilderStore, toast: (html: string) => void, confetti: HTMLElement): void {
   const model = requireEl<HTMLInputElement>('#model');
+  const phone = requireEl<HTMLSelectElement>('#phone');
   const counter = requireEl('#counter');
 
   const order = (): void => {
     const state = store.getState();
     const problem = validateOrder(state);
     if (problem === 'missing-model') {
-      const field = model.closest('.field');
+      // Sin elegir: se señala la lista. Otra marca: falta escribir el modelo
+      const missing = state.phoneId === OTHER_PHONE ? model : phone;
+      const field = missing.closest('.field');
       if (field) replayClass(field, 'invalid');
-      model.focus({ preventScroll: true });
-      model.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
+      missing.focus({ preventScroll: true });
+      missing.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
       toast(COPY.toast.missingModel);
       return;
     }
@@ -140,6 +146,7 @@ export function initApp(): void {
         toast(COPY.toast.full);
         break;
       case 'size-changed':
+      case 'phone-changed':
         bump();
         if (event.trimmed > 0) toast(COPY.toast.trimmed(event.trimmed, max));
         break;
@@ -188,10 +195,12 @@ export function initApp(): void {
   mountView3D({
     stage,
     store,
-    onActive: (controller) => {
+    onLoaded: (controller) => {
       scene = controller;
-      hint.innerHTML = COPY.hint3D;
       if (new URLSearchParams(window.location.search).has('e2e')) window.__chunkea3d = controller;
+    },
+    onToggle: (active) => {
+      hint.innerHTML = active ? COPY.hint3D : COPY.hint2D;
     },
   });
 

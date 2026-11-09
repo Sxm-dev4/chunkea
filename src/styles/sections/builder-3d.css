@@ -28,6 +28,16 @@
   visibility: hidden;
 }
 
+/* Con la foto del forro, la escena queda oculta (y deja de dibujarse).
+   three.js le pone display en línea al canvas: por eso el !important. */
+.stage:not(.is-3d) .stage-3d {
+  display: none !important;
+}
+
+.stage:not(.is-3d) .only-3d {
+  display: none;
+}
+
 .stage.is-3d .stage-empty {
   z-index: 2;
 }
@@ -40,17 +50,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.badge-3d {
-  padding: 3px 10px;
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  color: var(--tinta);
-  background: var(--lila);
-  border: 2px solid var(--tinta);
-  border-radius: 999px;
-  box-shadow: 2px 2px 0 var(--tinta);
 }
 
 .tool {
@@ -94,6 +93,20 @@
   height: 18px;
 }
 
+.tool-toggle {
+  color: var(--tinta);
+  background: var(--lila);
+  border-color: var(--tinta);
+  box-shadow: 2px 2px 0 var(--tinta);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.tool-toggle:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
 .stage.loading3d::after {
   content: 'Cargando 3D…';
   position: absolute;
@@ -129,10 +142,5 @@
   .tool {
     height: 30px;
     min-width: 30px;
-  }
-
-  .badge-3d {
-    padding: 2px 8px;
-    font-size: 0.75rem;
   }
 }
