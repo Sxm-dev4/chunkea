@@ -150,10 +150,4 @@ test.describe('Armador', () => {
     await expect(page.locator('[data-size="pequeno"]')).toHaveAttribute('aria-checked', 'true');
     await expect(page.locator('#toast')).toContainText('Dulce');
   });
-
-  test('carga un combo de Inspírate', async ({ page }) => {
-    await page.locator('[data-combo="2"]').dispatchEvent('click');
-    await expect(page.locator('#countNow')).toHaveText('9');
-    await expect(page.locator('[data-size="pequeno"]')).toHaveAttribute('aria-checked', 'true');
-  });
 });

@@ -36,30 +36,14 @@ function mountDecorations(): void {
     hero.append(createMiniCase(GENERIC_RENDER[first.size], first.size, first.items, 7, true));
   }
 
-  const grid = document.getElementById('inspoGrid');
-  if (!grid) return;
-  COMBOS.forEach((combo, i) => {
-    const card = document.createElement('button');
-    card.type = 'button';
-    card.className = 'inspo-card reveal';
-    card.dataset.combo = String(i);
-    card.setAttribute('aria-label', `Cargar el combo ${combo.name} en el armador`);
-    card.append(createMiniCase(GENERIC_RENDER[combo.size], combo.size, combo.items, i + 3));
-    const title = document.createElement('strong');
-    title.textContent = combo.name;
-    const desc = document.createElement('span');
-    desc.textContent = `${combo.description} · ${PRODUCTS[combo.size].name.toLowerCase()}`;
-    card.append(title, desc);
-    grid.append(card);
-  });
-
-  // Los mismos combos, en pequeño, dentro del armador (paso 2)
+  // Combos pre armados dentro del armador (paso 2)
   const chips = document.getElementById('comboChips');
   COMBOS.forEach((combo, i) => {
     const chip = document.createElement('button');
     chip.type = 'button';
     chip.className = 'combo-chip';
     chip.dataset.comboChip = String(i);
+    chip.title = `${combo.description} · ${PRODUCTS[combo.size].name.toLowerCase()}`;
     chip.setAttribute('aria-label', `Cargar el combo ${combo.name}`);
     const photo = document.createElement('span');
     photo.className = 'combo-chip-photo';
@@ -191,16 +175,8 @@ export function initApp(): void {
   });
   requireEl('#btnClear').addEventListener('click', () => store.clear());
 
-  // Combos de "Inspírate" y botones de la sección de precios
+  // Combos (dentro del armador no hace falta desplazarse) y botones de la sección de precios
   const builder = requireEl('#arma');
-  document.getElementById('inspoGrid')?.addEventListener('click', (e) => {
-    const card = (e.target as Element).closest<HTMLElement>('[data-combo]');
-    const combo = card ? COMBOS[Number(card.dataset.combo)] : undefined;
-    if (!combo) return;
-    store.loadCombo(combo);
-    builder.scrollIntoView({ behavior: scrollBehavior() });
-  });
-  // Dentro del armador no hace falta desplazarse: el combo se ve en el forro de una vez
   document.getElementById('comboChips')?.addEventListener('click', (e) => {
     const chip = (e.target as Element).closest<HTMLElement>('[data-combo-chip]');
     const combo = chip ? COMBOS[Number(chip.dataset.comboChip)] : undefined;
