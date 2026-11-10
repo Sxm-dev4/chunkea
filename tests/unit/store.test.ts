@@ -22,8 +22,8 @@ describe('createBuilderStore', () => {
     const store = newStore();
     const events: BuilderEvent['type'][] = [];
     store.subscribe((_, e) => events.push(e.type));
-    for (let i = 0; i < PRODUCTS.grande.maxCharms; i++) expect(store.addCharm('osito')).toBe(true);
-    expect(store.addCharm('osito')).toBe(false);
+    for (let i = 0; i < PRODUCTS.grande.maxCharms; i++) expect(store.addCharm('plata-osito')).toBe(true);
+    expect(store.addCharm('plata-osito')).toBe(false);
     expect(store.getState().charms).toHaveLength(PRODUCTS.grande.maxCharms);
     expect(events.at(-1)).toBe('rejected');
   });
@@ -32,7 +32,7 @@ describe('createBuilderStore', () => {
     const store = newStore();
     const listener = vi.fn();
     store.subscribe(listener);
-    for (let i = 0; i < PRODUCTS.grande.maxCharms; i++) store.addCharm('cereza');
+    for (let i = 0; i < PRODUCTS.grande.maxCharms; i++) store.addCharm('plata-cereza');
     const lastAdded = listener.mock.calls
       .map(([, e]) => e as BuilderEvent)
       .findLast((e) => e.type === 'added');
@@ -47,19 +47,19 @@ describe('createBuilderStore', () => {
 
   it('quita por uid y el último de un tipo', () => {
     const store = newStore();
-    store.addCharm('osito');
-    store.addCharm('cereza');
-    store.addCharm('osito');
-    store.removeOneOf('osito');
-    expect(store.getState().charms.map((c) => c.id)).toEqual(['osito', 'cereza']);
+    store.addCharm('plata-osito');
+    store.addCharm('plata-cereza');
+    store.addCharm('plata-osito');
+    store.removeOneOf('plata-osito');
+    expect(store.getState().charms.map((c) => c.id)).toEqual(['plata-osito', 'plata-cereza']);
     const first = store.getState().charms[0];
     if (first) store.removeCharm(first.uid);
-    expect(store.getState().charms.map((c) => c.id)).toEqual(['cereza']);
+    expect(store.getState().charms.map((c) => c.id)).toEqual(['plata-cereza']);
   });
 
   it('al pasar a pequeño recorta al máximo y lo informa', () => {
     const store = newStore();
-    for (let i = 0; i < 12; i++) store.addCharm('osito');
+    for (let i = 0; i < 12; i++) store.addCharm('plata-osito');
     const listener = vi.fn();
     store.subscribe(listener);
     store.setSize('pequeno');
@@ -69,7 +69,7 @@ describe('createBuilderStore', () => {
 
   it('mueve chunkis dentro del forro y fuera de la cámara', () => {
     const store = newStore();
-    store.addCharm('osito');
+    store.addCharm('plata-osito');
     const charm = store.getState().charms[0];
     expect(charm).toBeDefined();
     store.moveCharm(charm!.uid, 200, -50);
@@ -81,12 +81,13 @@ describe('createBuilderStore', () => {
 
   it('"Sorpréndeme" llena los espacios libres con el filtro actual', () => {
     const store = newStore();
-    store.setFilter('animalitos');
-    store.addCharm('osito');
+    store.setFilter('dorados');
+    store.addCharm('plata-osito');
     expect(store.surprise()).toBe(PRODUCTS.grande.maxCharms - 1);
     const ids = store.getState().charms.map((c) => c.id);
     expect(ids).toHaveLength(PRODUCTS.grande.maxCharms);
-    expect(ids.every((id) => ['osito', 'leopardo', 'elefante', 'tortuga'].includes(id))).toBe(true);
+    // El primero lo puso a mano; el resto sale del filtro
+    expect(ids.slice(1).every((id) => id.startsWith('oro-'))).toBe(true);
   });
 
   it('carga un combo con su tamaño y sus chunkis', () => {
@@ -102,17 +103,17 @@ describe('createBuilderStore', () => {
     const storage = memoryStorage();
     const store = newStore(storage);
     store.setModel('iPhone 15');
-    store.addCharm('osito');
-    store.addCharm('cereza');
+    store.addCharm('plata-osito');
+    store.addCharm('plata-cereza');
     const again = newStore(storage);
     expect(again.getState().model).toBe('iPhone 15');
-    expect(again.getState().charms.map((c) => c.id)).toEqual(['osito', 'cereza']);
+    expect(again.getState().charms.map((c) => c.id)).toEqual(['plata-osito', 'plata-cereza']);
   });
 
   it('no guarda al cambiar de filtro', () => {
     const storage = memoryStorage();
     const spy = vi.spyOn(storage, 'set');
-    newStore(storage).setFilter('random');
+    newStore(storage).setFilter('coloridos');
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -135,19 +136,19 @@ describe('parseSavedDesign', () => {
       size: 'grande',
       model: 'Moto',
       charms: [
-        { id: 'osito', x: 60, y: 60, r: 10 },
+        { id: 'plata-osito', x: 60, y: 60, r: 10 },
         { id: 'inventado', x: 60, y: 60, r: 0 },
-        { id: 'cereza', x: 'a', y: 60, r: 0 },
-        { id: 'hongo', x: 500, y: 60 },
+        { id: 'plata-cereza', x: 'a', y: 60, r: 0 },
+        { id: 'plata-hongo', x: 500, y: 60 },
       ],
     });
     const design = parseSavedDesign(raw);
-    expect(design?.charms.map((c) => c.id)).toEqual(['osito', 'hongo']);
+    expect(design?.charms.map((c) => c.id)).toEqual(['plata-osito', 'plata-hongo']);
     expect(design?.charms[1]).toMatchObject({ x: 88, r: 0 });
   });
 
   it('usa el tamaño por defecto si viene uno desconocido y recorta al máximo', () => {
-    const charms = Array.from({ length: 20 }, () => ({ id: 'osito', x: 60, y: 60, r: 0 }));
+    const charms = Array.from({ length: 20 }, () => ({ id: 'plata-osito', x: 60, y: 60, r: 0 }));
     const design = parseSavedDesign(JSON.stringify({ size: 'collar', charms }));
     expect(design?.size).toBe('grande');
     expect(design?.charms).toHaveLength(PRODUCTS.grande.maxCharms);

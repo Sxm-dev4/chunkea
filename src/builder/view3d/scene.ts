@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { getChunki } from '../../data/chunkis';
+import { chunkiWidth, getChunki } from '../../data/chunkis';
 import { cameraZoneFor, renderIdFor } from '../../data/phones';
 import { prefersReducedMotion } from '../../lib/env';
 import { clampToCase } from '../placement';
@@ -123,7 +123,7 @@ export async function mountScene(
   const createCharm = (charm: PlacedCharm, initial: boolean): CharmObject | null => {
     const chunki = getChunki(charm.id);
     if (!chunki) return null;
-    const body = charmTemplate(chunki.glyph).clone();
+    const body = charmTemplate(chunki.id).clone();
     const charmRoot = new THREE.Group();
     charmRoot.add(body);
     charmRoot.userData.uid = charm.uid;
@@ -137,7 +137,7 @@ export async function mountScene(
       uid: charm.uid,
       target: [x, y],
       rotation: (-(charm.r || 0) * Math.PI) / 180,
-      size: (chunki.mini ? 0.14 : 0.19) * dims.W,
+      size: (chunkiWidth(chunki.id) / 100) * dims.W,
       appear: reduce ? 1 : 0,
       delay: initial && !reduce ? stagger++ * 0.06 : 0,
       removing: 0,

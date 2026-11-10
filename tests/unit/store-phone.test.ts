@@ -37,7 +37,7 @@ describe('elegir celular', () => {
   it('entre iPhone del mismo tamaño conserva el diseño y sólo saca lo que tapa la cámara', () => {
     const store = newStore();
     store.setPhone('iphone-se');
-    store.addCharm('osito');
+    store.addCharm('plata-osito');
     const [charm] = store.getState().charms;
     store.moveCharm(charm!.uid, 60, 12); // libre en el SE: su cámara es pequeña
     expect(store.getState().charms[0]).toMatchObject({ x: 60, y: 12 });
@@ -114,7 +114,7 @@ describe('diseños guardados', () => {
   it('saca de la cámara los chunkis guardados encima', () => {
     const saved = parse({
       phoneId: 'iphone-17-pro',
-      charms: [{ id: 'osito', x: 50, y: 10, r: 0 }],
+      charms: [{ id: 'plata-osito', x: 50, y: 10, r: 0 }],
     });
     const [charm] = saved?.charms ?? [];
     expect(isInCameraZone(charm!, cameraZoneFor('iphone-17-pro'))).toBe(false);

@@ -90,13 +90,6 @@ p {
   left: 8px;
 }
 
-.svg-sprite {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
 .noscript {
   position: fixed;
   inset: auto 16px 16px;

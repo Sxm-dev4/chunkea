@@ -1,30 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { paintIcon, strokeForSize } from '../../src/icons/animatedIcons';
-import { GLYPHS, glyphSvg, mountGlyphSprite } from '../../src/icons/glyphs';
 import { hydrateInlineIcons, isLineIconId, lineIcon } from '../../src/icons/lineIcons';
 import { escapeHtml } from '../../src/lib/html';
-
-describe('sprite de chunkis', () => {
-  it('se inserta una sola vez con todos los dibujos', () => {
-    mountGlyphSprite();
-    mountGlyphSprite();
-    expect(document.querySelectorAll('#chunkea-sprite')).toHaveLength(1);
-    expect(document.querySelectorAll('#chunkea-sprite symbol')).toHaveLength(Object.keys(GLYPHS).length);
-  });
-
-  it.each(Object.entries(GLYPHS))('el dibujo "%s" es SVG/XML válido', (_, body) => {
-    // El armador 3D lee los dibujos con un lector XML estricto (sin atributos repetidos, etc.)
-    const doc = new DOMParser().parseFromString(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">${body}</svg>`,
-      'image/svg+xml',
-    );
-    expect(doc.getElementsByTagName('parsererror')).toHaveLength(0);
-  });
-
-  it('referencia el símbolo correcto', () => {
-    expect(glyphSvg('bear')).toContain('href="#g-bear"');
-  });
-});
 
 describe('iconos de línea', () => {
   it('reemplaza los marcadores <i data-ico> por SVG', () => {
