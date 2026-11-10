@@ -7,6 +7,7 @@ import { mountView3D } from './builder/view3d';
 import type { SceneController } from './builder/view3d/scene';
 import { PRODUCTS, isSizeId } from './config/site';
 import { COPY } from './copy';
+import { chunkiPiecePhoto } from './data/chunkis';
 import { COMBOS } from './data/combos';
 import { GENERIC_RENDER, OTHER_PHONE } from './data/phones';
 import { mountAnimatedIcons } from './icons/animatedIcons';
@@ -50,6 +51,26 @@ function mountDecorations(): void {
     desc.textContent = `${combo.description} · ${PRODUCTS[combo.size].name.toLowerCase()}`;
     card.append(title, desc);
     grid.append(card);
+  });
+
+  // Los mismos combos, en pequeño, dentro del armador (paso 2)
+  const chips = document.getElementById('comboChips');
+  COMBOS.forEach((combo, i) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'combo-chip';
+    chip.dataset.comboChip = String(i);
+    chip.setAttribute('aria-label', `Cargar el combo ${combo.name}`);
+    const photo = document.createElement('span');
+    photo.className = 'combo-chip-photo';
+    const img = document.createElement('img');
+    img.src = chunkiPiecePhoto(combo.items[0] ?? '');
+    img.alt = '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    photo.append(img);
+    chip.append(photo, combo.name);
+    chips?.append(chip);
   });
 }
 
@@ -178,6 +199,12 @@ export function initApp(): void {
     if (!combo) return;
     store.loadCombo(combo);
     builder.scrollIntoView({ behavior: scrollBehavior() });
+  });
+  // Dentro del armador no hace falta desplazarse: el combo se ve en el forro de una vez
+  document.getElementById('comboChips')?.addEventListener('click', (e) => {
+    const chip = (e.target as Element).closest<HTMLElement>('[data-combo-chip]');
+    const combo = chip ? COMBOS[Number(chip.dataset.comboChip)] : undefined;
+    if (combo) store.loadCombo(combo);
   });
   document.querySelectorAll<HTMLButtonElement>('[data-start]').forEach((btn) =>
     btn.addEventListener('click', () => {

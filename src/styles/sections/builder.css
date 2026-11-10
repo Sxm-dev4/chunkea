@@ -591,28 +591,87 @@
   color: var(--rosa);
 }
 
-/* Muestra de color de cada tipo de chunki en los filtros */
-.swatch {
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgb(255 255 255 / 70%);
+/* Combos de "Inspírate" en pequeño, dentro del paso 2 */
+.combos {
+  margin-bottom: 14px;
+}
+
+.combos-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--muted-dark);
+}
+
+.combo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.combo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 13px 5px 5px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  background: rgb(227 132 230 / 10%);
+  border: 2px solid rgb(227 132 230 / 45%);
+  border-radius: 999px;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
+}
+
+.combo-chip:hover {
+  border-color: var(--lila);
+  background: rgb(227 132 230 / 20%);
+  transform: translateY(-1px);
+}
+
+.combo-chip:active {
+  transform: scale(0.96);
+}
+
+.combo-chip-photo {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  background: rgb(255 255 255 / 12%);
   border-radius: 50%;
 }
 
-.swatch-plata {
-  background: linear-gradient(135deg, #fbfcff, #8f97a3 55%, #e3e7ee);
+.combo-chip-photo img {
+  max-width: 20px;
+  max-height: 20px;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 45%));
 }
 
-.swatch-oro {
-  background: linear-gradient(135deg, #fff3c4, #c99a2e 55%, #f5d987);
+/* Foto de un chunki de cada tipo en los filtros */
+.filter-chip {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  background: rgb(255 255 255 / 12%);
+  border-radius: 50%;
 }
 
-.swatch-color {
-  background: conic-gradient(#ff5a8a, #ffd23f, #4cc9f0, #8b5cf6, #ff5a8a);
+.filter-chip img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 45%));
 }
 
-.filter[aria-pressed='true'] .swatch {
-  border-color: var(--tinta);
+.filter[aria-pressed='true'] .filter-chip {
+  background: var(--noche);
 }
 
 .pick-wrap.has .pick {
