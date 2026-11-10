@@ -27,7 +27,8 @@ const make =
 const plata = make('plateados', 'plata');
 const oro = make('dorados', 'oro');
 const color = make('coloridos', 'color');
-const AGOTADO: Extra = { soldOut: true };
+/** Por ahora no hay agotados; para agotar uno: plata('ancla', 'Ancla', AGOTADO). */
+export const AGOTADO: Extra = { soldOut: true };
 const COLORES: Extra = { note: 'color' };
 
 /**
@@ -49,7 +50,7 @@ export const CHUNKIS: readonly Chunki[] = [
   plata('corazon-mini', 'Corazón mini'),
   plata('rey-corazon-alas', 'Rey de corazón con alas'),
   plata('astronauta', 'Astronauta'),
-  plata('corazon-destello', 'Corazón destello', AGOTADO),
+  plata('corazon-destello', 'Corazón destello'),
   plata('espejo', 'Espejo'),
   plata('corazon-cruz', 'Corazón cruz'),
   plata('corazon-rey', 'Corazón rey'),
@@ -60,7 +61,7 @@ export const CHUNKIS: readonly Chunki[] = [
   plata('avion', 'Avión'),
   plata('corazon-ojo', 'Corazón con ojo'),
   plata('ala-corazon', 'Ala corazón'),
-  plata('ancla', 'Ancla', AGOTADO),
+  plata('ancla', 'Ancla'),
   plata('reina-roja', 'Reina roja'),
   plata('corazon-puas', 'Corazón púas'),
   plata('arcoiris', 'Arcoíris'),
@@ -102,7 +103,7 @@ export const CHUNKIS: readonly Chunki[] = [
   oro('oso-grabado', 'Oso grabado'),
   oro('rey-corazon-negro', 'Rey de corazón negro'),
   oro('cuadro-ojo', 'Cuadro ojo'),
-  oro('cuadro-mano', 'Cuadro mano', AGOTADO),
+  oro('cuadro-mano', 'Cuadro mano'),
   oro('rostro-sol-luna', 'Rostro sol y luna'),
   oro('cupido', 'Cupido'),
   oro('mano-nacar', 'Mano nácar'),
@@ -137,7 +138,7 @@ export const CHUNKIS: readonly Chunki[] = [
   color('corona', 'Corona'),
   color('pancito', 'Pancito'),
   color('corazon-rojo', 'Corazón rojo'),
-  color('coca-cola-lata', 'Coca-Cola lata', AGOTADO),
+  color('coca-cola-lata', 'Coca-Cola lata'),
   color('coca-cola', 'Coca-Cola'),
   color('osito-goma', 'Osito de goma', COLORES),
   color('hongo', 'Hongo', COLORES),
@@ -153,7 +154,7 @@ export const CHUNKIS: readonly Chunki[] = [
   color('lego', 'Lego', COLORES),
   color('estrella-mario', 'Estrella Mario Bros'),
   color('pato', 'Pato', COLORES),
-  color('paleta-bebe', 'Paleta bebé', AGOTADO),
+  color('paleta-bebe', 'Paleta bebé'),
   color('perritos', 'Perritos', COLORES),
   color('dado-turco-fucsia', 'Dado turco fucsia'),
   color('licores-mini', 'Licores mini'),
