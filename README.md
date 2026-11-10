@@ -45,7 +45,7 @@ Abre la URL que muestra la terminal (normalmente http://localhost:5173).
 | URL del sitio (SEO, sitemap)      | `.env` → `VITE_SITE_URL`                                         |
 | Precios o máximo de chunkis       | `src/config/site.ts` → `PRODUCTS` (y los textos de `index.html`) |
 | Agregar / quitar / agotar chunkis | `src/data/chunkis.ts` (`AGOTADO` para agotado)                   |
-| Combos de "Inspírate"             | `src/data/combos.ts`                                             |
+| Combos pre armados del armador    | `src/data/combos.ts`                                             |
 | iPhones y tamaño de cada uno      | `src/data/phones.ts`                                             |
 | Colores de la marca               | `src/styles/tokens.css`                                          |
 | Textos de avisos y contador       | `src/copy.ts`                                                    |

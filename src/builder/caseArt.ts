@@ -50,7 +50,7 @@ export function placeCharmElement(el: HTMLElement, x: number, y: number, rotatio
   el.style.setProperty('--r', `${rotation}deg`);
 }
 
-/** Forro decorativo (hero e "Inspírate") con chunkis en posiciones fijas. */
+/** Forro decorativo (hero) con chunkis en posiciones fijas. */
 export function createMiniCase(
   renderId: string,
   size: SizeId,

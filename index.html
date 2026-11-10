@@ -279,18 +279,32 @@
                   </div>
                   <div class="counter-bar" aria-hidden="true"><span id="counterFill"></span></div>
                 </div>
+                <div class="combos" role="group" aria-labelledby="combos-label">
+                  <span class="combos-label" id="combos-label">¿Sin ideas? Empieza con un combo</span>
+                  <div class="combo-chips" id="comboChips"></div>
+                </div>
                 <div class="filters" role="group" aria-label="Filtrar chunkis por tipo">
                   <button type="button" class="filter" data-cat="todos" aria-pressed="true">Todos</button>
                   <button type="button" class="filter" data-cat="plateados" aria-pressed="false">
-                    <span class="swatch swatch-plata" aria-hidden="true"></span>
+                    <span class="filter-chip" aria-hidden="true"
+                      ><img
+                        src="./src/assets/chunkis/plata-corazon-mini-3d.webp"
+                        alt=""
+                        width="20"
+                        height="20"
+                    /></span>
                     Plateados
                   </button>
                   <button type="button" class="filter" data-cat="dorados" aria-pressed="false">
-                    <span class="swatch swatch-oro" aria-hidden="true"></span>
+                    <span class="filter-chip" aria-hidden="true"
+                      ><img src="./src/assets/chunkis/oro-cora-globo.webp" alt="" width="20" height="20"
+                    /></span>
                     Dorados
                   </button>
                   <button type="button" class="filter" data-cat="coloridos" aria-pressed="false">
-                    <span class="swatch swatch-color" aria-hidden="true"></span>
+                    <span class="filter-chip" aria-hidden="true"
+                      ><img src="./src/assets/chunkis/color-carita-feliz.webp" alt="" width="20" height="20"
+                    /></span>
                     Coloridos
                   </button>
                 </div>
@@ -358,18 +372,6 @@
               <p>Tu diseño viaja en el mensaje. Confirmamos, pagas y te llega a casa.</p>
             </li>
           </ol>
-        </div>
-      </section>
-
-      <!-- ============ INSPÍRATE ============ -->
-      <section class="inspo" id="inspo" aria-labelledby="inspo-title">
-        <div class="container">
-          <div class="section-head">
-            <p class="eyebrow">¿Sin ideas? Tranqui</p>
-            <h2 id="inspo-title">Inspírate</h2>
-            <p>Toca un combo para cargarlo en el armador y cambiarlo a tu gusto.</p>
-          </div>
-          <div class="inspo-grid" id="inspoGrid"></div>
         </div>
       </section>
 
