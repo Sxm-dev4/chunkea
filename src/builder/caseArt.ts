@@ -1,7 +1,6 @@
 import type { SizeId } from '../config/site';
-import { getChunki } from '../data/chunkis';
+import { chunkiPiecePhoto, chunkiWidth, getChunki } from '../data/chunkis';
 import { caseBox, caseImageUrl, cameraZoneFor, type Box } from '../data/phones';
-import { glyphSvg } from '../icons/glyphs';
 import { seededRng } from '../lib/random';
 import { SLOTS, touchesCamera } from './placement';
 
@@ -29,6 +28,19 @@ export function fitLayerToCase(layer: HTMLElement, box: Box): void {
   layer.style.top = `${box.y0 * 100}%`;
   layer.style.width = `${(box.x1 - box.x0) * 100}%`;
   layer.style.height = `${(box.y1 - box.y0) * 100}%`;
+}
+
+/** Pone la foto del chunki dentro del elemento y le da su tamaño real sobre el forro. */
+export function fillCharmElement(el: HTMLElement, chunkiId: string, lazy = false): void {
+  const img = document.createElement('img');
+  // Cada chunki es una foto: los que no se ven al abrir la página se cargan al acercarse
+  if (lazy) img.loading = 'lazy';
+  img.src = chunkiPiecePhoto(chunkiId);
+  img.alt = '';
+  img.decoding = 'async';
+  img.draggable = false;
+  el.replaceChildren(img);
+  el.style.setProperty('--w', `${chunkiWidth(chunkiId)}%`);
 }
 
 /** Posiciona un elemento de chunki (sólo vía CSSOM: compatible con la CSP). */
@@ -64,8 +76,8 @@ export function createMiniCase(
     const slot = slots[i];
     if (!chunki || !slot) return;
     const charm = document.createElement('span');
-    charm.className = chunki.mini ? 'charm mini' : 'charm';
-    charm.innerHTML = glyphSvg(chunki.glyph);
+    charm.className = 'charm';
+    fillCharmElement(charm, chunki.id, !priority);
     placeCharmElement(
       charm,
       slot[0] + (rng() - 0.5) * 5,

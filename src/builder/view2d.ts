@@ -1,8 +1,7 @@
 import { getChunki } from '../data/chunkis';
 import { caseBox, getPhone, renderIdFor } from '../data/phones';
-import { glyphSvg } from '../icons/glyphs';
 import { prefersReducedMotion, replayClass } from '../lib/env';
-import { createCaseImage, fitLayerToCase, placeCharmElement } from './caseArt';
+import { createCaseImage, fillCharmElement, fitLayerToCase, placeCharmElement } from './caseArt';
 import type { BuilderEvent, BuilderState, BuilderStore } from './store';
 
 const DRAG_THRESHOLD_PX = 6;
@@ -50,10 +49,10 @@ export function mountView2D(store: BuilderStore, els: View2DElements): { bump():
     if (!chunki) return null;
     const node = document.createElement('button');
     node.type = 'button';
-    node.className = chunki.mini ? 'charm mini' : 'charm';
+    node.className = 'charm';
     node.dataset.uid = String(uid);
     node.setAttribute('aria-label', `Quitar ${chunki.name}`);
-    node.innerHTML = glyphSvg(chunki.glyph);
+    fillCharmElement(node, chunki.id);
     els.layer.append(node);
     return node;
   };

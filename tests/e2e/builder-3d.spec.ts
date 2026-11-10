@@ -66,7 +66,7 @@ test.describe('Armador 3D', () => {
     await page.locator('#tool3dToggle').click();
     await expect(page.locator('.stage.is-3d')).toBeVisible({ timeout: 30_000 });
 
-    await addCharms(page, ['osito', 'cereza']);
+    await addCharms(page, ['plata-osito', 'plata-cereza']);
     await page.locator('.stage').scrollIntoViewIfNeeded();
     // espera a que el chunki termine de "caer"
     await page.waitForTimeout(1500);
@@ -98,7 +98,7 @@ test.describe('Armador sin WebGL', () => {
   test('se queda la foto del forro funcionando', async ({ page }) => {
     await page.goto('/');
     await page.locator('#arma').scrollIntoViewIfNeeded();
-    await addCharms(page, ['osito']);
+    await addCharms(page, ['plata-osito']);
     await expect(page.locator('#charmLayer .charm')).toHaveCount(1);
     await expect(page.locator('.stage-3d')).toHaveCount(0);
     await expect(page.locator('#stageTools')).toBeHidden();

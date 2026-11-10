@@ -44,7 +44,7 @@ Abre la URL que muestra la terminal (normalmente http://localhost:5173).
 | Número de WhatsApp                | `.env` → `VITE_WHATSAPP`                                         |
 | URL del sitio (SEO, sitemap)      | `.env` → `VITE_SITE_URL`                                         |
 | Precios o máximo de chunkis       | `src/config/site.ts` → `PRODUCTS` (y los textos de `index.html`) |
-| Agregar / quitar / agotar chunkis | `src/data/chunkis.ts` (`soldOut: true` para agotado)             |
+| Agregar / quitar / agotar chunkis | `src/data/chunkis.ts` (`AGOTADO` para agotado)                   |
 | Combos de "Inspírate"             | `src/data/combos.ts`                                             |
 | iPhones y tamaño de cada uno      | `src/data/phones.ts`                                             |
 | Colores de la marca               | `src/styles/tokens.css`                                          |
@@ -85,10 +85,21 @@ npm run models:process -- modelos
 
 ### Agregar un chunki nuevo
 
-1. Si necesita un dibujo nuevo, agrégalo en `src/icons/glyphs.ts` (lienzo 48×48, colores
-   `url(#ag)` plata, `url(#rb)` rubí, etc.). El mismo dibujo se usa en 2D y se convierte a 3D solo.
-2. Agrega el chunki en `src/data/chunkis.ts`.
-3. Corre `npm test`: las pruebas verifican que el dibujo sea SVG válido y que los ids no se repitan.
+Los chunkis usan las fotos del catálogo de Chunkea (las páginas de Canva con fondo liso y etiquetas
+rosadas). El script recorta cada foto, le quita el fondo y calcula su tamaño real sobre el forro.
+
+1. Exporta las 9 páginas del catálogo (3 plateados, 3 dorados, 3 coloridos) en PNG.
+2. Si cambiaron los chunkis, actualiza la lista de ids por página en `scripts/extract-chunkis.mjs`
+   (en el orden de lectura: fila por fila) y el catálogo en `src/data/chunkis.ts`.
+3. Recorta las fotos (las páginas en orden):
+
+   ```bash
+   npm run chunkis:extract -- plateados-1.png plateados-2.png plateados-3.png dorados-1.png dorados-2.png dorados-3.png coloridos-1.png coloridos-2.png coloridos-3.png
+   ```
+
+4. Corre `npm test`: avisa si a un chunki le falta su foto o si sobran fotos.
+
+Para agotar un chunki agrega `AGOTADO` en `src/data/chunkis.ts`; no hace falta volver a recortar.
 
 ### Agregar un icono animado
 
@@ -116,7 +127,8 @@ src/
     controls.ts          Catálogo, filtros, tamaño, contador y resumen
     view2d.ts            Vista principal: render del forro + chunkis arrastrables
     view3d/              Vista 3D (se descarga sólo al tocar "Ver en 3D")
-  icons/                 Dibujos de chunkis, iconos de línea e iconos animados
+  assets/chunkis/        Fotos recortadas de los chunkis (WebP)
+  icons/                 Iconos de línea e iconos animados
   ui/                    Avisos, confeti, carrusel y animaciones de aparición
   styles/                CSS por capas: tokens → base → componentes → secciones
 tests/

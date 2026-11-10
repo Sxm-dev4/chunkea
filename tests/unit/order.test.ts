@@ -14,7 +14,7 @@ describe('formatCOP', () => {
 
 describe('validateOrder', () => {
   it('pide el modelo del celular', () => {
-    expect(validateOrder({ model: '  ', charms: [charm(1, 'osito')] })).toBe('missing-model');
+    expect(validateOrder({ model: '  ', charms: [charm(1, 'plata-osito')] })).toBe('missing-model');
   });
 
   it('pide al menos un chunki', () => {
@@ -22,7 +22,7 @@ describe('validateOrder', () => {
   });
 
   it('acepta un pedido completo', () => {
-    expect(validateOrder({ model: 'iPhone 15', charms: [charm(1, 'osito')] })).toBeNull();
+    expect(validateOrder({ model: 'iPhone 15', charms: [charm(1, 'plata-osito')] })).toBeNull();
   });
 });
 
@@ -30,7 +30,7 @@ describe('buildOrderMessage', () => {
   const message = buildOrderMessage({
     size: 'grande',
     model: ' iPhone 15 Pro Max ',
-    charms: [charm(1, 'osito'), charm(2, 'cereza'), charm(3, 'osito')],
+    charms: [charm(1, 'plata-osito'), charm(2, 'plata-cereza'), charm(3, 'plata-osito')],
   });
 
   it('incluye producto, celular, conteo y total', () => {
@@ -41,9 +41,29 @@ describe('buildOrderMessage', () => {
   });
 
   it('agrupa los chunkis repetidos', () => {
-    expect(message).toContain('• Osito x2');
+    expect(message).toContain('• Osito (plateado) x2');
     expect(message).toContain('• Cereza');
     expect(message).not.toContain('• Cereza x');
+  });
+
+  it('distingue el mismo chunki en plateado y en dorado', () => {
+    const both = buildOrderMessage({
+      size: 'grande',
+      model: 'iPhone 15',
+      charms: [charm(1, 'plata-cruz'), charm(2, 'oro-cruz')],
+    });
+    expect(both).toContain('• Cruz (plateado)');
+    expect(both).toContain('• Cruz (dorado)');
+  });
+
+  it('pide confirmar el color o la inicial cuando hay que elegirlos', () => {
+    const notes = buildOrderMessage({
+      size: 'pequeno',
+      model: 'iPhone 15',
+      charms: [charm(1, 'color-hongo'), charm(2, 'color-hongo'), charm(3, 'oro-letras')],
+    });
+    expect(notes).toContain('• Hongo (colorido) x2 — color a confirmar');
+    expect(notes).toContain('• Letras (dorado) — inicial a confirmar');
   });
 
   it('no usa emojis (el mensaje es texto plano)', () => {

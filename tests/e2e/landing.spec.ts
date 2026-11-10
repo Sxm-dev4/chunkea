@@ -49,16 +49,16 @@ test.describe('Armador', () => {
   });
 
   test('cuenta los chunkis y actualiza el resumen', async ({ page }) => {
-    await addCharms(page, ['osito', 'cereza', 'osito']);
+    await addCharms(page, ['plata-osito', 'plata-cereza', 'plata-osito']);
     await expect(page.locator('#countNow')).toHaveText('3');
-    await expect(page.locator('[data-id="osito"] .pick-count')).toHaveText('2');
+    await expect(page.locator('[data-id="plata-osito"] .pick-count')).toHaveText('2');
     await expect(page.locator('#sumSub')).toHaveText('3 chunkis');
-    await page.locator('[data-remove="osito"]').dispatchEvent('click');
+    await page.locator('[data-remove="plata-osito"]').dispatchEvent('click');
     await expect(page.locator('#countNow')).toHaveText('2');
   });
 
   test('pide el modelo antes de abrir WhatsApp', async ({ page }) => {
-    await addCharms(page, ['osito']);
+    await addCharms(page, ['plata-osito']);
     await page.locator('#btnOrder').click();
     await expect(page.locator('#toast')).toContainText('celular');
     await expect(page.locator('#phone')).toBeFocused();
@@ -66,7 +66,7 @@ test.describe('Armador', () => {
   });
 
   test('abre WhatsApp con el diseño en el mensaje', async ({ page }) => {
-    await addCharms(page, ['osito', 'cereza', 'osito']);
+    await addCharms(page, ['plata-osito', 'plata-cereza', 'plata-osito']);
     await page.locator('#phone').selectOption('iphone-15');
     await page.locator('#btnOrder').click();
     await expect.poll(() => openedUrls(page)).toHaveLength(1);
@@ -74,7 +74,7 @@ test.describe('Armador', () => {
     expect(url).toMatch(/^https:\/\/wa\.me\/\d+\?text=/);
     const text = decodeURIComponent(url?.split('text=')[1] ?? '');
     expect(text).toContain('*Celular:* iPhone 15');
-    expect(text).toContain('• Osito x2');
+    expect(text).toContain('• Osito (plateado) x2');
     expect(text).toContain('*Total:* $55.000');
   });
 
@@ -101,7 +101,7 @@ test.describe('Armador', () => {
   });
 
   test('con otra marca se escribe el modelo y se elige el tamaño', async ({ page }) => {
-    await addCharms(page, ['osito']);
+    await addCharms(page, ['plata-osito']);
     await page.locator('#phone').selectOption('otro');
     await expect(page.locator('#sizeArea')).toBeVisible();
     await page.locator('#btnOrder').click();
@@ -127,13 +127,14 @@ test.describe('Armador', () => {
   });
 
   test('filtra el catálogo por categoría', async ({ page }) => {
-    await page.locator('.filter[data-cat="animalitos"]').dispatchEvent('click');
-    await expect(page.locator('.filter[data-cat="animalitos"]')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('.pick-wrap:not([hidden])')).toHaveCount(4);
+    await page.locator('.filter[data-cat="dorados"]').dispatchEvent('click');
+    await expect(page.locator('.filter[data-cat="dorados"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.pick-wrap:not([hidden])')).toHaveCount(45);
+    await expect(page.locator('.pick-wrap:not([hidden])[data-cat="dorados"]')).toHaveCount(45);
   });
 
   test('recuerda el diseño al recargar', async ({ page }) => {
-    await addCharms(page, ['osito', 'hongo']);
+    await addCharms(page, ['plata-osito', 'plata-hongo']);
     await page.locator('#phone').selectOption('otro');
     await page.locator('#model').fill('Galaxy S24');
     await page.reload();

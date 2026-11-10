@@ -10,7 +10,6 @@ import { COPY } from './copy';
 import { COMBOS } from './data/combos';
 import { GENERIC_RENDER, OTHER_PHONE } from './data/phones';
 import { mountAnimatedIcons } from './icons/animatedIcons';
-import { mountGlyphSprite } from './icons/glyphs';
 import { hydrateInlineIcons } from './icons/lineIcons';
 import { prefersReducedMotion, replayClass, requireEl } from './lib/env';
 import { burstConfetti } from './ui/confetti';
@@ -106,7 +105,6 @@ function mountOrderBar(): void {
 }
 
 export function initApp(): void {
-  mountGlyphSprite();
   hydrateInlineIcons();
   mountDecorations();
 

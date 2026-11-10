@@ -1,8 +1,7 @@
 import { PRODUCTS, isSizeId } from '../config/site';
 import { COPY } from '../copy';
-import { CHUNKIS, isCategoryFilter } from '../data/chunkis';
+import { CHUNKIS, NOTE_LABELS, chunkiPhoto, isCategoryFilter } from '../data/chunkis';
 import { OTHER_PHONE, PHONES, getPhone } from '../data/phones';
-import { glyphSvg } from '../icons/glyphs';
 import { escapeHtml } from '../lib/html';
 import { requireEl } from '../lib/env';
 import { formatCOP } from './money';
@@ -32,9 +31,10 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
   /* ---------- Catálogo ---------- */
   picker.innerHTML = CHUNKIS.map((c) => {
     const name = escapeHtml(c.name);
+    const note = c.note ? `<span class="pick-note">${NOTE_LABELS[c.note].short}</span>` : '';
     return `<li class="pick-wrap${c.soldOut ? ' soldout' : ''}" data-id="${c.id}" data-cat="${c.category}">
       <button type="button" class="pick" data-add="${c.id}"${c.soldOut ? ' disabled' : ''} aria-label="Agregar ${name}${c.soldOut ? ' (agotado)' : ''}">
-        ${glyphSvg(c.glyph)}<span class="pick-name">${name}</span>
+        <span class="pick-photo"><img src="${chunkiPhoto(c.id)}" alt="" loading="lazy" decoding="async" draggable="false" /></span><span class="pick-name">${name}</span>${note}
       </button>
       <span class="pick-count" aria-hidden="true">0</span>
       <button type="button" class="pick-minus" data-remove="${c.id}" aria-label="Quitar un ${name}">−</button>

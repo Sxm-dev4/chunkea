@@ -1,5 +1,5 @@
 import { PRODUCTS, SITE } from '../config/site';
-import { getChunki } from '../data/chunkis';
+import { CATEGORY_LABELS, NOTE_LABELS, getChunki } from '../data/chunkis';
 import { formatCOP } from './money';
 import type { BuilderState } from './store';
 
@@ -19,8 +19,11 @@ export function buildOrderMessage(state: Pick<BuilderState, 'size' | 'model' | '
   for (const charm of state.charms) counts.set(charm.id, (counts.get(charm.id) ?? 0) + 1);
 
   const lines = [...counts].map(([id, n]) => {
-    const name = getChunki(id)?.name ?? id;
-    return `• ${name}${n > 1 ? ` x${n}` : ''}`;
+    const chunki = getChunki(id);
+    if (!chunki) return `• ${id}${n > 1 ? ` x${n}` : ''}`;
+    // Hay chunkis con el mismo nombre en plateado y dorado: se aclara cuál
+    const note = chunki.note ? ` — ${NOTE_LABELS[chunki.note].order}` : '';
+    return `• ${chunki.name} (${CATEGORY_LABELS[chunki.category]})${n > 1 ? ` x${n}` : ''}${note}`;
   });
 
   return [

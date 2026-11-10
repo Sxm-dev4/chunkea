@@ -1,0 +1,558 @@
+{
+  "plata-sagrado-corazon": {
+    "w": 115,
+    "h": 163
+  },
+  "plata-corazon-ojo-rosa": {
+    "w": 125,
+    "h": 163
+  },
+  "plata-corazon-plano-mini": {
+    "w": 46,
+    "h": 41
+  },
+  "plata-ojo-sol": {
+    "w": 98,
+    "h": 109
+  },
+  "plata-corazon-3d": {
+    "w": 61,
+    "h": 89
+  },
+  "plata-cara-hindu": {
+    "w": 45,
+    "h": 74
+  },
+  "plata-soles": {
+    "w": 78,
+    "h": 99
+  },
+  "plata-sol-luna": {
+    "w": 91,
+    "h": 107
+  },
+  "plata-mano-hamsa": {
+    "w": 58,
+    "h": 68
+  },
+  "plata-corazon-mini": {
+    "w": 32,
+    "h": 33
+  },
+  "plata-rey-corazon-alas": {
+    "w": 153,
+    "h": 141
+  },
+  "plata-astronauta": {
+    "w": 52,
+    "h": 96
+  },
+  "plata-corazon-destello": {
+    "w": 161,
+    "h": 146
+  },
+  "plata-espejo": {
+    "w": 127,
+    "h": 193
+  },
+  "plata-corazon-cruz": {
+    "w": 119,
+    "h": 145
+  },
+  "plata-corazon-rey": {
+    "w": 114,
+    "h": 129
+  },
+  "plata-cruz": {
+    "w": 81,
+    "h": 148
+  },
+  "plata-rey-puntos-dobles": {
+    "w": 83,
+    "h": 127
+  },
+  "plata-llave-san-benito": {
+    "w": 76,
+    "h": 177
+  },
+  "plata-virgen": {
+    "w": 57,
+    "h": 142
+  },
+  "plata-avion": {
+    "w": 154,
+    "h": 139
+  },
+  "plata-corazon-ojo": {
+    "w": 127,
+    "h": 137
+  },
+  "plata-ala-corazon": {
+    "w": 186,
+    "h": 170
+  },
+  "plata-ancla": {
+    "w": 123,
+    "h": 80
+  },
+  "plata-reina-roja": {
+    "w": 131,
+    "h": 127
+  },
+  "plata-corazon-puas": {
+    "w": 179,
+    "h": 199
+  },
+  "plata-arcoiris": {
+    "w": 148,
+    "h": 112
+  },
+  "plata-cereza": {
+    "w": 49,
+    "h": 65
+  },
+  "plata-hongo": {
+    "w": 72,
+    "h": 87
+  },
+  "plata-trebol": {
+    "w": 74,
+    "h": 96
+  },
+  "plata-osito": {
+    "w": 71,
+    "h": 88
+  },
+  "plata-mano-vacia": {
+    "w": 79,
+    "h": 97
+  },
+  "plata-tortuga": {
+    "w": 66,
+    "h": 72
+  },
+  "plata-corazon-mini-3d": {
+    "w": 68,
+    "h": 50
+  },
+  "plata-corazon-coronita": {
+    "w": 114,
+    "h": 167
+  },
+  "plata-leopardo": {
+    "w": 120,
+    "h": 78
+  },
+  "plata-corazon-cupido": {
+    "w": 115,
+    "h": 124
+  },
+  "plata-liston": {
+    "w": 74,
+    "h": 94
+  },
+  "plata-rey-manzanita": {
+    "w": 59,
+    "h": 91
+  },
+  "plata-rostro-sol-luna": {
+    "w": 124,
+    "h": 140
+  },
+  "plata-elefante": {
+    "w": 101,
+    "h": 137
+  },
+  "plata-ancla-mini": {
+    "w": 56,
+    "h": 58
+  },
+  "plata-corazon-pellet": {
+    "w": 92,
+    "h": 99
+  },
+  "oro-mini-cora-rojo": {
+    "w": 39,
+    "h": 46
+  },
+  "oro-mini-cora-negro": {
+    "w": 38,
+    "h": 44
+  },
+  "oro-corazon-negro-ojo-rojo": {
+    "w": 94,
+    "h": 104
+  },
+  "oro-cruz": {
+    "w": 74,
+    "h": 135
+  },
+  "oro-sagrado-corazon": {
+    "w": 141,
+    "h": 199
+  },
+  "oro-corazon-estrella": {
+    "w": 103,
+    "h": 127
+  },
+  "oro-trebol-negro": {
+    "w": 100,
+    "h": 165
+  },
+  "oro-reina-corazon": {
+    "w": 115,
+    "h": 188
+  },
+  "oro-astronauta": {
+    "w": 92,
+    "h": 166
+  },
+  "oro-mano-hamsa": {
+    "w": 111,
+    "h": 129
+  },
+  "oro-mano-hamsa-2": {
+    "w": 112,
+    "h": 181
+  },
+  "oro-corazon-manzana": {
+    "w": 114,
+    "h": 187
+  },
+  "oro-virgen": {
+    "w": 75,
+    "h": 159
+  },
+  "oro-estrella-fugaz": {
+    "w": 88,
+    "h": 146
+  },
+  "oro-om": {
+    "w": 120,
+    "h": 162
+  },
+  "oro-cerezas-rojas": {
+    "w": 57,
+    "h": 67
+  },
+  "oro-leopardo": {
+    "w": 115,
+    "h": 73
+  },
+  "oro-oso-grabado": {
+    "w": 80,
+    "h": 150
+  },
+  "oro-rey-corazon-negro": {
+    "w": 94,
+    "h": 125
+  },
+  "oro-cuadro-ojo": {
+    "w": 69,
+    "h": 106
+  },
+  "oro-cuadro-mano": {
+    "w": 83,
+    "h": 130
+  },
+  "oro-rostro-sol-luna": {
+    "w": 123,
+    "h": 142
+  },
+  "oro-cupido": {
+    "w": 88,
+    "h": 94
+  },
+  "oro-mano-nacar": {
+    "w": 67,
+    "h": 121
+  },
+  "oro-oso-liso": {
+    "w": 73,
+    "h": 134
+  },
+  "oro-letras": {
+    "w": 51,
+    "h": 86
+  },
+  "oro-mano-mini": {
+    "w": 52,
+    "h": 80
+  },
+  "oro-estrella-cardinal": {
+    "w": 98,
+    "h": 112
+  },
+  "oro-pesas": {
+    "w": 99,
+    "h": 53
+  },
+  "oro-avion": {
+    "w": 130,
+    "h": 141
+  },
+  "oro-ancla": {
+    "w": 67,
+    "h": 45
+  },
+  "oro-argolla-curva": {
+    "w": 36,
+    "h": 38
+  },
+  "oro-ojos-pintados": {
+    "w": 154,
+    "h": 158,
+    "piece": {
+      "w": 87,
+      "h": 89
+    }
+  },
+  "oro-corazon-ojo-azul": {
+    "w": 90,
+    "h": 130
+  },
+  "oro-talisman": {
+    "w": 106,
+    "h": 151
+  },
+  "oro-ojo-corazon": {
+    "w": 115,
+    "h": 121
+  },
+  "oro-ojo-pestanas": {
+    "w": 147,
+    "h": 122
+  },
+  "oro-virgen-negra": {
+    "w": 125,
+    "h": 169
+  },
+  "oro-virgen-roja": {
+    "w": 124,
+    "h": 170
+  },
+  "oro-cerezas": {
+    "w": 60,
+    "h": 68
+  },
+  "oro-ojo-gota-mini": {
+    "w": 53,
+    "h": 85
+  },
+  "oro-ojo-gota-mini-azul": {
+    "w": 57,
+    "h": 90
+  },
+  "oro-cora-mini-negro": {
+    "w": 91,
+    "h": 86
+  },
+  "oro-cora-globo": {
+    "w": 82,
+    "h": 79
+  },
+  "oro-corazones-mini": {
+    "w": 122,
+    "h": 68,
+    "piece": {
+      "w": 44,
+      "h": 45
+    }
+  },
+  "color-pan-salsa": {
+    "w": 138,
+    "h": 117
+  },
+  "color-crispetas": {
+    "w": 148,
+    "h": 221
+  },
+  "color-starbucks": {
+    "w": 148,
+    "h": 198,
+    "piece": {
+      "w": 77,
+      "h": 171
+    }
+  },
+  "color-chocolate": {
+    "w": 116,
+    "h": 166
+  },
+  "color-cheesecake": {
+    "w": 126,
+    "h": 119
+  },
+  "color-corona": {
+    "w": 57,
+    "h": 208
+  },
+  "color-pancito": {
+    "w": 87,
+    "h": 85
+  },
+  "color-corazon-rojo": {
+    "w": 135,
+    "h": 119
+  },
+  "color-coca-cola-lata": {
+    "w": 86,
+    "h": 175
+  },
+  "color-coca-cola": {
+    "w": 60,
+    "h": 208
+  },
+  "color-osito-goma": {
+    "w": 88,
+    "h": 138
+  },
+  "color-hongo": {
+    "w": 68,
+    "h": 103
+  },
+  "color-carita-feliz": {
+    "w": 82,
+    "h": 82
+  },
+  "color-paletas": {
+    "w": 174,
+    "h": 166
+  },
+  "color-pan-choco": {
+    "w": 138,
+    "h": 164
+  },
+  "color-cupcake": {
+    "w": 105,
+    "h": 102
+  },
+  "color-waffle": {
+    "w": 148,
+    "h": 113
+  },
+  "color-croissant": {
+    "w": 78,
+    "h": 114
+  },
+  "color-pan-cacho": {
+    "w": 104,
+    "h": 133
+  },
+  "color-toasts": {
+    "w": 93,
+    "h": 119
+  },
+  "color-cereza": {
+    "w": 65,
+    "h": 94
+  },
+  "color-lego": {
+    "w": 122,
+    "h": 215
+  },
+  "color-estrella-mario": {
+    "w": 118,
+    "h": 113
+  },
+  "color-pato": {
+    "w": 115,
+    "h": 142
+  },
+  "color-paleta-bebe": {
+    "w": 92,
+    "h": 123
+  },
+  "color-perritos": {
+    "w": 172,
+    "h": 153,
+    "piece": {
+      "w": 77,
+      "h": 90
+    }
+  },
+  "color-dado-turco-fucsia": {
+    "w": 101,
+    "h": 93
+  },
+  "color-licores-mini": {
+    "w": 135,
+    "h": 192,
+    "piece": {
+      "w": 62,
+      "h": 192
+    }
+  },
+  "color-patico-mini": {
+    "w": 46,
+    "h": 44
+  },
+  "color-deportivos": {
+    "w": 161,
+    "h": 207
+  },
+  "color-funny-face": {
+    "w": 198,
+    "h": 138
+  },
+  "color-foca-neon": {
+    "w": 211,
+    "h": 143,
+    "piece": {
+      "w": 148,
+      "h": 143
+    }
+  },
+  "color-baby-bubbles": {
+    "w": 180,
+    "h": 75,
+    "piece": {
+      "w": 58,
+      "h": 59
+    }
+  },
+  "color-patito-lila-mini": {
+    "w": 113,
+    "h": 145
+  },
+  "color-patito-azul-mini": {
+    "w": 119,
+    "h": 154
+  },
+  "color-dulces": {
+    "w": 189,
+    "h": 102
+  },
+  "color-pintura": {
+    "w": 107,
+    "h": 151
+  },
+  "color-aji": {
+    "w": 175,
+    "h": 119
+  },
+  "color-dado-turco-morado": {
+    "w": 122,
+    "h": 134
+  },
+  "color-dado-turco-rosado": {
+    "w": 140,
+    "h": 135
+  },
+  "color-dado-turco-rojo": {
+    "w": 128,
+    "h": 138
+  },
+  "color-cutie-blanco": {
+    "w": 97,
+    "h": 96
+  },
+  "color-cutie-rosado": {
+    "w": 88,
+    "h": 88
+  },
+  "color-taza-cafe": {
+    "w": 209,
+    "h": 159
+  }
+}

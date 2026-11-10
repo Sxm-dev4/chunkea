@@ -150,10 +150,10 @@
   }
 }
 
+/* --w: ancho real del chunki en % del forro (se calcula de la foto del catálogo). */
 .charm {
   position: absolute;
-  width: 19%;
-  aspect-ratio: 1;
+  width: var(--w, 19%);
   padding: 0;
   border: 0;
   background: none;
@@ -164,17 +164,17 @@
   filter: drop-shadow(0 3px 2px rgb(0 0 0 / 50%)) drop-shadow(0 0 1px rgb(0 0 0 / 60%));
 }
 
-.charm.mini {
-  width: 14%;
-}
-
-.charm svg {
+.charm img {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
   animation: pop 0.5s cubic-bezier(0.3, 1.8, 0.5, 1) both;
 }
 
-.charm:hover svg {
+.charm:hover img {
   animation: wiggle 0.5s ease;
 }
 
@@ -184,12 +184,12 @@
   filter: drop-shadow(0 10px 8px rgb(0 0 0 / 55%));
 }
 
-.charm.dragging svg {
+.charm.dragging img {
   transform: scale(1.15);
   animation: none;
 }
 
-.charm.poof svg {
+.charm.poof img {
   animation: poof 0.3s ease forwards;
 }
 
@@ -516,10 +516,10 @@
   list-style: none;
 }
 
+/* Con más de 100 chunkis, en móvil el catálogo también se desplaza dentro de su caja. */
 @media (max-width: 899px) {
   .picker {
-    max-height: none;
-    overflow: visible;
+    max-height: min(46vh, 400px);
   }
 }
 
@@ -554,13 +554,23 @@
   transform: scale(0.94);
 }
 
-.pick svg {
-  width: 46px;
-  height: 46px;
+/* Tamaño natural hasta 58 px: las fotos mini no se estiran (se verían borrosas) y se nota que son mini. */
+.pick-photo {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+}
+
+.pick img {
+  width: auto;
+  height: auto;
+  max-width: 58px;
+  max-height: 58px;
   filter: drop-shadow(0 2px 1.5px rgb(0 0 0 / 50%));
 }
 
-.pick:hover svg {
+.pick:hover img {
   animation: wiggle 0.5s ease;
 }
 
@@ -572,6 +582,37 @@
   line-height: 1.15;
   text-align: center;
   color: #e9dbe7;
+}
+
+.pick-note {
+  margin-top: -2px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--rosa);
+}
+
+/* Muestra de color de cada tipo de chunki en los filtros */
+.swatch {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgb(255 255 255 / 70%);
+  border-radius: 50%;
+}
+
+.swatch-plata {
+  background: linear-gradient(135deg, #fbfcff, #8f97a3 55%, #e3e7ee);
+}
+
+.swatch-oro {
+  background: linear-gradient(135deg, #fff3c4, #c99a2e 55%, #f5d987);
+}
+
+.swatch-color {
+  background: conic-gradient(#ff5a8a, #ffd23f, #4cc9f0, #8b5cf6, #ff5a8a);
+}
+
+.filter[aria-pressed='true'] .swatch {
+  border-color: var(--tinta);
 }
 
 .pick-wrap.has .pick {

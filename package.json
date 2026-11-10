@@ -15,7 +15,8 @@
     "check": "npm run lint && npm run typecheck && npm run test && npm run build && npm run test:e2e",
     "images": "node scripts/generate-images.mjs",
     "renders:process": "node scripts/process-cases.mjs",
-    "models:process": "node scripts/process-cases-3d.mjs"
+    "models:process": "node scripts/process-cases-3d.mjs",
+    "chunkis:extract": "node scripts/extract-chunkis.mjs"
   },
   "type": "module",
   "dependencies": {
