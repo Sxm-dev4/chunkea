@@ -25,14 +25,9 @@ describe('catálogo de chunkis', () => {
     expect([count('plateados'), count('dorados'), count('coloridos')]).toEqual([43, 45, 44]);
   });
 
-  it('marca como agotados los mismos del catálogo', () => {
-    expect(CHUNKIS.filter((c) => c.soldOut).map((c) => c.id)).toEqual([
-      'plata-corazon-destello',
-      'plata-ancla',
-      'oro-cuadro-mano',
-      'color-coca-cola-lata',
-      'color-paleta-bebe',
-    ]);
+  it('por ahora todos los chunkis están disponibles', () => {
+    expect(CHUNKIS.filter((c) => c.soldOut).map((c) => c.id)).toEqual([]);
+    expect(CHUNKIS.every((c) => isAvailable(c.id))).toBe(true);
   });
 
   it('cada chunki tiene su foto y sus medidas', () => {
