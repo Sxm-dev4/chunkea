@@ -9,6 +9,7 @@ import { PRODUCTS, isSizeId } from './config/site';
 import { COPY } from './copy';
 import { chunkiPiecePhoto } from './data/chunkis';
 import { COMBOS } from './data/combos';
+import { REVIEWS, reviewPhoto } from './data/reviews';
 import { GENERIC_RENDER, OTHER_PHONE } from './data/phones';
 import { mountAnimatedIcons } from './icons/animatedIcons';
 import { hydrateInlineIcons } from './icons/lineIcons';
@@ -16,6 +17,7 @@ import { prefersReducedMotion, replayClass, requireEl } from './lib/env';
 import { burstConfetti } from './ui/confetti';
 import { mountMarquee } from './ui/marquee';
 import { mountReveal } from './ui/reveal';
+import { mountReviews } from './ui/reviews';
 import { createToaster } from './ui/toast';
 
 const WHATSAPP_DELAY_MS = 450;
@@ -207,6 +209,8 @@ export function initApp(): void {
 
   const track = document.querySelector<HTMLElement>('.marquee-track');
   if (track) mountMarquee(track);
+  const reviews = document.getElementById('resenas');
+  if (reviews) mountReviews(reviews, REVIEWS, reviewPhoto);
   mountReveal();
   mountAnimatedIcons();
 

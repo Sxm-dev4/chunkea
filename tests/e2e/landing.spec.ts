@@ -40,6 +40,22 @@ test.describe('Landing', () => {
     }));
     expect(trackWidth - groupWidth).toBeGreaterThanOrEqual(viewport);
   });
+
+  test('las reseñas sólo se muestran cuando hay reseñas', async ({ page }) => {
+    await page.goto('/');
+    const section = page.locator('#resenas');
+    const cards = await section.locator('.review').count();
+    if (cards === 0) await expect(section).toBeHidden();
+    else await expect(section).toBeVisible();
+  });
+
+  test('usa el logo oficial en el encabezado', async ({ page }) => {
+    await page.goto('/');
+    const logo = page.locator('.header .logo svg use');
+    await expect(logo).toHaveAttribute('href', '#logo-chunkea');
+    const box = await page.locator('.header .logo-svg').boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThan(80);
+  });
 });
 
 test.describe('Armador', () => {

@@ -1,10 +1,10 @@
 .builder {
-  --li-accent: var(--lila);
+  --li-accent: var(--fucsia);
 
   background:
-    radial-gradient(circle at 15% 10%, rgb(227 132 230 / 22%), transparent 40%),
-    radial-gradient(circle at 90% 80%, rgb(200 35 122 / 25%), transparent 45%), var(--noche);
-  color: #fff;
+    radial-gradient(circle at 12% 8%, rgb(241 121 234 / 22%), transparent 38%),
+    radial-gradient(circle at 92% 85%, rgb(216 241 121 / 35%), transparent 42%), var(--crema);
+  color: var(--tinta);
 }
 
 .builder-grid {
@@ -25,7 +25,7 @@
   position: sticky;
   top: var(--header-h);
   z-index: 4;
-  background: var(--noche);
+  background: var(--crema);
   margin: 0 -16px;
   padding: 8px 16px 6px;
 }
@@ -37,8 +37,8 @@
   height: clamp(210px, 30vh, 300px);
   padding: 12px;
   overflow: hidden;
-  background: linear-gradient(160deg, #2b1d2e, #120b13);
-  border: 2.5px solid rgb(255 255 255 / 12%);
+  background: linear-gradient(160deg, var(--lila-3), var(--lila-2));
+  border: 2px solid var(--tinta);
   border-radius: var(--r-lg);
 }
 
@@ -75,7 +75,7 @@
 .stage-glow {
   position: absolute;
   inset: 15% 20%;
-  background: radial-gradient(circle, rgb(227 132 230 / 55%), transparent 65%);
+  background: radial-gradient(circle, rgb(255 255 255 / 85%), transparent 65%);
   filter: blur(30px);
   pointer-events: none;
 }
@@ -83,7 +83,7 @@
 .stage-hint {
   text-align: center;
   font-size: 0.82rem;
-  color: var(--muted-dark);
+  color: var(--tinta-2);
   margin-top: 8px;
 }
 
@@ -95,13 +95,13 @@
   top: 50%;
   max-width: 44%;
   transform: translateY(-50%) rotate(4deg);
-  background: var(--rosa);
+  background: var(--lima);
   color: var(--tinta);
   font-size: 0.85rem;
   line-height: 1.25;
   padding: 10px 14px;
   border-radius: 16px;
-  border: 2.5px solid var(--tinta);
+  border: 2px solid var(--tinta);
   box-shadow: 3px 3px 0 var(--tinta);
   transition:
     opacity 0.3s,
@@ -161,7 +161,7 @@
   cursor: grab;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
-  filter: drop-shadow(0 3px 2px rgb(0 0 0 / 50%)) drop-shadow(0 0 1px rgb(0 0 0 / 60%));
+  filter: drop-shadow(0 3px 2px rgb(42 15 36 / 40%)) drop-shadow(0 0 1px rgb(42 15 36 / 55%));
 }
 
 .charm img {
@@ -235,9 +235,9 @@
   min-width: 0;
   margin: 0;
   padding: 18px 16px;
-  border: 2px solid rgb(255 255 255 / 12%);
+  border: 2px solid var(--lila-2);
   border-radius: var(--r);
-  background: rgb(255 255 255 / 3%);
+  background: #fff;
 }
 
 .step legend {
@@ -255,16 +255,16 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--lila);
-  color: var(--tinta);
+  background: var(--fucsia);
+  color: #fff;
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 800;
   font-size: 0.95rem;
 }
 
 .help {
   font-size: 0.84rem;
-  color: var(--muted-dark);
+  color: var(--tinta-2);
   margin-top: 10px;
 }
 
@@ -281,10 +281,10 @@
   gap: 2px;
   padding: 12px 14px;
   text-align: left;
-  color: #fff;
+  color: var(--tinta);
   cursor: pointer;
-  background: rgb(255 255 255 / 4%);
-  border: 2.5px solid rgb(255 255 255 / 18%);
+  background: #fff;
+  border: 2px solid var(--linea);
   border-radius: var(--r-sm);
   transition:
     border-color 0.2s,
@@ -292,12 +292,13 @@
 }
 
 .size-card:hover {
-  border-color: rgb(255 255 255 / 40%);
+  border-color: var(--tinta);
 }
 
 .size-card[aria-checked='true'] {
-  border-color: var(--lila);
-  background: rgb(227 132 230 / 14%);
+  border-color: var(--fucsia);
+  background: var(--lila-3);
+  box-shadow: 0 0 0 1px var(--fucsia);
 }
 
 .size-card[aria-checked='true']::after {
@@ -308,7 +309,8 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--lila) url('../../assets/svg/check.svg') center / 14px no-repeat;
+  background: var(--lima) url('../../assets/svg/check.svg') center / 14px no-repeat;
+  border: 2px solid var(--tinta);
 }
 
 .size-ico {
@@ -335,14 +337,15 @@
 
 .size-meta {
   font-size: 0.8rem;
-  color: var(--muted-dark);
+  color: var(--tinta-2);
 }
 
 .size-price {
   margin-top: 4px;
   font-family: var(--font-display);
+  font-weight: 800;
   font-size: 1.15rem;
-  color: var(--rosa);
+  color: var(--fucsia-d);
 }
 
 .field {
@@ -365,20 +368,20 @@
   font-size: 1rem;
   color: var(--tinta);
   background: #fff;
-  border: 2.5px solid transparent;
+  border: 2px solid var(--linea);
   border-radius: var(--r-sm);
 }
 
 .field input:focus,
 .field select:focus {
   outline: none;
-  border-color: var(--lila);
-  box-shadow: 0 0 0 4px rgb(227 132 230 / 35%);
+  border-color: var(--fucsia);
+  box-shadow: 0 0 0 4px rgb(241 121 234 / 40%);
 }
 
 .field.invalid input,
 .field.invalid select {
-  border-color: #ff6b8a;
+  border-color: var(--rojo);
   animation: shake 0.4s;
 }
 
@@ -387,8 +390,8 @@
   padding: 10px 14px;
   font-weight: 700;
   font-size: 0.92rem;
-  color: var(--rosa);
-  background: rgb(227 132 230 / 14%);
+  color: var(--tinta);
+  background: var(--lila-3);
   border: 2px solid var(--lila);
   border-radius: var(--r-sm);
 }
@@ -415,14 +418,14 @@
 
 .counter-num strong {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 800;
   font-size: 1.5rem;
-  color: var(--rosa);
+  color: var(--fucsia);
 }
 
 .counter-msg {
   font-size: 0.85rem;
-  color: var(--muted-dark);
+  color: var(--tinta-2);
 }
 
 .counter-bar {
@@ -430,7 +433,8 @@
   margin-top: 8px;
   overflow: hidden;
   border-radius: 99px;
-  background: rgb(255 255 255 / 10%);
+  background: var(--lila-3);
+  box-shadow: inset 0 0 0 1px var(--lila-2);
 }
 
 .counter-bar span {
@@ -443,7 +447,7 @@
 }
 
 .counter.full .counter-msg {
-  color: var(--rosa);
+  color: var(--fucsia-d);
   font-weight: 700;
 }
 
@@ -487,10 +491,10 @@
   padding: 7px 13px 7px 6px;
   font-size: 0.88rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--tinta);
   cursor: pointer;
-  background: transparent;
-  border: 2px solid rgb(255 255 255 / 20%);
+  background: #fff;
+  border: 2px solid var(--linea);
   border-radius: 999px;
 }
 
@@ -499,9 +503,9 @@
 }
 
 .filter[aria-pressed='true'] {
-  background: #fff;
-  color: var(--tinta);
-  border-color: #fff;
+  background: var(--tinta);
+  color: #fff;
+  border-color: var(--tinta);
 }
 
 .picker {
@@ -533,10 +537,10 @@
   justify-items: center;
   gap: 4px;
   padding: 10px 4px 8px;
-  color: #fff;
+  color: var(--tinta);
   cursor: pointer;
-  background: rgb(255 255 255 / 5%);
-  border: 2px solid rgb(255 255 255 / 10%);
+  background: #fff;
+  border: 2px solid var(--lila-2);
   border-radius: 16px;
   transition:
     transform 0.15s,
@@ -546,8 +550,8 @@
 
 .pick:hover {
   transform: translateY(-3px);
-  border-color: rgb(227 132 230 / 60%);
-  background: rgb(227 132 230 / 8%);
+  border-color: var(--lila);
+  background: var(--lila-3);
 }
 
 .pick:active {
@@ -567,7 +571,7 @@
   height: auto;
   max-width: 58px;
   max-height: 58px;
-  filter: drop-shadow(0 2px 1.5px rgb(0 0 0 / 50%));
+  filter: drop-shadow(0 2px 1.5px rgb(42 15 36 / 35%));
 }
 
 .pick:hover img {
@@ -581,14 +585,14 @@
   font-size: 0.72rem;
   line-height: 1.15;
   text-align: center;
-  color: #e9dbe7;
+  color: var(--tinta-2);
 }
 
 .pick-note {
   margin-top: -2px;
   font-size: 0.62rem;
   font-weight: 700;
-  color: var(--rosa);
+  color: var(--fucsia-d);
 }
 
 /* Combos pre armados dentro del paso 2 */
@@ -601,7 +605,7 @@
   margin-bottom: 8px;
   font-size: 0.84rem;
   font-weight: 600;
-  color: var(--muted-dark);
+  color: var(--tinta-2);
 }
 
 .combo-chips {
@@ -616,11 +620,11 @@
   gap: 7px;
   padding: 5px 13px 5px 5px;
   font-size: 0.84rem;
-  font-weight: 700;
-  color: #fff;
+  font-weight: 600;
+  color: var(--tinta);
   cursor: pointer;
-  background: rgb(227 132 230 / 10%);
-  border: 2px solid rgb(227 132 230 / 45%);
+  background: var(--lila-3);
+  border: 2px solid var(--lila);
   border-radius: 999px;
   transition:
     background 0.2s,
@@ -629,8 +633,8 @@
 }
 
 .combo-chip:hover {
-  border-color: var(--lila);
-  background: rgb(227 132 230 / 20%);
+  border-color: var(--fucsia);
+  background: var(--lila-2);
   transform: translateY(-1px);
 }
 
@@ -643,14 +647,14 @@
   place-items: center;
   width: 26px;
   height: 26px;
-  background: rgb(255 255 255 / 12%);
+  background: #fff;
   border-radius: 50%;
 }
 
 .combo-chip-photo img {
   max-width: 20px;
   max-height: 20px;
-  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 45%));
+  filter: drop-shadow(0 1px 1px rgb(42 15 36 / 35%));
 }
 
 /* Foto de un chunki de cada tipo en los filtros */
@@ -659,7 +663,7 @@
   place-items: center;
   width: 26px;
   height: 26px;
-  background: rgb(255 255 255 / 12%);
+  background: var(--lila-3);
   border-radius: 50%;
 }
 
@@ -667,16 +671,16 @@
   width: 20px;
   height: 20px;
   object-fit: contain;
-  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 45%));
+  filter: drop-shadow(0 1px 1px rgb(42 15 36 / 35%));
 }
 
 .filter[aria-pressed='true'] .filter-chip {
-  background: var(--noche);
+  background: #fff;
 }
 
 .pick-wrap.has .pick {
-  border-color: var(--lila);
-  background: rgb(227 132 230 / 15%);
+  border-color: var(--fucsia);
+  background: var(--lila-3);
 }
 
 .pick-count {
@@ -692,7 +696,7 @@
   font-size: 0.8rem;
   color: #fff;
   background: var(--fucsia);
-  border: 2px solid var(--noche);
+  border: 2px solid #fff;
   border-radius: 99px;
   pointer-events: none;
   animation: pop 0.35s cubic-bezier(0.3, 1.8, 0.5, 1);
@@ -712,7 +716,7 @@
   color: var(--tinta);
   cursor: pointer;
   background: #fff;
-  border: 2px solid var(--noche);
+  border: 2px solid var(--tinta);
   border-radius: 50%;
 }
 
@@ -753,16 +757,16 @@
   padding-left: 6px;
 }
 
-/* ---------- Resumen ---------- */
+/* ---------- Resumen del pedido: bloque oscuro que resalta sobre el armador claro ---------- */
 .summary {
-  --li-accent: var(--fucsia);
+  --li-accent: var(--lima);
 
-  padding: 18px;
-  color: var(--tinta);
-  background: #fff;
-  border: 2.5px solid var(--tinta);
+  padding: 20px 18px 16px;
+  color: #fff;
+  background: var(--tinta);
+  border: 2px solid var(--tinta);
   border-radius: var(--r);
-  box-shadow: 5px 5px 0 var(--lila);
+  box-shadow: 4px 4px 0 var(--fucsia);
 }
 
 .summary-row {
@@ -780,18 +784,25 @@
 
 .summary-sub {
   font-size: 0.86rem;
-  color: var(--tinta-2);
+  color: var(--rosa);
 }
 
 .summary-price {
   font-family: var(--font-display);
+  font-weight: 800;
   font-size: 2rem;
-  color: var(--fucsia);
+  line-height: 1;
+  color: var(--lima);
+}
+
+.summary .btn {
+  border-color: var(--wa);
+  box-shadow: none;
 }
 
 .summary-note {
   margin-top: 10px;
   font-size: 0.82rem;
   text-align: center;
-  color: var(--tinta-2);
+  color: var(--rosa);
 }

@@ -2,10 +2,10 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--lila) 88%, transparent);
+  background: color-mix(in srgb, var(--crema) 90%, transparent);
   backdrop-filter: saturate(1.4) blur(10px);
   -webkit-backdrop-filter: saturate(1.4) blur(10px);
-  border-bottom: 2.5px solid var(--tinta);
+  border-bottom: 2px solid var(--tinta);
 }
 
 .header-inner {
@@ -16,37 +16,31 @@
 }
 
 .logo {
-  font-family: var(--font-display);
-  font-size: 1.9rem;
-  color: var(--fucsia-dd);
-  text-decoration: none;
   display: inline-flex;
-  line-height: 1;
   margin: 0;
+  color: var(--fucsia);
+  line-height: 0;
+  text-decoration: none;
 }
 
-.logo span {
-  display: inline-block;
+/* Proporción del logo oficial (1258 × 376) */
+.logo-svg {
+  width: auto;
+  height: 38px;
+  aspect-ratio: 1258 / 376;
+  fill: currentcolor;
   transition: transform 0.25s cubic-bezier(0.3, 1.8, 0.5, 1);
 }
 
-.logo span:nth-child(odd) {
-  transform: translateY(-2px) rotate(-4deg);
-}
-
-.logo span:nth-child(even) {
-  transform: translateY(2px) rotate(4deg);
-}
-
-.logo:hover span {
-  transform: translateY(0) rotate(0) scale(1.08);
+.logo:hover .logo-svg {
+  transform: rotate(-3deg) scale(1.05);
 }
 
 .nav {
   display: none;
   gap: 26px;
   margin-left: auto;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .nav a {
@@ -62,7 +56,7 @@
   bottom: -4px;
   height: 3px;
   border-radius: 3px;
-  background: var(--fucsia-d);
+  background: var(--fucsia);
   transition: right 0.25s;
 }
 

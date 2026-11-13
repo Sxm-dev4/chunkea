@@ -47,7 +47,9 @@ Abre la URL que muestra la terminal (normalmente http://localhost:5173).
 | Agregar / quitar / agotar chunkis | `src/data/chunkis.ts` (`AGOTADO` para agotado)                   |
 | Combos pre armados del armador    | `src/data/combos.ts`                                             |
 | iPhones y tamaño de cada uno      | `src/data/phones.ts`                                             |
-| Colores de la marca               | `src/styles/tokens.css`                                          |
+| Colores de la marca               | `src/styles/tokens.css` (fucsia, rosa, naranja y lima oficiales) |
+| Logo                              | `src/assets/brand/` (y el símbolo al inicio de `index.html`)     |
+| Reseñas de clientes (carrusel)    | `src/data/reviews.ts` y fotos en `src/assets/reviews/`           |
 | Textos de avisos y contador       | `src/copy.ts`                                                    |
 | Textos fijos de la página         | `index.html`                                                     |
 
@@ -181,6 +183,7 @@ Access & security → Visitor access_ y quita la protección.
 ## Créditos
 
 - Iconos animados: [AnimatedIcons](https://animatedicons.co) (licencia gratuita, sin atribución obligatoria).
-- Fuentes: Bagel Fat One y Outfit (SIL Open Font License), vía Fontsource.
+- Fuente: Jost (SIL Open Font License), vía Fontsource; es la alternativa libre a Futura, la fuente de la marca.
+- Logo: archivos oficiales de Chunkea (`chunkea.ai`), convertidos a SVG.
 
 © Chunkea. Todos los derechos reservados.
