@@ -211,7 +211,7 @@
   }
 }
 
-/* Forro decorativo del hero */
+/* Forros decorativos (hero e Inspírate) */
 .mini-case {
   position: relative;
   aspect-ratio: 1 / 2;
@@ -593,68 +593,6 @@
   font-size: 0.62rem;
   font-weight: 700;
   color: var(--fucsia-d);
-}
-
-/* Combos pre armados dentro del paso 2 */
-.combos {
-  margin-bottom: 14px;
-}
-
-.combos-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--tinta-2);
-}
-
-.combo-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.combo-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 13px 5px 5px;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--tinta);
-  cursor: pointer;
-  background: var(--lila-3);
-  border: 2px solid var(--lila);
-  border-radius: 999px;
-  transition:
-    background 0.2s,
-    border-color 0.2s,
-    transform 0.15s;
-}
-
-.combo-chip:hover {
-  border-color: var(--fucsia);
-  background: var(--lila-2);
-  transform: translateY(-1px);
-}
-
-.combo-chip:active {
-  transform: scale(0.96);
-}
-
-.combo-chip-photo {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  background: #fff;
-  border-radius: 50%;
-}
-
-.combo-chip-photo img {
-  max-width: 20px;
-  max-height: 20px;
-  filter: drop-shadow(0 1px 1px rgb(42 15 36 / 35%));
 }
 
 /* Foto de un chunki de cada tipo en los filtros */
