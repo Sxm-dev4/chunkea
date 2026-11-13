@@ -80,7 +80,7 @@ export async function mountScene(
   key.shadow.bias = -0.0004;
   key.shadow.normalBias = 0.01;
   key.shadow.radius = 5;
-  const rim = new THREE.DirectionalLight(0xe384e6, 0.8);
+  const rim = new THREE.DirectionalLight(0xf179ea, 0.8);
   rim.position.set(-3, 1.5, -2.5);
   // Los chunkis son de metal: con la luz ambiente y el estudio tenue necesitan su propia luz
   const fill = new THREE.DirectionalLight(0xffffff, 1.2);

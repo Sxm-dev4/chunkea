@@ -7,12 +7,12 @@ const STAR = 'M24 4l5.9 12 13.1 1.9-9.5 9.3 2.2 13.1L24 34l-11.7 6.3 2.2-13.1L5 
 
 /** Formas propias en los colores de la marca. */
 const SHAPES: readonly (readonly [string, string])[] = [
-  [HEART, '#C8237A'],
-  [SPARKLE, '#E384E6'],
-  [HEART, '#FF9BD2'],
-  [STAR, '#FFD3EC'],
+  [HEART, '#D91E75'],
+  [SPARKLE, '#F179EA'],
+  [HEART, '#F25822'],
+  [STAR, '#D8F179'],
   [SPARKLE, '#FFFFFF'],
-  [HEART, '#C8102E'],
+  [HEART, '#F179EA'],
 ];
 
 const SVG_NS = 'http://www.w3.org/2000/svg';

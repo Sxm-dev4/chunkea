@@ -8,7 +8,7 @@ export interface Combo {
   readonly items: readonly string[];
 }
 
-/** Combos pre armados que se cargan desde el armador (paso 2). */
+/** Combos de la sección "Inspírate". */
 export const COMBOS: readonly Combo[] = [
   {
     name: 'Corazón salvaje',

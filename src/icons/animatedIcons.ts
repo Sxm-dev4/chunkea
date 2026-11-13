@@ -14,9 +14,9 @@ import { LINE_ICONS, isLineIconId } from './lineIcons';
 
 type Theme = 'light' | 'dark' | 'white';
 const THEMES: Readonly<Record<Theme, readonly [string, string]>> = {
-  light: ['#2A0F24', '#C8237A'], // sobre fondos claros
-  dark: ['#FFFFFF', '#E384E6'], // sobre fondos oscuros
-  white: ['#FFFFFF', '#FFD3EC'], // sobre botones de color
+  light: ['#2A0F24', '#D91E75'], // sobre fondos claros
+  dark: ['#FFFFFF', '#F179EA'], // sobre fondos oscuros
+  white: ['#FFFFFF', '#D8F179'], // sobre botones de color
 };
 const isTheme = (v: unknown): v is Theme => v === 'light' || v === 'dark' || v === 'white';
 

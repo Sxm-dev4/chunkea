@@ -53,7 +53,7 @@
 }
 
 .tool {
-  --li-accent: var(--lila);
+  --li-accent: var(--fucsia);
 
   display: inline-grid;
   place-items: center;
@@ -62,10 +62,10 @@
   padding: 0 10px;
   font-weight: 800;
   font-size: 0.82rem;
-  color: #fff;
+  color: var(--tinta);
   cursor: pointer;
-  background: rgb(20 12 22 / 55%);
-  border: 2px solid rgb(255 255 255 / 35%);
+  background: rgb(255 255 255 / 85%);
+  border: 2px solid var(--tinta);
   border-radius: 999px;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -76,7 +76,7 @@
 }
 
 .tool:hover {
-  border-color: #fff;
+  background: #fff;
   transform: translateY(-1px);
 }
 

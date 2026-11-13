@@ -7,7 +7,7 @@
   margin-bottom: 12px;
   overflow: hidden;
   background: #fff;
-  border: 2.5px solid var(--tinta);
+  border: 2px solid var(--tinta);
   border-radius: var(--r);
   box-shadow: 3px 3px 0 var(--tinta);
 }
@@ -15,7 +15,7 @@
 .faq summary {
   position: relative;
   padding: 18px 54px 18px 20px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.05rem;
   list-style: none;
   cursor: pointer;

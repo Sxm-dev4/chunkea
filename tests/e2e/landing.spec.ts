@@ -40,6 +40,22 @@ test.describe('Landing', () => {
     }));
     expect(trackWidth - groupWidth).toBeGreaterThanOrEqual(viewport);
   });
+
+  test('las reseñas sólo se muestran cuando hay reseñas', async ({ page }) => {
+    await page.goto('/');
+    const section = page.locator('#resenas');
+    const cards = await section.locator('.review').count();
+    if (cards === 0) await expect(section).toBeHidden();
+    else await expect(section).toBeVisible();
+  });
+
+  test('usa el logo oficial en el encabezado', async ({ page }) => {
+    await page.goto('/');
+    const logo = page.locator('.header .logo svg use');
+    await expect(logo).toHaveAttribute('href', '#logo-chunkea');
+    const box = await page.locator('.header .logo-svg').boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThan(80);
+  });
 });
 
 test.describe('Armador', () => {
@@ -143,9 +159,10 @@ test.describe('Armador', () => {
     await expect(page.locator('#model')).toHaveValue('Galaxy S24');
   });
 
-  test('carga un combo desde el armador sin salir de él', async ({ page }) => {
-    await expect(page.locator('#comboChips .combo-chip')).toHaveCount(4);
-    await page.locator('[data-combo-chip="2"]').dispatchEvent('click');
+  test('carga un combo de Inspírate', async ({ page }) => {
+    await expect(page.locator('#inspoGrid .inspo-card')).toHaveCount(4);
+    await expect(page.locator('#comboChips')).toHaveCount(0);
+    await page.locator('[data-combo="2"]').dispatchEvent('click');
     await expect(page.locator('#countNow')).toHaveText('9');
     await expect(page.locator('[data-size="pequeno"]')).toHaveAttribute('aria-checked', 'true');
     await expect(page.locator('#toast')).toContainText('Dulce');

@@ -1,0 +1,109 @@
+.reviews {
+  background: var(--lila-3);
+  border-block: 2px solid var(--tinta);
+}
+
+.reviews-carousel {
+  position: relative;
+}
+
+/* Carrusel con scroll-snap: se desliza con el dedo y las flechas avanzan una tarjeta */
+.reviews-track {
+  display: grid;
+  grid-auto-columns: min(82%, 320px);
+  grid-auto-flow: column;
+  gap: 16px;
+  padding: 6px 4px 14px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.reviews-track:focus-visible {
+  outline-offset: 6px;
+}
+
+.review {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 2px solid var(--tinta);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-pop);
+  scroll-snap-align: start;
+}
+
+.review-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-bottom: 2px solid var(--tinta);
+}
+
+.review-text {
+  flex: 1;
+  margin: 0;
+  padding: 16px 18px 8px;
+  font-size: 0.98rem;
+  color: var(--tinta);
+}
+
+.review-text::before {
+  content: '“';
+  display: block;
+  height: 0.6em;
+  font-weight: 800;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--fucsia);
+}
+
+.review-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 18px 16px;
+  font-weight: 700;
+  color: var(--fucsia-d);
+}
+
+.review-source {
+  padding: 2px 10px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--tinta);
+  background: var(--lima);
+  border-radius: 99px;
+}
+
+.reviews-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.reviews-arrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--tinta);
+  cursor: pointer;
+  background: #fff;
+  border: 2px solid var(--tinta);
+  border-radius: 50%;
+  box-shadow: 2px 2px 0 var(--tinta);
+}
+
+.reviews-arrow:hover {
+  background: var(--lima);
+}

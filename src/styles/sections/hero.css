@@ -1,7 +1,7 @@
 .hero {
   background:
-    radial-gradient(circle at 85% 20%, var(--rosa) 0 120px, transparent 121px),
-    radial-gradient(circle at 10% 90%, var(--lila-2) 0 160px, transparent 161px), var(--lila);
+    radial-gradient(circle at 88% 18%, var(--lila-2) 0 130px, transparent 131px),
+    radial-gradient(circle at 6% 92%, var(--lima-2) 0 150px, transparent 151px), var(--lila-3);
   padding: 40px 0 56px;
   overflow: hidden;
 }
@@ -24,8 +24,9 @@
 }
 
 .hero h1 {
-  font-size: clamp(2.6rem, 8.5vw, 5rem);
-  color: var(--fucsia-d);
+  font-size: clamp(2.5rem, 7.6vw, 4.6rem);
+  line-height: 1;
+  color: var(--fucsia);
   text-wrap: balance;
 }
 
@@ -94,7 +95,7 @@
 
 .hero-facts li {
   background: #fff;
-  border: 2.5px solid var(--tinta);
+  border: 2px solid var(--tinta);
   border-radius: var(--r-sm);
   padding: 8px 14px;
   display: flex;
@@ -111,8 +112,8 @@
 
 .hero-facts strong {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.2rem;
+  font-weight: 800;
+  font-size: 1.15rem;
   color: var(--fucsia);
 }
 
@@ -133,8 +134,8 @@
   width: min(420px, 90%);
   aspect-ratio: 1;
   border-radius: 42% 58% 55% 45% / 50% 40% 60% 50%;
-  background: var(--noche);
-  border: 3px solid var(--tinta);
+  background: var(--lila);
+  border: 2px solid var(--tinta);
   animation: blob 9s ease-in-out infinite;
 }
 
@@ -167,11 +168,11 @@
   position: absolute;
   z-index: 3;
   background: #fff;
-  border: 2.5px solid var(--tinta);
+  border: 2px solid var(--tinta);
   border-radius: 999px;
-  padding: 8px 14px;
-  font-weight: 800;
-  font-size: 0.9rem;
+  padding: 7px 13px;
+  font-weight: 700;
+  font-size: 0.86rem;
   box-shadow: 3px 3px 0 var(--tinta);
   line-height: 1.1;
   text-align: center;
@@ -192,7 +193,7 @@
   color: #fff;
   border-radius: 50%;
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 800;
   transform: rotate(12deg);
   animation: sticker-bob 6s ease-in-out infinite;
 }
@@ -200,13 +201,14 @@
 .sticker.s2 {
   bottom: 14%;
   left: 0;
+  background: var(--lima);
   transform: rotate(-8deg);
 }
 
 .sticker.s3 {
   bottom: 2%;
   right: 6%;
-  background: var(--rosa);
+  background: var(--naranja);
   transform: rotate(5deg);
 }
 
@@ -223,8 +225,8 @@
 
   .hero-ctas .btn {
     flex: 1 1 0;
-    padding: 14px 10px;
-    font-size: 0.98rem;
+    padding: 11px 10px;
+    font-size: 0.95rem;
   }
 
   .hero-facts {

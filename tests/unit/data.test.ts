@@ -67,7 +67,7 @@ describe('catálogo de chunkis', () => {
   });
 });
 
-describe('combos pre armados', () => {
+describe('combos de Inspírate', () => {
   it.each(COMBOS.map((c) => [c.name, c] as const))(
     '%s usa chunkis válidos y cabe en su forro',
     (_, combo) => {
