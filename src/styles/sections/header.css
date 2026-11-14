@@ -23,17 +23,23 @@
   text-decoration: none;
 }
 
-/* Proporción del logo oficial (1258 × 376) */
+/* Logo redondo de la «K» (círculo rosa con «Let's fun.») */
+.logo-k {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.35s cubic-bezier(0.3, 1.8, 0.5, 1);
+}
+
+.logo:hover .logo-k {
+  transform: rotate(-12deg) scale(1.08);
+}
+
+/* Logo con el nombre (pie de página) */
 .logo-svg {
   width: auto;
   height: 38px;
   aspect-ratio: 1258 / 376;
   fill: currentcolor;
-  transition: transform 0.25s cubic-bezier(0.3, 1.8, 0.5, 1);
-}
-
-.logo:hover .logo-svg {
-  transform: rotate(-3deg) scale(1.05);
 }
 
 .nav {

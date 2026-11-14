@@ -30,26 +30,32 @@
   text-wrap: balance;
 }
 
+/* «no chunkear»: un trazo de resaltador lima que se dibuja al cargar la página */
 .wiggle-word {
+  position: relative;
+  z-index: 0;
   display: inline-block;
   color: var(--tinta);
-  position: relative;
 }
 
-.wiggle-word::after {
+.wiggle-word::before {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -0.08em;
-  height: 0.22em;
-  background: url('../../assets/svg/wave.svg') repeat-x 0 0 / 0.9em 100%;
-  animation: wave 1.2s linear infinite;
+  z-index: -1;
+  left: -0.12em;
+  right: -0.12em;
+  bottom: 0.04em;
+  height: 0.46em;
+  background: var(--lima);
+  border-radius: 0.3em 0.12em 0.34em 0.1em;
+  transform: rotate(-1.5deg) scaleX(0);
+  transform-origin: left center;
+  animation: highlight 0.7s cubic-bezier(0.5, 0, 0.2, 1) 0.45s forwards;
 }
 
-@keyframes wave {
+@keyframes highlight {
   to {
-    background-position: 0.9em 0;
+    transform: rotate(-1.5deg) scaleX(1);
   }
 }
 

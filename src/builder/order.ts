@@ -1,5 +1,5 @@
 import { PRODUCTS, SITE } from '../config/site';
-import { CATEGORY_LABELS, NOTE_LABELS, getChunki } from '../data/chunkis';
+import { CATEGORY_LABELS, CHUNK_SIZE_LABELS, NOTE_LABELS, chunkSize, getChunki } from '../data/chunkis';
 import { formatCOP } from './money';
 import type { BuilderState } from './store';
 
@@ -21,9 +21,9 @@ export function buildOrderMessage(state: Pick<BuilderState, 'size' | 'model' | '
   const lines = [...counts].map(([id, n]) => {
     const chunki = getChunki(id);
     if (!chunki) return `• ${id}${n > 1 ? ` x${n}` : ''}`;
-    // Hay chunkis con el mismo nombre en plateado y dorado: se aclara cuál
+    // Hay chunkis con el mismo nombre en plateado y dorado: se aclara cuál (y si es grande o pequeño)
     const note = chunki.note ? ` — ${NOTE_LABELS[chunki.note].order}` : '';
-    return `• ${chunki.name} (${CATEGORY_LABELS[chunki.category]})${n > 1 ? ` x${n}` : ''}${note}`;
+    return `• ${chunki.name} (${CATEGORY_LABELS[chunki.category]}, ${CHUNK_SIZE_LABELS[chunkSize(id)]})${n > 1 ? ` x${n}` : ''}${note}`;
   });
 
   return [
@@ -31,7 +31,7 @@ export function buildOrderMessage(state: Pick<BuilderState, 'size' | 'model' | '
     '',
     `*Producto:* ${product.name}`,
     `*Celular:* ${state.model.trim()}`,
-    `*Chunkis (${state.charms.length}/${product.maxCharms}):*`,
+    `*Chunks (${state.charms.length}/${product.maxCharms}):*`,
     ...lines,
     '',
     `*Total:* ${formatCOP(product.price)} + envío`,

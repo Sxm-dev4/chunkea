@@ -50,6 +50,8 @@ Abre la URL que muestra la terminal (normalmente http://localhost:5173).
 | Colores de la marca               | `src/styles/tokens.css` (fucsia, rosa, naranja y lima oficiales) |
 | Logo                              | `src/assets/brand/` (y el símbolo al inicio de `index.html`)     |
 | Reseñas de clientes (carrusel)    | `src/data/reviews.ts` y fotos en `src/assets/reviews/`           |
+| Stickers de la marca (decoración) | `src/assets/stickers/` y `src/styles/sections/stickers.css`      |
+| Chunk grande o pequeño            | `src/data/chunkis.ts` → `SIZE_OVERRIDES` (si la foto engaña)     |
 | Textos de avisos y contador       | `src/copy.ts`                                                    |
 | Textos fijos de la página         | `index.html`                                                     |
 

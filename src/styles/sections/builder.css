@@ -744,3 +744,66 @@
   text-align: center;
   color: var(--rosa);
 }
+
+/* ---------- Tamaño del chunk (grande / pequeño) ---------- */
+.filters-size {
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.filters-label {
+  flex: none;
+  font-weight: 600;
+  font-size: 0.84rem;
+  color: var(--tinta-2);
+}
+
+.filters-size .filter {
+  padding: 5px 12px;
+  font-size: 0.84rem;
+}
+
+/* Punto grande y punto pequeño: se entiende el tamaño sin leer */
+.size-dot {
+  display: inline-block;
+  flex: none;
+  background: var(--fucsia);
+  border-radius: 50%;
+}
+
+.size-dot-grande {
+  width: 12px;
+  height: 12px;
+}
+
+.size-dot-pequeno {
+  width: 7px;
+  height: 7px;
+}
+
+.filter[aria-pressed='true'] .size-dot {
+  background: var(--lima);
+}
+
+.size-help {
+  margin: 0 0 10px;
+}
+
+.pick-size {
+  margin-top: -2px;
+  padding: 1px 7px;
+  font-weight: 700;
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tinta);
+  border-radius: 99px;
+}
+
+.pick-size-grande {
+  background: var(--lila-2);
+}
+
+.pick-size-pequeno {
+  background: var(--lima-2);
+}

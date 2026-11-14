@@ -9,12 +9,12 @@ export const COPY = {
   counter(count: number, max: number): string {
     if (count === 0) return '¡Todos incluidos en el precio!';
     if (count >= max) return `¡Full chunky! ${lineIcon('heart')}`;
-    return `Te quedan ${max - count} chunkis incluidos ${lineIcon('eyes')}`;
+    return `Te quedan ${max - count} chunks incluidos ${lineIcon('eyes')}`;
   },
-  charmsLabel: (count: number): string => `${count} chunki${count === 1 ? '' : 's'}`,
-  emptyCase: `Tu forro está muy solito…<br><strong>¡dale chunkis! ${lineIcon('arrow')}</strong>`,
+  charmsLabel: (count: number): string => `${count} chunk${count === 1 ? '' : 's'}`,
+  emptyCase: `Tu forro está muy solito…<br><strong>¡dale chunks! ${lineIcon('arrow')}</strong>`,
   hint2D: `${lineIcon('hand')} Arrastra para mover · toca para quitar`,
-  hint3D: `${lineIcon('rotate')} Gira el forro · mueve o toca los chunkis`,
+  hint3D: `${lineIcon('rotate')} Gira el forro · mueve o toca los chunks`,
   toast: {
     full: `¡Ya está full! Quita uno para cambiarlo ${lineIcon('heart')}`,
     fullSurprise: `${lineIcon('heart')} Ya está full. Vacíalo para otra sorpresa`,
@@ -22,9 +22,9 @@ export const COPY = {
     cleared: `${lineIcon('trash')} Listo, lienzo en blanco`,
     combo: (name: string): string => `${lineIcon('sparkle')} Cargamos “${escapeHtml(name)}”. ¡Hazlo tuyo!`,
     trimmed: (n: number, max: number): string =>
-      `Quitamos ${n} chunki${n > 1 ? 's' : ''}: aquí caben hasta ${max}`,
+      `Quitamos ${n} chunk${n > 1 ? 's' : ''}: aquí caben hasta ${max}`,
     missingModel: `${lineIcon('phone')} Cuéntanos cuál es tu celular para hacer tu forro`,
-    noCharms: `${lineIcon('heart')} Elige al menos un chunki`,
+    noCharms: `${lineIcon('heart')} Elige al menos un chunk`,
     opening: `${lineIcon('chat')} ¡Abriendo WhatsApp! Tu diseño ya va en el mensaje`,
   },
 } as const;

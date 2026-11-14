@@ -49,12 +49,12 @@ test.describe('Landing', () => {
     else await expect(section).toBeVisible();
   });
 
-  test('usa el logo oficial en el encabezado', async ({ page }) => {
+  test('usa los logos oficiales: la «K» arriba y el nombre en el pie', async ({ page }) => {
     await page.goto('/');
-    const logo = page.locator('.header .logo svg use');
-    await expect(logo).toHaveAttribute('href', '#logo-chunkea');
-    const box = await page.locator('.header .logo-svg').boundingBox();
-    expect(box?.width ?? 0).toBeGreaterThan(80);
+    await expect(page.locator('.header .logo svg use')).toHaveAttribute('href', '#logo-k');
+    const box = await page.locator('.header .logo-k').boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThanOrEqual(40);
+    await expect(page.locator('.footer .logo svg use')).toHaveAttribute('href', '#logo-chunkea-lets-fun');
   });
 });
 
@@ -64,11 +64,11 @@ test.describe('Armador', () => {
     await page.locator('#arma').scrollIntoViewIfNeeded();
   });
 
-  test('cuenta los chunkis y actualiza el resumen', async ({ page }) => {
+  test('cuenta los chunks y actualiza el resumen', async ({ page }) => {
     await addCharms(page, ['plata-osito', 'plata-cereza', 'plata-osito']);
     await expect(page.locator('#countNow')).toHaveText('3');
     await expect(page.locator('[data-id="plata-osito"] .pick-count')).toHaveText('2');
-    await expect(page.locator('#sumSub')).toHaveText('3 chunkis');
+    await expect(page.locator('#sumSub')).toHaveText('3 chunks');
     await page.locator('[data-remove="plata-osito"]').dispatchEvent('click');
     await expect(page.locator('#countNow')).toHaveText('2');
   });
@@ -90,7 +90,7 @@ test.describe('Armador', () => {
     expect(url).toMatch(/^https:\/\/wa\.me\/\d+\?text=/);
     const text = decodeURIComponent(url?.split('text=')[1] ?? '');
     expect(text).toContain('*Celular:* iPhone 15');
-    expect(text).toContain('• Osito (plateado) x2');
+    expect(text).toContain('• Osito (plateado, pequeño) x2');
     expect(text).toContain('*Total:* $55.000');
   });
 
@@ -166,5 +166,20 @@ test.describe('Armador', () => {
     await expect(page.locator('#countNow')).toHaveText('9');
     await expect(page.locator('[data-size="pequeno"]')).toHaveAttribute('aria-checked', 'true');
     await expect(page.locator('#toast')).toContainText('Dulce');
+  });
+});
+
+test.describe('Tamaño de los chunks', () => {
+  test('filtra el catálogo por chunks grandes y pequeños', async ({ page }) => {
+    await page.goto('/');
+    const visible = (size: string) => page.locator(`.pick-wrap[data-chunk-size="${size}"]:not([hidden])`);
+    await page.locator('[data-chunk-size="pequeno"].filter').dispatchEvent('click');
+    await expect(visible('grande')).toHaveCount(0);
+    expect(await visible('pequeno').count()).toBeGreaterThan(0);
+    await page.locator('[data-chunk-size="grande"].filter').dispatchEvent('click');
+    await expect(visible('pequeno')).toHaveCount(0);
+    await page.locator('[data-chunk-size="todos"].filter').dispatchEvent('click');
+    expect(await visible('pequeno').count()).toBeGreaterThan(0);
+    expect(await visible('grande').count()).toBeGreaterThan(0);
   });
 });

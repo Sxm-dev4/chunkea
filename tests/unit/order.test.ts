@@ -36,12 +36,12 @@ describe('buildOrderMessage', () => {
   it('incluye producto, celular, conteo y total', () => {
     expect(message).toContain('*Producto:* Forro grande');
     expect(message).toContain('*Celular:* iPhone 15 Pro Max');
-    expect(message).toContain('*Chunkis (3/13):*');
+    expect(message).toContain('*Chunks (3/13):*');
     expect(message).toContain('*Total:* $60.000 + envío');
   });
 
   it('agrupa los chunkis repetidos', () => {
-    expect(message).toContain('• Osito (plateado) x2');
+    expect(message).toContain('• Osito (plateado, pequeño) x2');
     expect(message).toContain('• Cereza');
     expect(message).not.toContain('• Cereza x');
   });
@@ -52,8 +52,8 @@ describe('buildOrderMessage', () => {
       model: 'iPhone 15',
       charms: [charm(1, 'plata-cruz'), charm(2, 'oro-cruz')],
     });
-    expect(both).toContain('• Cruz (plateado)');
-    expect(both).toContain('• Cruz (dorado)');
+    expect(both).toContain('• Cruz (plateado, grande)');
+    expect(both).toContain('• Cruz (dorado, pequeño)');
   });
 
   it('pide confirmar el color o la inicial cuando hay que elegirlos', () => {
@@ -62,8 +62,8 @@ describe('buildOrderMessage', () => {
       model: 'iPhone 15',
       charms: [charm(1, 'color-hongo'), charm(2, 'color-hongo'), charm(3, 'oro-letras')],
     });
-    expect(notes).toContain('• Hongo (colorido) x2 — color a confirmar');
-    expect(notes).toContain('• Letras (dorado) — inicial a confirmar');
+    expect(notes).toContain('• Hongo (colorido, pequeño) x2 — color a confirmar');
+    expect(notes).toContain('• Letras (dorado, pequeño) — inicial a confirmar');
   });
 
   it('no usa emojis (el mensaje es texto plano)', () => {

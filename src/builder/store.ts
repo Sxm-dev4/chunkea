@@ -1,5 +1,5 @@
 import { DEFAULT_SIZE, PRODUCTS, isSizeId, type SizeId } from '../config/site';
-import { CHUNKIS, isAvailable, type CategoryFilter } from '../data/chunkis';
+import { CHUNKIS, chunkSize, isAvailable, type CategoryFilter, type ChunkSizeFilter } from '../data/chunkis';
 import type { Combo } from '../data/combos';
 import { OTHER_PHONE, PHONES, cameraZoneFor, getPhone, renderIdFor } from '../data/phones';
 import { defaultRng, randomBetween, type Rng } from '../lib/random';
@@ -22,6 +22,8 @@ export interface BuilderState {
   model: string;
   charms: PlacedCharm[];
   filter: CategoryFilter;
+  /** Filtro del catálogo por tamaño del chunk. */
+  sizeFilter: ChunkSizeFilter;
 }
 
 export type BuilderEvent =
@@ -109,6 +111,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
     model: '',
     charms: [],
     filter: 'todos',
+    sizeFilter: 'todos',
   };
 
   const saved = parseSavedDesign(storage.get(STORAGE_KEY));
@@ -261,10 +264,19 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
       emit({ type: 'filter-changed' });
     },
 
+    setSizeFilter(sizeFilter: ChunkSizeFilter): void {
+      if (sizeFilter === state.sizeFilter) return;
+      state.sizeFilter = sizeFilter;
+      emit({ type: 'filter-changed' });
+    },
+
     /** Llena los espacios libres con chunkis al azar (del filtro actual). */
     surprise(): number {
       const pool = CHUNKIS.filter(
-        (c) => !c.soldOut && (state.filter === 'todos' || c.category === state.filter),
+        (c) =>
+          !c.soldOut &&
+          (state.filter === 'todos' || c.category === state.filter) &&
+          (state.sizeFilter === 'todos' || chunkSize(c.id) === state.sizeFilter),
       );
       const free = maxCharms() - state.charms.length;
       if (free <= 0 || pool.length === 0) {
