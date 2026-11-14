@@ -58,7 +58,7 @@ test.describe('Armador 3D', () => {
     await expect.poll(() => models.some((url) => url.includes('iphone-se'))).toBe(true);
   });
 
-  test('se activa y permite mover y quitar chunkis', async ({ page, isMobile }) => {
+  test('se activa y permite mover, elegir y quitar chunks', async ({ page, isMobile }) => {
     test.skip(isMobile, 'El arrastre con mouse se prueba en escritorio');
     test.slow(); // sin GPU, el 3D corre por software
     await page.goto('/?e2e');
@@ -87,7 +87,10 @@ test.describe('Armador 3D', () => {
 
     await page.waitForTimeout(600);
     const now = await page.evaluate((u) => (window as TestWindow).__chunkea3d?.project(u) ?? null, uid);
+    // tocar lo elige y la barra lo quita
     await page.mouse.click(now!.x, now!.y);
+    await expect(page.locator('#charmTools')).toBeVisible();
+    await page.locator('#charmTools [data-charm-remove]').click();
     await expect(page.locator('#countNow')).toHaveText('1');
   });
 });

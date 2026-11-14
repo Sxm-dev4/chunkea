@@ -245,3 +245,37 @@ export const chunkiWidth = (id: string): number => {
   if (!size) return 19;
   return Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, size.w / CATALOG_PX_PER_PERCENT));
 };
+
+/* ---------- Tamaño del chunk (sólo informativo: todos cuentan igual en el forro) ---------- */
+
+export type ChunkSize = 'grande' | 'pequeno';
+export type ChunkSizeFilter = ChunkSize | 'todos';
+
+export const CHUNK_SIZE_LABELS: Readonly<Record<ChunkSize, string>> = {
+  grande: 'grande',
+  pequeno: 'pequeño',
+};
+
+export const CHUNK_SIZE_FILTERS: readonly ChunkSizeFilter[] = ['todos', 'grande', 'pequeno'];
+
+export const isChunkSizeFilter = (value: unknown): value is ChunkSizeFilter =>
+  typeof value === 'string' && (CHUNK_SIZE_FILTERS as readonly string[]).includes(value);
+
+/**
+ * Por debajo de este tamaño (raíz del ancho × alto de la foto del catálogo, que está a escala)
+ * el chunk es pequeño: unos 1,3 cm sobre el forro.
+ */
+const SMALL_MAX_PX = 100;
+
+/** Correcciones a mano cuando la foto engaña. Ejemplo: 'color-pato': 'pequeno'. */
+const SIZE_OVERRIDES: Readonly<Record<string, ChunkSize>> = {};
+
+/** Grande o pequeño: lo que dice SIZE_OVERRIDES, si no "mini" en el nombre, si no la medida de la foto. */
+export const chunkSize = (id: string): ChunkSize => {
+  const override = SIZE_OVERRIDES[id];
+  if (override) return override;
+  if (/(^|-)mini(-|$)/.test(id)) return 'pequeno';
+  const size = PHOTOS[id]?.piece ?? PHOTOS[id];
+  if (!size) return 'grande';
+  return Math.sqrt(size.w * size.h) < SMALL_MAX_PX ? 'pequeno' : 'grande';
+};

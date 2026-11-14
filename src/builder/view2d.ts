@@ -4,6 +4,9 @@ import { prefersReducedMotion, replayClass } from '../lib/env';
 import { createCaseImage, fillCharmElement, fitLayerToCase, placeCharmElement } from './caseArt';
 import type { BuilderEvent, BuilderState, BuilderStore } from './store';
 
+/** Grados que gira un chunk con cada toque del botón o de la tecla R. */
+export const ROTATE_STEP = 15;
+
 const DRAG_THRESHOLD_PX = 6;
 const POOF_MS = 260;
 
@@ -15,8 +18,8 @@ export interface View2DElements {
 }
 
 /**
- * Vista principal: el render realista del forro con los chunkis encima,
- * que se pueden arrastrar o tocar para quitarlos.
+ * Vista principal: el render realista del forro con los chunks encima.
+ * Se arrastran para moverlos y se tocan para elegirlos (y girarlos o quitarlos).
  */
 export function mountView2D(store: BuilderStore, els: View2DElements): { bump(): void } {
   const nodes = new Map<number, HTMLButtonElement>();
@@ -51,7 +54,7 @@ export function mountView2D(store: BuilderStore, els: View2DElements): { bump():
     node.type = 'button';
     node.className = 'charm';
     node.dataset.uid = String(uid);
-    node.setAttribute('aria-label', `Quitar ${chunki.name}`);
+    node.setAttribute('aria-label', `${chunki.name}: elegir para girar o quitar (R gira, Suprimir quita)`);
     fillCharmElement(node, chunki.id);
     els.layer.append(node);
     return node;
@@ -65,6 +68,9 @@ export function mountView2D(store: BuilderStore, els: View2DElements): { bump():
       if (!node) continue;
       nodes.set(charm.uid, node);
       placeCharmElement(node, charm.x, charm.y, charm.r);
+      const selected = charm.uid === state.selectedUid;
+      node.classList.toggle('selected', selected);
+      node.setAttribute('aria-pressed', String(selected));
     }
     nodes.forEach((node, uid) => {
       if (alive.has(uid)) return;
@@ -96,6 +102,7 @@ export function mountView2D(store: BuilderStore, els: View2DElements): { bump():
       case 'added':
       case 'filled':
       case 'moved':
+      case 'selected':
         renderCharms(state);
         break;
       case 'removed':
@@ -119,7 +126,11 @@ export function mountView2D(store: BuilderStore, els: View2DElements): { bump():
 
   els.layer.addEventListener('pointerdown', (e) => {
     const node = (e.target as Element).closest<HTMLButtonElement>('.charm');
-    if (!node || e.button > 0) return;
+    if (e.button > 0) return;
+    if (!node) {
+      store.selectCharm(null); // tocar el forro fuera de un chunk suelta la selección
+      return;
+    }
     drag = {
       node,
       uid: Number(node.dataset.uid),
@@ -148,18 +159,28 @@ export function mountView2D(store: BuilderStore, els: View2DElements): { bump():
     node.classList.remove('dragging');
     drag = null;
     if (!commit) return;
-    if (!moved) store.removeCharm(uid);
+    if (!moved) store.selectCharm(store.getState().selectedUid === uid ? null : uid);
     else store.moveCharm(uid, parseFloat(node.style.left), parseFloat(node.style.top));
   };
   els.layer.addEventListener('pointerup', () => endDrag(true));
   els.layer.addEventListener('pointercancel', () => endDrag(false));
 
-  // Teclado: Enter, Espacio o Suprimir quitan el chunki enfocado
+  // Teclado: Enter o Espacio eligen el chunk, R lo gira (Mayús+R al otro lado) y Suprimir lo quita
   els.layer.addEventListener('keydown', (e) => {
     const node = (e.target as Element).closest<HTMLButtonElement>('.charm');
-    if (node && ['Enter', ' ', 'Delete', 'Backspace'].includes(e.key)) {
+    if (!node) return;
+    const uid = Number(node.dataset.uid);
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      store.removeCharm(Number(node.dataset.uid));
+      store.selectCharm(store.getState().selectedUid === uid ? null : uid);
+    } else if (e.key === 'Delete' || e.key === 'Backspace') {
+      e.preventDefault();
+      store.removeCharm(uid);
+    } else if (e.key === 'r' || e.key === 'R') {
+      e.preventDefault();
+      store.rotateCharm(uid, e.shiftKey ? -ROTATE_STEP : ROTATE_STEP);
+    } else if (e.key === 'Escape') {
+      store.selectCharm(null);
     }
   });
   // El click lo maneja pointerup; se evita que un Enter dispare dos veces

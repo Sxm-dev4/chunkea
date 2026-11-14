@@ -1,0 +1,156 @@
+/* Stickers de la marca como decoración (src/assets/stickers/). No reciben clics ni los leen los lectores de pantalla. */
+.inspo,
+.how,
+.prices,
+.faq,
+.final {
+  position: relative;
+  overflow-x: clip;
+}
+
+.inspo > .container,
+.how > .container,
+.prices > .container,
+.faq > .container,
+.final > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.deco {
+  --rot: 0deg;
+  --s: 70px;
+
+  position: absolute;
+  z-index: 0;
+  width: var(--s);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 6px 8px rgb(42 15 36 / 22%));
+  transform: rotate(var(--rot));
+  animation: deco-float 7s ease-in-out infinite;
+}
+
+@keyframes deco-float {
+  50% {
+    transform: rotate(calc(var(--rot) + 5deg)) translateY(-8px);
+  }
+}
+
+/* En móvil van pequeños en las esquinas, encima del título de cada sección */
+.deco-rayo {
+  --rot: -10deg;
+  --s: 64px;
+
+  top: 0;
+  left: 2%;
+  z-index: 3;
+}
+
+.deco-corazon {
+  --rot: 8deg;
+  --s: 92px;
+
+  top: 42%;
+  right: -2%;
+  z-index: 3;
+  animation-delay: -2s;
+}
+
+.deco-ovni {
+  --rot: 10deg;
+
+  top: 8px;
+  right: 10px;
+}
+
+.deco-blah {
+  --rot: -8deg;
+
+  top: 6px;
+  left: 10px;
+  animation-delay: -3s;
+}
+
+.deco-corazones {
+  --rot: -6deg;
+  --s: 84px;
+
+  top: 4px;
+  right: 8px;
+  animation-delay: -1s;
+}
+
+.deco-carita {
+  --rot: 12deg;
+  --s: 60px;
+
+  top: 8px;
+  left: 12px;
+  animation-delay: -4s;
+}
+
+.deco-lets-fun {
+  --rot: -8deg;
+  --s: 66px;
+
+  top: 8px;
+  right: 10px;
+  animation-delay: -2.5s;
+}
+
+@media (min-width: 900px) {
+  .deco-rayo {
+    --s: 96px;
+
+    top: 4%;
+    left: 4%;
+  }
+
+  .deco-corazon {
+    --s: 140px;
+
+    top: 40%;
+    right: -6%;
+  }
+
+  .deco-ovni {
+    --s: 150px;
+
+    top: 40px;
+    right: 5%;
+  }
+
+  .deco-blah {
+    --s: 140px;
+
+    top: 36px;
+    left: 6%;
+  }
+
+  .deco-corazones {
+    --s: 190px;
+
+    top: auto;
+    right: auto;
+    bottom: 70px;
+    left: 4%;
+  }
+
+  .deco-carita {
+    --s: 120px;
+
+    top: 120px;
+    left: auto;
+    right: 8%;
+  }
+
+  .deco-lets-fun {
+    --s: 110px;
+
+    top: 50%;
+    right: 3%;
+    margin-top: -55px;
+  }
+}

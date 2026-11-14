@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { PRODUCTS } from '../../src/config/site';
+import { MAX_BIG_CHUNKS, PRODUCTS } from '../../src/config/site';
 import { readdirSync } from 'node:fs';
 import photos from '../../src/data/chunkiPhotos.json';
 import {
   CHUNKIS,
+  chunkSize,
   chunkiAspect,
   chunkiPhoto,
   chunkiPiecePhoto,
@@ -67,12 +68,14 @@ describe('catálogo de chunkis', () => {
   });
 });
 
-describe('combos pre armados', () => {
+describe('combos de Inspírate', () => {
   it.each(COMBOS.map((c) => [c.name, c] as const))(
     '%s usa chunkis válidos y cabe en su forro',
     (_, combo) => {
       expect(combo.items.length).toBeLessThanOrEqual(PRODUCTS[combo.size].maxCharms);
       for (const id of combo.items) expect(isAvailable(id), id).toBe(true);
+      const bigs = combo.items.filter((id) => chunkSize(id) === 'grande');
+      expect(bigs.length, bigs.join(', ')).toBeLessThanOrEqual(MAX_BIG_CHUNKS);
     },
   );
 });
@@ -83,5 +86,19 @@ describe('productos', () => {
       expect(p.price).toBeGreaterThan(0);
       expect(p.maxCharms).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('tamaño de los chunks', () => {
+  it('cada chunk es grande o pequeño, y hay de los dos', () => {
+    const sizes = CHUNKIS.map((c) => chunkSize(c.id));
+    expect(sizes.every((s) => s === 'grande' || s === 'pequeno')).toBe(true);
+    expect(sizes.filter((s) => s === 'pequeno').length).toBeGreaterThan(20);
+    expect(sizes.filter((s) => s === 'grande').length).toBeGreaterThan(20);
+  });
+
+  it('los que dicen "mini" son pequeños', () => {
+    for (const c of CHUNKIS.filter((c) => /(^|-)mini(-|$)/.test(c.id)))
+      expect(chunkSize(c.id), c.id).toBe('pequeno');
   });
 });

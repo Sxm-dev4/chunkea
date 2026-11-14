@@ -4,11 +4,11 @@ export interface Combo {
   readonly name: string;
   readonly description: string;
   readonly size: SizeId;
-  /** Ids de chunkis (se pueden repetir). */
+  /** Ids de chunks (se pueden repetir). Máximo MAX_BIG_CHUNKS grandes. */
   readonly items: readonly string[];
 }
 
-/** Combos pre armados que se cargan desde el armador (paso 2). */
+/** Combos de la sección "Inspírate". Cada uno lleva 3 chunks grandes y el resto pequeños. */
 export const COMBOS: readonly Combo[] = [
   {
     name: 'Corazón salvaje',
@@ -19,15 +19,15 @@ export const COMBOS: readonly Combo[] = [
       'plata-rey-corazon-alas',
       'plata-reina-roja',
       'plata-leopardo',
-      'plata-corazon-coronita',
       'plata-corazon-3d',
-      'plata-corazon-cruz',
       'oro-mini-cora-rojo',
       'plata-corazon-mini-3d',
-      'plata-corazon-rey',
       'plata-cereza',
       'plata-corazon-mini',
-      'plata-ala-corazon',
+      'plata-corazon-pellet',
+      'plata-corazon-plano-mini',
+      'oro-mini-cora-negro',
+      'oro-corazon-negro-ojo-rojo',
     ],
   },
   {
@@ -38,16 +38,16 @@ export const COMBOS: readonly Combo[] = [
       'oro-ojo-pestanas',
       'oro-mano-hamsa',
       'oro-virgen-roja',
-      'oro-talisman',
-      'oro-ojo-corazon',
-      'oro-rostro-sol-luna',
-      'oro-estrella-cardinal',
       'oro-cruz',
       'oro-ojo-gota-mini-azul',
-      'oro-om',
-      'oro-trebol-negro',
-      'oro-sagrado-corazon',
+      'oro-cuadro-ojo',
+      'oro-mano-nacar',
+      'oro-ojos-pintados',
       'oro-ojo-gota-mini',
+      'oro-mano-mini',
+      'oro-cora-globo',
+      'oro-corazones-mini',
+      'oro-argolla-curva',
     ],
   },
   {
@@ -56,14 +56,14 @@ export const COMBOS: readonly Combo[] = [
     size: 'pequeno',
     items: [
       'color-cupcake',
-      'color-osito-goma',
       'color-paletas',
+      'color-corazon-rojo',
       'color-cutie-rosado',
-      'color-pato',
       'color-carita-feliz',
       'color-croissant',
-      'color-corazon-rojo',
       'color-patico-mini',
+      'color-pancito',
+      'color-cereza',
     ],
   },
   {
@@ -72,14 +72,14 @@ export const COMBOS: readonly Combo[] = [
     size: 'pequeno',
     items: [
       'oro-avion',
-      'oro-estrella-cardinal',
       'color-starbucks',
-      'plata-ancla-mini',
-      'oro-estrella-fugaz',
-      'plata-tortuga',
       'color-taza-cafe',
+      'plata-ancla-mini',
+      'plata-tortuga',
       'oro-leopardo',
       'plata-astronauta',
+      'oro-ancla',
+      'plata-sol-luna',
     ],
   },
 ];

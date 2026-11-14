@@ -17,17 +17,17 @@
   position: relative;
   padding: 26px 22px;
   background: #fff;
-  border: 2.5px solid var(--tinta);
+  border: 2px solid var(--tinta);
   border-radius: var(--r);
   box-shadow: var(--shadow-pop);
 }
 
 .how-card:nth-child(2) {
-  background: var(--lila-3);
+  background: var(--lima-2);
 }
 
 .how-card:nth-child(3) {
-  background: var(--rosa);
+  background: var(--lila-3);
 }
 
 .how-n {
@@ -39,10 +39,11 @@
   width: 40px;
   height: 40px;
   font-family: var(--font-display);
+  font-weight: 800;
   font-size: 1.1rem;
   color: #fff;
   background: var(--fucsia);
-  border: 2.5px solid var(--tinta);
+  border: 2px solid var(--tinta);
   border-radius: 50%;
 }
 
@@ -53,7 +54,7 @@
 }
 
 .how-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin-bottom: 6px;
 }
 

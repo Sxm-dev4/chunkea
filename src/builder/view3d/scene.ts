@@ -80,7 +80,7 @@ export async function mountScene(
   key.shadow.bias = -0.0004;
   key.shadow.normalBias = 0.01;
   key.shadow.radius = 5;
-  const rim = new THREE.DirectionalLight(0xe384e6, 0.8);
+  const rim = new THREE.DirectionalLight(0xf179ea, 0.8);
   rim.position.set(-3, 1.5, -2.5);
   // Los chunkis son de metal: con la luz ambiente y el estudio tenue necesitan su propia luz
   const fill = new THREE.DirectionalLight(0xffffff, 1.2);
@@ -319,14 +319,16 @@ export async function mountScene(
     if (!pointer || e.pointerId !== pointer.id) return;
     const wasTap = !pointer.moved;
     if (dragging) {
-      if (wasTap) store.removeCharm(dragging.uid);
+      // Tocar un chunk lo elige para girarlo o quitarlo desde la barra (otra vez: lo suelta)
+      if (wasTap) store.selectCharm(store.getState().selectedUid === dragging.uid ? null : dragging.uid);
       else {
         const [px, py] = toPercent(dragging.target[0], dragging.target[1]);
         dragging.landing = 1;
         store.moveCharm(dragging.uid, px, py);
       }
-    } else if (wasTap && pointer.onCase) {
-      rotation.vy = 0.09; // tocar el forro le da un giro juguetón
+    } else if (wasTap) {
+      store.selectCharm(null);
+      if (pointer.onCase) rotation.vy = 0.09; // tocar el forro le da un giro juguetón
     }
     dragging = null;
     pointer = null;
@@ -407,8 +409,10 @@ export async function mountScene(
       root.scale.setScalar(1 + Math.sin(bumpT * Math.PI) * 0.035);
     }
 
+    const selectedUid = store.getState().selectedUid;
     objects.forEach((o, uid) => {
       const r = o.root;
+      const selected = uid === selectedUid;
       if (o.appear < 1) {
         if (o.delay > 0) {
           o.delay -= dt;
@@ -420,10 +424,11 @@ export async function mountScene(
       const follow = lerpK(o === dragging ? 0.45 : 0.2);
       r.position.x += (o.target[0] - r.position.x) * follow;
       r.position.y += (o.target[1] - r.position.y) * follow;
-      o.lift += ((o === dragging ? 0.09 : o === hovered ? 0.025 : 0) - o.lift) * lerpK(0.25);
+      o.lift +=
+        ((o === dragging ? 0.09 : selected ? 0.05 : o === hovered ? 0.025 : 0) - o.lift) * lerpK(0.25);
       if (o.landing) o.landing = Math.max(0, o.landing - dt * 3);
       r.position.z = dims.backTop + (1 - ease.outCubic(o.appear)) * 0.55 + o.lift;
-      const grow = o === dragging ? 1.12 : o === hovered ? 1.05 : 1;
+      const grow = o === dragging ? 1.12 : selected ? 1.08 : o === hovered ? 1.05 : 1;
       let scale =
         o.size * Math.max(0.0001, ease.outBack(o.appear)) * grow * (1 + Math.sin(o.landing * Math.PI) * 0.08);
       r.rotation.z =

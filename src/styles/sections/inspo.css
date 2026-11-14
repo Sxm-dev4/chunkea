@@ -1,0 +1,83 @@
+.inspo {
+  background: var(--lila-3);
+  border-bottom: 2px solid var(--tinta);
+}
+
+.inspo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+@media (min-width: 760px) {
+  .inspo-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+  }
+}
+
+/* Cada tarjeta lleva uno de los colores de la marca de fondo */
+.inspo-card {
+  --card-bg: #fff;
+
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 16px 10px 14px;
+  text-align: center;
+  color: var(--tinta);
+  cursor: pointer;
+  background: var(--card-bg);
+  border: 2px solid var(--tinta);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-pop);
+  transition:
+    transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1),
+    box-shadow 0.2s;
+}
+
+.inspo-card:nth-child(4n + 2) {
+  --card-bg: var(--lila);
+}
+
+.inspo-card:nth-child(4n + 3) {
+  --card-bg: var(--lima);
+}
+
+.inspo-card:nth-child(4n + 4) {
+  --card-bg: var(--lila-2);
+}
+
+.inspo-card:hover {
+  transform: translate(-2px, -2px) rotate(-1.5deg);
+  box-shadow: 5px 5px 0 var(--tinta);
+}
+
+.inspo-card .mini-case {
+  height: 210px;
+}
+
+@media (min-width: 1000px) {
+  .inspo-card .mini-case {
+    height: 260px;
+  }
+}
+
+@media (max-width: 420px) {
+  .inspo-card .mini-case {
+    height: 170px;
+  }
+}
+
+.inspo-card strong {
+  font-weight: 800;
+  font-size: 1.15rem;
+  line-height: 1.1;
+}
+
+/* En tinta: el gris violeta no contrasta lo suficiente sobre la tarjeta rosa */
+.inspo-card span {
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--tinta);
+}

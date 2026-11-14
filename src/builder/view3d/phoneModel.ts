@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import logoSvg from '../../assets/brand/chunkea-logo.svg?raw';
 
 /** Medidas del modelo (unidades de la escena). */
 export interface PhoneDims {
@@ -28,6 +29,27 @@ const modelUrls = import.meta.glob<string>('../../assets/cases3d/*.glb', {
 /** Color lineal, igual al que usa el material en Blender. */
 const linear = (r: number, g: number, b: number): THREE.Color => new THREE.Color().setRGB(r, g, b);
 
+/** Dibuja el logo oficial (los mismos vectores del sitio) centrado en (cx, cy) con el ancho pedido. */
+function drawLogo(ctx: CanvasRenderingContext2D, cx: number, cy: number, width: number, color: string): void {
+  const viewBox = /viewBox="([^"]+)"/.exec(logoSvg)?.[1]?.split(' ').map(Number);
+  if (!viewBox || viewBox.length !== 4 || typeof Path2D === 'undefined') return;
+  const [x, y, w, h] = viewBox as [number, number, number, number];
+  const scale = width / w;
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.translate(cx - width / 2, cy - (h * scale) / 2);
+  ctx.scale(scale, scale);
+  ctx.translate(-x, -y);
+  for (const [, matrix = '', d = ''] of logoSvg.matchAll(/transform="matrix\(([^)]+)\)" d="([^"]+)"/g)) {
+    const [a = 1, b = 0, c = 0, e = 1, f = 0, g = 0] = matrix.split(',').map(Number);
+    ctx.save();
+    ctx.transform(a, b, c, e, f, g);
+    ctx.fill(new Path2D(d));
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
 function screenTexture(): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -35,21 +57,19 @@ function screenTexture(): THREE.CanvasTexture {
   const ctx = canvas.getContext('2d');
   if (ctx) {
     const gradient = ctx.createLinearGradient(0, 0, 512, 1050);
-    gradient.addColorStop(0, '#E384E6');
-    gradient.addColorStop(0.55, '#C8237A');
+    gradient.addColorStop(0, '#F179EA');
+    gradient.addColorStop(0.55, '#D91E75');
     gradient.addColorStop(1, '#3a0f2c');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 512, 1050);
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(255,255,255,.9)';
-    ctx.font = '600 46px Outfit, sans-serif';
+    ctx.font = '600 46px Jost, sans-serif';
     ctx.fillText('9:41', 256, 170);
-    ctx.fillStyle = '#FFD3EC';
-    ctx.font = '120px "Bagel Fat One", sans-serif';
-    ctx.fillText('Chunkea', 256, 560);
+    drawLogo(ctx, 256, 520, 400, '#D8F179');
     ctx.fillStyle = '#fff';
-    ctx.font = '600 38px Outfit, sans-serif';
-    ctx.fillText('chunkea tu vida', 256, 630);
+    ctx.font = '600 38px Jost, sans-serif';
+    ctx.fillText('Let’s fun.', 256, 640);
   }
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;

@@ -5,7 +5,8 @@ import {
   parseSavedDesign,
   type BuilderEvent,
 } from '../../src/builder/store';
-import { PRODUCTS } from '../../src/config/site';
+import { MAX_BIG_CHUNKS, PRODUCTS } from '../../src/config/site';
+import { CHUNKIS, chunkSize } from '../../src/data/chunkis';
 import { COMBOS } from '../../src/data/combos';
 import { seededRng } from '../../src/lib/random';
 import { memoryStorage } from '../../src/lib/storage';
@@ -156,5 +157,93 @@ describe('parseSavedDesign', () => {
 
   it('usa la clave de almacenamiento esperada', () => {
     expect(STORAGE_KEY).toBe('chunkea-diseno-v1');
+  });
+
+  describe('máximo de chunks grandes', () => {
+    const BIG = 'plata-corazon-puas';
+    const SMALL = 'plata-osito';
+
+    it('los datos de prueba son uno grande y uno pequeño', () => {
+      expect(chunkSize(BIG)).toBe('grande');
+      expect(chunkSize(SMALL)).toBe('pequeno');
+    });
+
+    it('deja poner hasta 3 grandes y avisa al intentar el cuarto', () => {
+      const store = newStore();
+      const events: BuilderEvent[] = [];
+      store.subscribe((_, e) => events.push(e));
+      for (let i = 0; i < MAX_BIG_CHUNKS; i++) expect(store.addCharm(BIG)).toBe(true);
+      expect(store.addCharm(BIG)).toBe(false);
+      expect(events.at(-1)).toEqual({ type: 'rejected', reason: 'big-limit' });
+      expect(store.bigCount()).toBe(MAX_BIG_CHUNKS);
+      // los pequeños siguen entrando
+      expect(store.addCharm(SMALL)).toBe(true);
+    });
+
+    it('al quitar un grande se puede poner otro', () => {
+      const store = newStore();
+      for (let i = 0; i < MAX_BIG_CHUNKS; i++) store.addCharm(BIG);
+      store.removeOneOf(BIG);
+      expect(store.addCharm(BIG)).toBe(true);
+    });
+
+    it('«Sorpréndeme» no pasa de 3 grandes', () => {
+      for (let seed = 1; seed <= 20; seed++) {
+        const store = createBuilderStore({ storage: memoryStorage(), rng: seededRng(seed) });
+        store.surprise();
+        expect(store.bigCount()).toBeLessThanOrEqual(MAX_BIG_CHUNKS);
+        expect(store.getState().charms).toHaveLength(PRODUCTS.grande.maxCharms);
+      }
+    });
+
+    it('un diseño guardado con más grandes se queda con los 3 primeros', () => {
+      const bigs = CHUNKIS.filter((c) => chunkSize(c.id) === 'grande').slice(0, 5);
+      const raw = JSON.stringify({
+        size: 'grande',
+        charms: bigs.map((c, i) => ({ id: c.id, x: 30 + i, y: 60, r: 0 })),
+      });
+      const saved = parseSavedDesign(raw);
+      expect(saved?.charms.map((c) => c.id)).toEqual(bigs.slice(0, MAX_BIG_CHUNKS).map((c) => c.id));
+    });
+  });
+
+  describe('elegir y girar chunks', () => {
+    it('gira el chunk elegido y guarda el ángulo entre -180° y 180°', () => {
+      const storage = memoryStorage();
+      const store = newStore(storage);
+      store.addCharm('plata-osito');
+      const charm = store.getState().charms[0]!;
+      const start = charm.r;
+      store.rotateCharm(charm.uid, 15);
+      expect(store.getState().charms[0]!.r).toBe(start + 15);
+      store.rotateCharm(charm.uid, 360);
+      expect(store.getState().charms[0]!.r).toBe(start + 15);
+      store.rotateCharm(charm.uid, 200 - (start + 15));
+      expect(store.getState().charms[0]!.r).toBe(-160);
+      // el giro se guarda con el diseño
+      const saved = parseSavedDesign(storage.get(STORAGE_KEY));
+      expect(saved?.charms[0]?.r).toBe(-160);
+    });
+
+    it('elige y suelta, y al quitarlo se suelta solo', () => {
+      const store = newStore();
+      store.addCharm('plata-osito');
+      const uid = store.getState().charms[0]!.uid;
+      store.selectCharm(uid);
+      expect(store.getState().selectedUid).toBe(uid);
+      store.selectCharm(999);
+      expect(store.getState().selectedUid).toBeNull();
+      store.selectCharm(uid);
+      store.removeCharm(uid);
+      expect(store.getState().selectedUid).toBeNull();
+    });
+
+    it('vaciar o cargar un combo suelta la selección', () => {
+      const store = newStore();
+      store.addCharm('plata-osito');
+      store.selectCharm(store.getState().charms[0]!.uid);
+      store.loadCombo(COMBOS[0]!);
+      expect(store.getState().selectedUid).toBeNull();
+    });
   });
 });

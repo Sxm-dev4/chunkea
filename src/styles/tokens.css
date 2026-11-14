@@ -1,26 +1,31 @@
 /* Colores y medidas de la marca: cambiarlos aquí actualiza todo el sitio. */
 :root {
-  --lila: #e384e6;
-  --lila-2: #f4c9f3;
-  --lila-3: #fbe9fa;
-  --fucsia: #c8237a;
-  --fucsia-d: #9c135c;
+  /* Paleta oficial de Chunkea */
+  --fucsia: #d91e75;
+  --lila: #f179ea;
+  --naranja: #f25822;
+  --lima: #d8f179;
+
+  /* Tonos derivados (contraste AA sobre los fondos claros) */
+  --fucsia-d: #b3155f;
   --fucsia-dd: #7a0f48;
-  --rosa: #ffd3ec;
-  --crema: #fff6fa;
+  --lila-2: #f9c6f5;
+  --lila-3: #fde3fb;
+  --lima-2: #f0fac9;
+  --rosa: #ffd6f6;
+  --crema: #fff4fc;
   --tinta: #2a0f24;
   --tinta-2: #5e3a55;
-  --noche: #150e17;
+  --linea: #8c5f83;
   --rojo: #c8102e;
   --wa: #15803d;
   --wa-d: #116932;
-  --muted-dark: #cdb8cb;
   --r-sm: 12px;
   --r: 20px;
-  --r-lg: 32px;
+  --r-lg: 28px;
   --shadow: 0 10px 30px -12px rgb(80 10 60 / 35%);
-  --shadow-pop: 4px 4px 0 var(--tinta);
-  --font-display: 'Bagel Fat One', 'Arial Rounded MT Bold', system-ui, sans-serif;
-  --font: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --shadow-pop: 3px 3px 0 var(--tinta);
+  --font: 'Jost', 'Futura', 'Century Gothic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font);
   --header-h: 64px;
 }
