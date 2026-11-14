@@ -1,3 +1,4 @@
+import { mountCharmTools } from './builder/charmTools';
 import { mountControls } from './builder/controls';
 import { createMiniCase } from './builder/caseArt';
 import { buildOrderMessage, validateOrder, whatsappUrl } from './builder/order';
@@ -5,7 +6,7 @@ import { createBuilderStore, type BuilderEvent, type BuilderStore } from './buil
 import { mountView2D } from './builder/view2d';
 import { mountView3D } from './builder/view3d';
 import type { SceneController } from './builder/view3d/scene';
-import { PRODUCTS, isSizeId } from './config/site';
+import { MAX_BIG_CHUNKS, PRODUCTS, isSizeId } from './config/site';
 import { COPY } from './copy';
 import { COMBOS } from './data/combos';
 import { REVIEWS, reviewPhoto } from './data/reviews';
@@ -133,6 +134,7 @@ export function initApp(): void {
   };
 
   mountControls(store);
+  mountCharmTools(store, requireEl('#charmTools'));
 
   // Avisos y efectos según lo que pasa en el armador
   store.subscribe((state, event: BuilderEvent) => {
@@ -144,7 +146,7 @@ export function initApp(): void {
         break;
       case 'rejected':
         replayClass(counter, 'shake');
-        toast(COPY.toast.full);
+        toast(event.reason === 'big-limit' ? COPY.toast.bigLimit(MAX_BIG_CHUNKS) : COPY.toast.full);
         break;
       case 'size-changed':
       case 'phone-changed':

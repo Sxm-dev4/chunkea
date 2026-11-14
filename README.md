@@ -39,21 +39,22 @@ Abre la URL que muestra la terminal (normalmente http://localhost:5173).
 
 ## Cambios frecuentes
 
-| Quiero cambiar…                   | Archivo                                                          |
-| --------------------------------- | ---------------------------------------------------------------- |
-| Número de WhatsApp                | `.env` → `VITE_WHATSAPP`                                         |
-| URL del sitio (SEO, sitemap)      | `.env` → `VITE_SITE_URL`                                         |
-| Precios o máximo de chunkis       | `src/config/site.ts` → `PRODUCTS` (y los textos de `index.html`) |
-| Agregar / quitar / agotar chunkis | `src/data/chunkis.ts` (`AGOTADO` para agotado)                   |
-| Combos de "Inspírate"             | `src/data/combos.ts`                                             |
-| iPhones y tamaño de cada uno      | `src/data/phones.ts`                                             |
-| Colores de la marca               | `src/styles/tokens.css` (fucsia, rosa, naranja y lima oficiales) |
-| Logo                              | `src/assets/brand/` (y el símbolo al inicio de `index.html`)     |
-| Reseñas de clientes (carrusel)    | `src/data/reviews.ts` y fotos en `src/assets/reviews/`           |
-| Stickers de la marca (decoración) | `src/assets/stickers/` y `src/styles/sections/stickers.css`      |
-| Chunk grande o pequeño            | `src/data/chunkis.ts` → `SIZE_OVERRIDES` (si la foto engaña)     |
-| Textos de avisos y contador       | `src/copy.ts`                                                    |
-| Textos fijos de la página         | `index.html`                                                     |
+| Quiero cambiar…                    | Archivo                                                                |
+| ---------------------------------- | ---------------------------------------------------------------------- |
+| Número de WhatsApp                 | `.env` → `VITE_WHATSAPP`                                               |
+| URL del sitio (SEO, sitemap)       | `.env` → `VITE_SITE_URL`                                               |
+| Precios o máximo de chunkis        | `src/config/site.ts` → `PRODUCTS` (y los textos de `index.html`)       |
+| Máximo de chunks grandes por forro | `src/config/site.ts` → `MAX_BIG_CHUNKS` (y los textos de `index.html`) |
+| Agregar / quitar / agotar chunkis  | `src/data/chunkis.ts` (`AGOTADO` para agotado)                         |
+| Combos de "Inspírate"              | `src/data/combos.ts`                                                   |
+| iPhones y tamaño de cada uno       | `src/data/phones.ts`                                                   |
+| Colores de la marca                | `src/styles/tokens.css` (fucsia, rosa, naranja y lima oficiales)       |
+| Logo                               | `src/assets/brand/` (y el símbolo al inicio de `index.html`)           |
+| Reseñas de clientes (carrusel)     | `src/data/reviews.ts` y fotos en `src/assets/reviews/`                 |
+| Stickers de la marca (decoración)  | `src/assets/stickers/` y `src/styles/sections/stickers.css`            |
+| Chunk grande o pequeño             | `src/data/chunkis.ts` → `SIZE_OVERRIDES` (si la foto engaña)           |
+| Textos de avisos y contador        | `src/copy.ts`                                                          |
+| Textos fijos de la página          | `index.html`                                                           |
 
 > Los precios aparecen también en `index.html` (tarjetas y datos estructurados para Google).
 > Si cambias un precio, búscalo en ambos lugares.

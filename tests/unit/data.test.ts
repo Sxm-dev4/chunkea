@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PRODUCTS } from '../../src/config/site';
+import { MAX_BIG_CHUNKS, PRODUCTS } from '../../src/config/site';
 import { readdirSync } from 'node:fs';
 import photos from '../../src/data/chunkiPhotos.json';
 import {
@@ -74,6 +74,8 @@ describe('combos de Inspírate', () => {
     (_, combo) => {
       expect(combo.items.length).toBeLessThanOrEqual(PRODUCTS[combo.size].maxCharms);
       for (const id of combo.items) expect(isAvailable(id), id).toBe(true);
+      const bigs = combo.items.filter((id) => chunkSize(id) === 'grande');
+      expect(bigs.length, bigs.join(', ')).toBeLessThanOrEqual(MAX_BIG_CHUNKS);
     },
   );
 });

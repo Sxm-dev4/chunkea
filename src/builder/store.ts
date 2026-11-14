@@ -1,4 +1,4 @@
-import { DEFAULT_SIZE, PRODUCTS, isSizeId, type SizeId } from '../config/site';
+import { DEFAULT_SIZE, MAX_BIG_CHUNKS, PRODUCTS, isSizeId, type SizeId } from '../config/site';
 import { CHUNKIS, chunkSize, isAvailable, type CategoryFilter, type ChunkSizeFilter } from '../data/chunkis';
 import type { Combo } from '../data/combos';
 import { OTHER_PHONE, PHONES, cameraZoneFor, getPhone, renderIdFor } from '../data/phones';
@@ -24,12 +24,14 @@ export interface BuilderState {
   filter: CategoryFilter;
   /** Filtro del catálogo por tamaño del chunk. */
   sizeFilter: ChunkSizeFilter;
+  /** Chunk tocado en el forro (para girarlo o quitarlo); no se guarda. */
+  selectedUid: number | null;
 }
 
 export type BuilderEvent =
   | { type: 'init' }
   | { type: 'added'; uid: number; full: boolean }
-  | { type: 'rejected'; reason: 'full' | 'unavailable' }
+  | { type: 'rejected'; reason: 'full' | 'unavailable' | 'big-limit' }
   | { type: 'removed'; uid: number }
   | { type: 'moved'; uid: number }
   | { type: 'size-changed'; trimmed: number }
@@ -38,7 +40,8 @@ export type BuilderEvent =
   | { type: 'cleared' }
   | { type: 'combo-loaded'; name: string }
   | { type: 'model-changed' }
-  | { type: 'filter-changed' };
+  | { type: 'filter-changed' }
+  | { type: 'selected' };
 
 export type Listener = (state: Readonly<BuilderState>, event: BuilderEvent) => void;
 
@@ -64,7 +67,8 @@ function savedPhoneId(saved: unknown, typedModel: string): string | null {
 
 /**
  * Valida un diseño guardado (puede venir dañado o de una versión anterior):
- * descarta chunkis desconocidos o agotados y recorta al máximo del tamaño.
+ * descarta chunkis desconocidos o agotados, deja máximo MAX_BIG_CHUNKS grandes
+ * y recorta al máximo del tamaño.
  */
 export function parseSavedDesign(raw: string | null): SavedDesign | null {
   if (!raw) return null;
@@ -86,6 +90,11 @@ export function parseSavedDesign(raw: string | null): SavedDesign | null {
     .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
     .filter((c) => typeof c.id === 'string' && isAvailable(c.id))
     .filter((c) => isFiniteNumber(c.x) && isFiniteNumber(c.y))
+    .filter(
+      (c, i, all) =>
+        chunkSize(c.id as string) !== 'grande' ||
+        all.slice(0, i).filter((o) => chunkSize(o.id as string) === 'grande').length < MAX_BIG_CHUNKS,
+    )
     .map((c) => {
       const pos = clampToCase({ x: c.x as number, y: c.y as number }, zone);
       return { id: c.id as string, x: pos.x, y: pos.y, r: isFiniteNumber(c.r) ? c.r : 0 };
@@ -112,6 +121,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
     charms: [],
     filter: 'todos',
     sizeFilter: 'todos',
+    selectedUid: null,
   };
 
   const saved = parseSavedDesign(storage.get(STORAGE_KEY));
@@ -123,6 +133,9 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
   }
 
   const maxCharms = (): number => PRODUCTS[state.size].maxCharms;
+  const bigCount = (): number => state.charms.filter((c) => chunkSize(c.id) === 'grande').length;
+  /** Ya hay MAX_BIG_CHUNKS grandes y este también es grande. */
+  const overBigLimit = (id: string): boolean => chunkSize(id) === 'grande' && bigCount() >= MAX_BIG_CHUNKS;
   const cameraZone = () => cameraZoneFor(renderIdFor(state.phoneId, state.size));
 
   const persist = (): void => {
@@ -136,13 +149,13 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
   };
 
   const emit = (event: BuilderEvent): void => {
-    if (event.type !== 'filter-changed' && event.type !== 'rejected' && event.type !== 'init') persist();
+    if (!['filter-changed', 'rejected', 'init', 'selected'].includes(event.type)) persist();
     listeners.forEach((fn) => fn(state, event));
   };
 
   /** Agrega sin avisar (para operaciones en lote). Devuelve el uid o null. */
   const place = (id: string): number | null => {
-    if (!isAvailable(id) || state.charms.length >= maxCharms()) return null;
+    if (!isAvailable(id) || state.charms.length >= maxCharms() || overBigLimit(id)) return null;
     const pos = findFreeSpot(state.charms, state.size, rng, cameraZone());
     const uid = uidSeq++;
     state.charms.push({ uid, id, x: pos.x, y: pos.y, r: Math.round(randomBetween(rng, -28, 28)) });
@@ -152,6 +165,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
   /** Vuelve a ubicar todos los chunkis en las posiciones sugeridas del tamaño actual. */
   const relayout = (ids: readonly string[]): void => {
     state.charms = [];
+    state.selectedUid = null;
     ids.forEach((id) => place(id));
   };
 
@@ -159,11 +173,14 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
     const index = state.charms.findIndex((c) => c.uid === uid);
     if (index < 0) return;
     state.charms.splice(index, 1);
+    if (state.selectedUid === uid) state.selectedUid = null;
     emit({ type: 'removed', uid });
   };
 
   return {
     getState: (): Readonly<BuilderState> => state,
+    /** Cuántos chunks grandes lleva el forro. */
+    bigCount,
     get product() {
       return PRODUCTS[state.size];
     },
@@ -181,6 +198,10 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
     addCharm(id: string): boolean {
       if (!isAvailable(id)) {
         emit({ type: 'rejected', reason: 'unavailable' });
+        return false;
+      }
+      if (state.charms.length < maxCharms() && overBigLimit(id)) {
+        emit({ type: 'rejected', reason: 'big-limit' });
         return false;
       }
       const uid = place(id);
@@ -206,6 +227,22 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
       const pos = clampToCase({ x, y }, cameraZone());
       charm.x = pos.x;
       charm.y = pos.y;
+      emit({ type: 'moved', uid });
+    },
+
+    /** Marca un chunk del forro para girarlo o quitarlo (null: ninguno). */
+    selectCharm(uid: number | null): void {
+      const next = uid !== null && state.charms.some((c) => c.uid === uid) ? uid : null;
+      if (next === state.selectedUid) return;
+      state.selectedUid = next;
+      emit({ type: 'selected' });
+    },
+
+    /** Gira un chunk; el ángulo queda entre -180° y 180°. */
+    rotateCharm(uid: number, degrees: number): void {
+      const charm = state.charms.find((c) => c.uid === uid);
+      if (!charm || !Number.isFinite(degrees)) return;
+      charm.r = ((((charm.r + degrees + 180) % 360) + 360) % 360) - 180;
       emit({ type: 'moved', uid });
     },
 
@@ -270,7 +307,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
       emit({ type: 'filter-changed' });
     },
 
-    /** Llena los espacios libres con chunkis al azar (del filtro actual). */
+    /** Llena los espacios libres con chunkis al azar (del filtro actual), sin pasar de los grandes permitidos. */
     surprise(): number {
       const pool = CHUNKIS.filter(
         (c) =>
@@ -285,8 +322,13 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
       }
       let added = 0;
       for (let i = 0; i < free; i++) {
-        const pick = pool[Math.floor(rng() * pool.length)];
+        const allowed = pool.filter((c) => !overBigLimit(c.id));
+        const pick = allowed[Math.floor(rng() * allowed.length)];
         if (pick && place(pick.id) !== null) added++;
+      }
+      if (added === 0) {
+        emit({ type: 'rejected', reason: 'big-limit' });
+        return 0;
       }
       emit({ type: 'filled', added });
       return added;
@@ -295,6 +337,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
     clear(): void {
       if (state.charms.length === 0) return;
       state.charms = [];
+      state.selectedUid = null;
       emit({ type: 'cleared' });
     },
 

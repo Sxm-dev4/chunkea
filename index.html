@@ -479,6 +479,19 @@
                   </button>
                 </div>
                 <div class="stage-empty" id="stageEmpty"></div>
+                <div class="charm-tools" id="charmTools" role="toolbar" aria-label="Chunk elegido" hidden>
+                  <span class="charm-tools-name" data-charm-name></span>
+                  <button type="button" class="charm-tool" data-rotate="-1" aria-label="Girar a la izquierda">
+                    ↺
+                  </button>
+                  <button type="button" class="charm-tool" data-rotate="1" aria-label="Girar a la derecha">
+                    ↻
+                  </button>
+                  <button type="button" class="charm-tool charm-tool-text" data-charm-remove>Quitar</button>
+                  <button type="button" class="charm-tool charm-tool-text charm-tool-done" data-charm-done>
+                    Listo
+                  </button>
+                </div>
               </div>
               <p class="stage-hint" id="stageHint"></p>
             </div>
@@ -546,6 +559,7 @@
                     >
                     <span class="counter-msg" id="counterMsg"></span>
                   </div>
+                  <p class="big-count" id="bigCount" aria-live="polite">0/3 grandes</p>
                   <div class="counter-bar" aria-hidden="true"><span id="counterFill"></span></div>
                 </div>
                 <div class="filters" role="group" aria-label="Filtrar chunks por tipo">
@@ -586,8 +600,7 @@
                   </button>
                 </div>
                 <p class="help size-help">
-                  Hay chunks grandes y pequeños. Puedes mezclarlos como quieras: todos cuentan igual en tu
-                  forro.
+                  Hay chunks grandes y pequeños: puedes poner máximo 3 grandes por forro y el resto, pequeños.
                 </p>
                 <ul class="picker" id="picker" aria-label="Catálogo de chunks"></ul>
                 <div class="quick">
@@ -653,7 +666,9 @@
               <span class="how-n" aria-hidden="true">2</span>
               <span class="how-emoji"><span class="ai" data-ai="choose" data-size="64"></span></span>
               <h3>Escoge tus chunks</h3>
-              <p>Hasta 9 o 13 chunks, todos incluidos en el precio. ¡Mézclalos como quieras!</p>
+              <p>
+                Hasta 9 o 13 chunks incluidos en el precio, con máximo 3 grandes. ¡Mézclalos como quieras!
+              </p>
             </li>
             <li class="how-card reveal">
               <span class="how-n" aria-hidden="true">3</span>
@@ -713,7 +728,7 @@
               <h3 class="price-tag" id="precio-pequeno">Forro pequeño</h3>
               <p class="price-num">$55.000</p>
               <ul>
-                <li>Hasta <strong>9 chunks</strong> incluidos</li>
+                <li>Hasta <strong>9 chunks</strong> incluidos (máximo 3 grandes)</li>
                 <li>iPhone estándar, Pro, mini y SE</li>
               </ul>
               <button type="button" class="btn btn-dark btn-block" data-start="pequeno">Armar el mío</button>
@@ -724,7 +739,7 @@
               <h3 class="price-tag" id="precio-grande">Forro grande</h3>
               <p class="price-num">$60.000</p>
               <ul>
-                <li>Hasta <strong>13 chunks</strong> incluidos</li>
+                <li>Hasta <strong>13 chunks</strong> incluidos (máximo 3 grandes)</li>
                 <li>iPhone Plus, Pro Max y Air</li>
               </ul>
               <button type="button" class="btn btn-primary btn-block" data-start="grande">
@@ -763,7 +778,7 @@
             <summary>¿Los chunks vienen en tamaños?</summary>
             <p>
               Sí: hay chunks grandes y pequeños. En el armador cada uno dice su tamaño y puedes filtrarlos.
-              Todos cuentan igual, así que puedes mezclarlos como quieras hasta llenar tu forro (9 en el
+              Cada forro lleva máximo 3 chunks grandes; el resto son pequeños, hasta llenarlo (9 en el
               pequeño, 13 en el grande).
             </p>
           </details>

@@ -183,3 +183,47 @@ test.describe('Tamaño de los chunks', () => {
     expect(await visible('grande').count()).toBeGreaterThan(0);
   });
 });
+
+test.describe('Girar y límite de grandes', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('toca un chunk para girarlo o quitarlo', async ({ page }) => {
+    await addCharms(page, ['plata-osito']);
+    const charm = page.locator('#charmLayer .charm').first();
+    await charm.scrollIntoViewIfNeeded();
+    await charm.click();
+    const tools = page.locator('#charmTools');
+    await expect(tools).toBeVisible();
+    await expect(charm).toHaveAttribute('aria-pressed', 'true');
+
+    const angle = () =>
+      page.evaluate(
+        () =>
+          (JSON.parse(localStorage.getItem('chunkea-diseno-v1') ?? '{}') as { charms: { r: number }[] })
+            .charms[0]?.r,
+      );
+    const before = (await angle()) ?? 0;
+    await tools.locator('[data-rotate="1"]').click();
+    await expect.poll(angle).toBe(before + 15);
+    await tools.locator('[data-rotate="-1"]').click();
+    await tools.locator('[data-rotate="-1"]').click();
+    await expect.poll(angle).toBe(before - 15);
+
+    await tools.locator('[data-charm-remove]').click();
+    await expect(page.locator('#countNow')).toHaveText('0');
+    await expect(tools).toBeHidden();
+  });
+
+  test('no deja poner más de 3 chunks grandes', async ({ page }) => {
+    await addCharms(page, ['plata-corazon-puas', 'plata-reina-roja', 'plata-espejo']);
+    await expect(page.locator('#bigCount')).toHaveText('3/3 grandes');
+    await page.locator('[data-add="plata-avion"]').dispatchEvent('click');
+    await expect(page.locator('#countNow')).toHaveText('3');
+    await expect(page.locator('#toast')).toContainText('Máximo 3 chunks grandes');
+    // los pequeños sí entran
+    await page.locator('[data-add="plata-osito"]').dispatchEvent('click');
+    await expect(page.locator('#countNow')).toHaveText('4');
+  });
+});

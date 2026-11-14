@@ -1,4 +1,4 @@
-import { PRODUCTS, isSizeId } from '../config/site';
+import { MAX_BIG_CHUNKS, PRODUCTS, isSizeId } from '../config/site';
 import { COPY } from '../copy';
 import {
   CHUNKIS,
@@ -23,6 +23,7 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
   const countMax = requireEl('#countMax', root);
   const counterMsg = requireEl('#counterMsg', root);
   const counterFill = requireEl('#counterFill', root);
+  const bigCounter = requireEl('#bigCount', root);
   const model = requireEl<HTMLInputElement>('#model', root);
   const phoneSelect = requireEl<HTMLSelectElement>('#phone', root);
   const phoneInfo = requireEl('#phoneInfo', root);
@@ -137,11 +138,18 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
       : '';
     if (document.activeElement !== model && model.value !== state.model) model.value = state.model;
 
+    // Con los grandes completos, los grandes del catálogo se ven apagados (al tocarlos se explica por qué)
+    const bigs = store.bigCount();
+    const bigFull = bigs >= MAX_BIG_CHUNKS;
+    bigCounter.textContent = COPY.bigCount(bigs, MAX_BIG_CHUNKS);
+    bigCounter.classList.toggle('full', bigFull);
+
     const perId = new Map<string, number>();
     state.charms.forEach((c) => perId.set(c.id, (perId.get(c.id) ?? 0) + 1));
     pickItems.forEach((item) => {
       const n = perId.get(item.dataset.id ?? '') ?? 0;
       item.classList.toggle('has', n > 0);
+      item.classList.toggle('big-blocked', bigFull && item.dataset.chunkSize === 'grande');
       item.hidden =
         (state.filter !== 'todos' && item.dataset.cat !== state.filter) ||
         (state.sizeFilter !== 'todos' && item.dataset.chunkSize !== state.sizeFilter);

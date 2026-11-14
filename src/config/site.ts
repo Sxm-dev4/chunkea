@@ -31,4 +31,7 @@ export const PRODUCTS: Readonly<Record<SizeId, Product>> = {
 
 export const DEFAULT_SIZE: SizeId = 'grande';
 
+/** Máximo de chunks grandes por forro (en cualquier tamaño); el resto van pequeños. */
+export const MAX_BIG_CHUNKS = 3;
+
 export const isSizeId = (value: unknown): value is SizeId => value === 'pequeno' || value === 'grande';

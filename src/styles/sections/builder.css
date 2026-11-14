@@ -807,3 +807,129 @@
 .pick-size-pequeno {
   background: var(--lima-2);
 }
+
+/* Contador de grandes y grandes bloqueados cuando ya hay 3 */
+.big-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 2px 10px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--tinta);
+  background: var(--lila-3);
+  border-radius: 99px;
+}
+
+.big-count::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: var(--fucsia);
+  border-radius: 50%;
+}
+
+.big-count.full {
+  background: var(--lima);
+}
+
+.pick-wrap.big-blocked:not(.has) .pick {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ---------- Chunk elegido y su barra (girar / quitar) ---------- */
+.charm.selected {
+  z-index: 5;
+  filter: drop-shadow(0 0 0 var(--lima)) drop-shadow(0 0 3px var(--lima)) drop-shadow(0 0 2px var(--fucsia));
+}
+
+.charm.selected img {
+  outline: 2px dashed var(--fucsia);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.charm-tools {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 20px);
+  padding: 5px 6px 5px 12px;
+  color: #fff;
+  background: var(--tinta);
+  border-radius: 999px;
+  box-shadow: 0 8px 20px -8px rgb(42 15 36 / 60%);
+  translate: -50% 0;
+  animation: pop-in 0.25s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    translate: -50% 10px;
+  }
+}
+
+.charm-tools-name {
+  overflow: hidden;
+  min-width: 0;
+  margin-right: 2px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.charm-tool {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0;
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--tinta);
+  cursor: pointer;
+  background: var(--lila);
+  border: 0;
+  border-radius: 999px;
+}
+
+.charm-tool:hover {
+  background: var(--lima);
+}
+
+.charm-tool-text {
+  padding: 0 12px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.charm-tool-done {
+  background: #fff;
+}
+
+@media (max-width: 899px) {
+  .charm-tools {
+    bottom: 8px;
+    gap: 4px;
+    padding: 4px 4px 4px 10px;
+  }
+
+  .charm-tools-name {
+    display: none;
+  }
+
+  .charm-tool {
+    min-width: 32px;
+    height: 32px;
+  }
+}
