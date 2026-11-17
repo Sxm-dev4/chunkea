@@ -152,21 +152,30 @@
   }
 }
 
+/* Foto real de un forro, como una foto instantánea ladeada */
 .hero-case {
   position: relative;
-  height: min(460px, 62vw);
-  min-height: 340px;
-  transform: rotate(-8deg);
+  width: min(300px, 62vw);
+  padding: 10px 10px 34px;
+  background: #fff;
+  border: 2px solid var(--tinta);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--tinta);
+  transform: rotate(-5deg);
   animation: float 5s ease-in-out infinite;
 }
 
-.hero-case .mini-case {
-  height: 100%;
+.hero-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 @keyframes float {
   50% {
-    transform: rotate(-5deg) translateY(-12px);
+    transform: rotate(-3deg) translateY(-12px);
   }
 }
 

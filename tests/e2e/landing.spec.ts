@@ -162,9 +162,14 @@ test.describe('Armador', () => {
   test('carga un combo de Inspírate', async ({ page }) => {
     await expect(page.locator('#inspoGrid .inspo-card')).toHaveCount(4);
     await expect(page.locator('#comboChips')).toHaveCount(0);
+    // cada tarjeta muestra la foto real del forro
+    const photos = page.locator('#inspoGrid .inspo-photo');
+    await expect(photos).toHaveCount(4);
+    for (const src of await photos.evaluateAll((imgs) => imgs.map((i) => (i as HTMLImageElement).src)))
+      expect(src).toMatch(/combo-.+\.webp$/);
     await page.locator('[data-combo="2"]').dispatchEvent('click');
-    await expect(page.locator('#countNow')).toHaveText('9');
-    await expect(page.locator('[data-size="pequeno"]')).toHaveAttribute('aria-checked', 'true');
+    await expect(page.locator('#countNow')).toHaveText('8');
+    await expect(page.locator('[data-size="grande"]')).toHaveAttribute('aria-checked', 'true');
     await expect(page.locator('#toast')).toContainText('Dulce');
   });
 });

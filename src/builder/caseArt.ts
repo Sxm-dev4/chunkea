@@ -1,8 +1,5 @@
-import type { SizeId } from '../config/site';
-import { chunkiPiecePhoto, chunkiWidth, getChunki } from '../data/chunkis';
-import { caseBox, caseImageUrl, cameraZoneFor, type Box } from '../data/phones';
-import { seededRng } from '../lib/random';
-import { SLOTS, touchesCamera } from './placement';
+import { chunkiPiecePhoto, chunkiWidth } from '../data/chunkis';
+import { caseImageUrl, type Box } from '../data/phones';
 
 /** Ancho y alto reales de los renders: reservan el espacio antes de que cargue la imagen. */
 const IMAGE_WIDTH = 640;
@@ -48,43 +45,4 @@ export function placeCharmElement(el: HTMLElement, x: number, y: number, rotatio
   el.style.left = `${x}%`;
   el.style.top = `${y}%`;
   el.style.setProperty('--r', `${rotation}deg`);
-}
-
-/** Forro decorativo (hero) con chunkis en posiciones fijas. */
-export function createMiniCase(
-  renderId: string,
-  size: SizeId,
-  ids: readonly string[],
-  seed: number,
-  priority = false,
-): HTMLElement {
-  const rng = seededRng(seed);
-  const wrap = document.createElement('div');
-  wrap.className = 'mini-case';
-  const art = document.createElement('div');
-  art.className = 'device-art';
-  art.append(createCaseImage(renderId, '', priority));
-  const layer = document.createElement('div');
-  layer.className = 'charm-layer';
-  fitLayerToCase(layer, caseBox(renderId));
-  wrap.append(art, layer);
-
-  const zone = cameraZoneFor(renderId);
-  const slots = SLOTS[size].filter(([x, y]) => !touchesCamera({ x, y }, zone));
-  ids.slice(0, slots.length).forEach((id, i) => {
-    const chunki = getChunki(id);
-    const slot = slots[i];
-    if (!chunki || !slot) return;
-    const charm = document.createElement('span');
-    charm.className = 'charm';
-    fillCharmElement(charm, chunki.id, !priority);
-    placeCharmElement(
-      charm,
-      slot[0] + (rng() - 0.5) * 5,
-      slot[1] + (rng() - 0.5) * 3,
-      Math.round((rng() - 0.5) * 50),
-    );
-    layer.append(charm);
-  });
-  return wrap;
 }

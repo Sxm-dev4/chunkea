@@ -211,18 +211,6 @@
   }
 }
 
-/* Forros decorativos (hero e Inspírate) */
-.mini-case {
-  position: relative;
-  aspect-ratio: 1 / 2;
-  transform: scale(1.26);
-}
-
-.mini-case .charm {
-  cursor: default;
-  pointer-events: none;
-}
-
 /* ---------- Controles ---------- */
 .controls {
   display: flex;

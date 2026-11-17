@@ -53,20 +53,14 @@
   box-shadow: 5px 5px 0 var(--tinta);
 }
 
-.inspo-card .mini-case {
-  height: 210px;
-}
-
-@media (min-width: 1000px) {
-  .inspo-card .mini-case {
-    height: 260px;
-  }
-}
-
-@media (max-width: 420px) {
-  .inspo-card .mini-case {
-    height: 170px;
-  }
+/* Foto real del forro (2:3) */
+.inspo-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border: 2px solid var(--tinta);
+  border-radius: calc(var(--r) - 8px);
 }
 
 .inspo-card strong {
