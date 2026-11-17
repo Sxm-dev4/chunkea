@@ -222,7 +222,7 @@ test.describe('Girar y límite de grandes', () => {
   });
 
   test('no deja poner más de 3 chunks grandes', async ({ page }) => {
-    await addCharms(page, ['plata-corazon-puas', 'plata-reina-roja', 'plata-espejo']);
+    await addCharms(page, ['plata-corazon-puas', 'plata-corazon-destello', 'plata-espejo']);
     await expect(page.locator('#bigCount')).toHaveText('3/3 grandes');
     await page.locator('[data-add="plata-avion"]').dispatchEvent('click');
     await expect(page.locator('#countNow')).toHaveText('3');

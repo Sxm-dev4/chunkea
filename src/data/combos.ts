@@ -42,9 +42,9 @@ export const COMBOS: readonly Combo[] = [
       'oro-ojo-pestanas',
       'oro-talisman',
       'oro-ojo-corazon',
+      'oro-estrella-fugaz',
+      'oro-mano-hamsa-2',
       'oro-cora-globo',
-      'oro-mano-mini',
-      'oro-corazones-mini',
     ],
   },
   {
@@ -68,7 +68,16 @@ export const COMBOS: readonly Combo[] = [
     description: 'Para ir a todas partes',
     size: 'pequeno',
     photo: 'combo-viajero.webp',
-    items: ['oro-avion', 'oro-estrella-cardinal', 'oro-sagrado-corazon', 'oro-letras', 'oro-cora-globo'],
+    items: [
+      'oro-avion',
+      'oro-rostro-sol-luna',
+      'oro-sagrado-corazon',
+      'oro-estrella-cardinal',
+      'oro-estrella-fugaz',
+      'oro-corazon-ojo-azul',
+      'oro-cora-globo',
+      'oro-letras',
+    ],
   },
 ];
 
