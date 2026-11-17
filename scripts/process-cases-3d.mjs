@@ -28,7 +28,8 @@ for (const file of files) {
   const document = await io.read(join(input, file));
   await document.transform(
     weld(),
-    dedup(),
+    // Los materiales se reconocen por su nombre: no se fusionan aunque se parezcan
+    dedup({ keepUniqueNames: true }),
     prune({ keepLeaves: true }),
     // 12 bits en las normales: con menos se notan bandas en los reflejos del plástico
     quantize({ quantizePosition: 14, quantizeNormal: 12 }),

@@ -6,9 +6,14 @@ const IMAGE_WIDTH = 640;
 const IMAGE_HEIGHT = 1280;
 
 /** Imagen del forro (sólo vía atributos y CSSOM: compatible con la CSP). */
-export function createCaseImage(renderId: string, alt: string, priority = false): HTMLImageElement {
+export function createCaseImage(
+  renderId: string,
+  alt: string,
+  priority = false,
+  colorId: string | null = null,
+): HTMLImageElement {
   const img = document.createElement('img');
-  img.src = caseImageUrl(renderId);
+  img.src = caseImageUrl(renderId, colorId);
   img.alt = alt;
   img.width = IMAGE_WIDTH;
   img.height = IMAGE_HEIGHT;

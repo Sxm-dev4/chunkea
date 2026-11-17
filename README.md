@@ -65,8 +65,14 @@ Salen de Blender y no se versionan los PNG, sólo los WebP de `src/assets/cases/
 `src/data/caseRenders.json` (dónde está el forro y la cámara dentro de cada imagen).
 
 ```bash
-blender --background --factory-startup --disable-autoexec chunkea.blend --python scripts/render-cases.py -- --outdir renders --height 1280 --samples 160 --skip-existing
+blender --background --factory-startup --disable-autoexec chunkea.blend --python scripts/render-cases.py -- --outdir renders --height 1280 --samples 160 --colors all --skip-existing
 ```
+
+Cada iPhone se arma con el detalle del teléfono real en `scripts/iphone_parts.py` (marco, botones,
+cámaras, logo) y se pinta con sus colores oficiales, que están en `src/data/iphones.json`. La foto
+principal de cada modelo (`<modelo>.webp`) lleva su primer color; con `--colors all` salen también
+los demás (`<modelo>--<color>.webp`, unos 2,5 minutos por foto). Si falta la foto de un color, la
+página muestra la principal.
 
 ```bash
 npm run renders:process -- renders
@@ -77,8 +83,9 @@ Para un modelo nuevo: agrégalo a `src/data/phones.ts` con el mismo nombre de ar
 
 ### Regenerar los modelos 3D
 
-La vista 3D usa los mismos modelos del render, optimizados en `src/assets/cases3d/` (unos 175 KB cada
-uno; sólo se descarga el del iPhone elegido).
+La vista 3D usa los mismos modelos del render, optimizados en `src/assets/cases3d/` (unos 185 KB cada
+uno; sólo se descarga el del iPhone elegido). El color no va en el modelo: la página pinta cada pieza
+según `src/data/iphones.json`, así que cambiar o agregar un color no requiere volver a exportar.
 
 ```bash
 blender --background --factory-startup --disable-autoexec chunkea.blend --python scripts/export-cases-3d.py -- --outdir modelos

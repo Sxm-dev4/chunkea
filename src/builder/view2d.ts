@@ -1,5 +1,5 @@
 import { getChunki } from '../data/chunkis';
-import { caseBox, getPhone, renderIdFor } from '../data/phones';
+import { caseBox, caseImageUrl, getPhone, renderIdFor } from '../data/phones';
 import { prefersReducedMotion, replayClass } from '../lib/env';
 import { createCaseImage, fillCharmElement, fitLayerToCase, placeCharmElement } from './caseArt';
 import type { BuilderEvent, BuilderState, BuilderStore } from './store';
@@ -23,22 +23,23 @@ export interface View2DElements {
  */
 export function mountView2D(store: BuilderStore, els: View2DElements): { bump(): void } {
   const nodes = new Map<number, HTMLButtonElement>();
-  let renderedId: string | null = null;
+  let renderedSrc: string | null = null;
   let currentImage: HTMLImageElement | null = null;
 
   const renderDevice = (state: Readonly<BuilderState>): void => {
     const renderId = renderIdFor(state.phoneId, state.size);
+    const src = caseImageUrl(renderId, state.phoneColor);
     const alt = `Forro transparente para ${getPhone(state.phoneId)?.name ?? 'tu celular'}`;
-    if (renderedId === renderId && currentImage) {
+    if (renderedSrc === src && currentImage) {
       // La misma foto puede ser la genérica o la del iPhone elegido: sólo cambia la descripción
       currentImage.alt = alt;
       return;
     }
-    renderedId = renderId;
-    const image = createCaseImage(renderId, alt, true);
+    renderedSrc = src;
+    const image = createCaseImage(renderId, alt, true, state.phoneColor);
     currentImage = image;
     const show = (): void => {
-      if (renderedId !== renderId) return; // ya eligió otro modelo mientras cargaba
+      if (renderedSrc !== src) return; // ya eligió otro modelo o color mientras cargaba
       els.art.replaceChildren(image);
       fitLayerToCase(els.layer, caseBox(renderId));
     };
@@ -98,6 +99,9 @@ export function mountView2D(store: BuilderStore, els: View2DElements): { bump():
         nodes.forEach((n) => n.remove());
         nodes.clear();
         renderCharms(state);
+        break;
+      case 'color-changed':
+        renderDevice(state); // sólo cambia la foto: los chunks se quedan donde están
         break;
       case 'added':
       case 'filled':

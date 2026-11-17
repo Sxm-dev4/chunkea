@@ -11,3 +11,6 @@ blob-report/
 .DS_Store
 Thumbs.db
 __pycache__/
+# Salidas de Blender (ver README): sólo se versionan los WebP y GLB ya procesados
+renders/
+modelos/

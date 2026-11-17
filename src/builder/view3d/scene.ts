@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { chunkiWidth, getChunki } from '../../data/chunkis';
-import { cameraZoneFor, renderIdFor } from '../../data/phones';
+import { cameraZoneFor, phoneColor, renderIdFor } from '../../data/phones';
 import { prefersReducedMotion } from '../../lib/env';
 import { clampToCase } from '../placement';
 import type { BuilderState, BuilderStore, PlacedCharm } from '../store';
@@ -178,6 +178,8 @@ export async function mountScene(
       wantedRender = renderId;
       void showPhone(renderId);
     }
+    // El color sólo vale para el iPhone elegido; mientras descarga otro, el que se ve conserva el suyo
+    if (shownRender === renderId) phone?.setColor(phoneColor(renderId, state.phoneColor));
     if (rebuild) clearCharms();
     const initial = objects.size === 0;
     const alive = new Set<number>();

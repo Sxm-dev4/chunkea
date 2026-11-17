@@ -384,6 +384,49 @@
   border-radius: var(--r-sm);
 }
 
+.phone-colors {
+  margin-top: 12px;
+}
+
+.phone-colors-label {
+  font-size: 0.92rem;
+  color: var(--tinta);
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.swatch {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: var(--swatch);
+  border: 3px solid var(--swatch-edge);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 14%);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.swatch:hover {
+  transform: scale(1.08);
+}
+
+.swatch[aria-checked='true'] {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 5px var(--fucsia);
+}
+
+.swatch:focus-visible {
+  outline: 3px solid var(--tinta);
+  outline-offset: 5px;
+}
+
 .size-area {
   margin-top: 14px;
 }
