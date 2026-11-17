@@ -52,7 +52,7 @@ describe('buildOrderMessage', () => {
       model: 'iPhone 15',
       charms: [charm(1, 'plata-cruz'), charm(2, 'oro-cruz')],
     });
-    expect(both).toContain('• Cruz (plateado, grande)');
+    expect(both).toContain('• Cruz (plateado, pequeño)');
     expect(both).toContain('• Cruz (dorado, pequeño)');
   });
 

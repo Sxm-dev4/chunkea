@@ -263,9 +263,9 @@ export const isChunkSizeFilter = (value: unknown): value is ChunkSizeFilter =>
 
 /**
  * Por debajo de este tamaño (raíz del ancho × alto de la foto del catálogo, que está a escala)
- * el chunk es pequeño: unos 1,3 cm sobre el forro.
+ * el chunk es pequeño: unos 1,7 cm sobre el forro (sólo lo realmente grande: sagrados corazones, soles, aviones…).
  */
-const SMALL_MAX_PX = 100;
+const SMALL_MAX_PX = 130;
 
 /** Correcciones a mano cuando la foto engaña. Ejemplo: 'color-pato': 'pequeno'. */
 const SIZE_OVERRIDES: Readonly<Record<string, ChunkSize>> = {};

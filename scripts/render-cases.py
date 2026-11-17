@@ -1,8 +1,10 @@
 """Renders frontales con fondo transparente de cada forro, a la misma escala, para la página.
 
 Uso: blender -b --factory-startup --disable-autoexec chunkea_sin_chunkis.blend --python render_cases.py --
-       --outdir carpeta --height 1440 --samples 256 [--models "iPhone 16 Pro,iPhone 15"] [--skip-existing]
-Escribe <slug>.png por modelo y cases.json con la posición del forro y la cámara en cada imagen.
+       --outdir carpeta --height 1440 --samples 256 [--models "iPhone 16 Pro,iPhone 15"]
+       [--colors default|all|id,id] [--skip-existing]
+Escribe <slug>.png por modelo (su primer color de src/data/iphones.json), <slug>--<color>.png para
+los demás colores y cases.json con la posición del forro y la cámara en cada imagen.
 """
 import argparse
 import json
@@ -17,15 +19,19 @@ from bpy_extras.object_utils import world_to_camera_view
 from mathutils import Matrix, Vector
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from case_parts import prepare_model  # noqa: E402
+from case_parts import box_corners, prepare_model  # noqa: E402
+from iphone_parts import material, spec_for  # noqa: E402
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--outdir", required=True)
 parser.add_argument("--height", type=int, default=1440)
 parser.add_argument("--samples", type=int, default=256)
 parser.add_argument("--models", default="")
+parser.add_argument("--colors", default="default")
 parser.add_argument("--skip-existing", action="store_true")
 args = parser.parse_args(sys.argv[sys.argv.index("--") + 1 :])
+# Ruta absoluta: Blender resuelve las relativas contra la raíz del disco, no contra la carpeta actual
+args.outdir = os.path.abspath(args.outdir)
 os.makedirs(args.outdir, exist_ok=True)
 
 scene = bpy.context.scene
@@ -55,7 +61,6 @@ def set_inputs(node, **values):
 
 
 """---------- Materiales ----------"""
-PHONE = (0.018, 0.018, 0.022, 1)
 case_mat = bpy.data.materials["Case_Transparente"]
 node = principled(case_mat)
 set_inputs(node, Base_Color=(0.985, 0.99, 0.995, 1), IOR=1.49)
@@ -108,10 +113,21 @@ micro_bump.inputs["Distance"].default_value = 0.0002
 links.new(micro.outputs["Fac"], micro_bump.inputs["Height"])
 links.new(micro_bump.outputs["Normal"], node.inputs["Normal"])
 
-# Celular: vidrio esmerilado con grano fino; módulo pulido
+# El plástico deja pasar la luz hacia el celular: sin esto (las cáusticas están apagadas) su
+# sombra lo dejaría a oscuras y no se vería el color del iPhone bajo el forro
+case_output = next(n for n in nodes if n.type == "OUTPUT_MATERIAL" and n.is_active_output)
+case_path = nodes.new("ShaderNodeLightPath")
+case_clear = nodes.new("ShaderNodeBsdfTransparent")
+case_clear.inputs["Color"].default_value = (0.93, 0.93, 0.93, 1)
+case_mix = nodes.new("ShaderNodeMixShader")
+links.new(case_path.outputs["Is Shadow Ray"], case_mix.inputs["Fac"])
+links.new(node.outputs["BSDF"], case_mix.inputs[1])
+links.new(case_clear.outputs["BSDF"], case_mix.inputs[2])
+links.new(case_mix.outputs["Shader"], case_output.inputs["Surface"])
+
+# Celular: el color y el acabado de cada pieza los pone paint() antes de cada toma
 back_mat = bpy.data.materials["Tel_Trasera"]
 back_node = principled(back_mat)
-set_inputs(back_node, Base_Color=(0.012, 0.012, 0.015, 1), Roughness=0.33, Coat_Weight=0.15, Coat_Roughness=0.3)
 bn, bl = back_mat.node_tree.nodes, back_mat.node_tree.links
 bc = bn.new("ShaderNodeTexCoord")
 grain = noise_at(9000, 1, bn, bl, bc.outputs["Object"])
@@ -120,9 +136,44 @@ grain_bump.inputs["Strength"].default_value = 0.06
 grain_bump.inputs["Distance"].default_value = 0.0002
 bl.new(grain.outputs["Fac"], grain_bump.inputs["Height"])
 bl.new(grain_bump.outputs["Normal"], back_node.inputs["Normal"])
-set_inputs(principled(bpy.data.materials["Tel_Modulo"]), Base_Color=(0.012, 0.012, 0.015, 1), Roughness=0.17, Coat_Weight=0.3, Coat_Roughness=0.08)
-set_inputs(principled(bpy.data.materials["Tel_AroLente"]), Base_Color=(0.22, 0.225, 0.24, 1), Metallic=1.0, Roughness=0.2)
 set_inputs(principled(bpy.data.materials["Tel_Pantalla"]), Roughness=0.05)
+set_inputs(principled(material("Tel_Frontal")), Base_Color=(0.004, 0.004, 0.005, 1), Roughness=0.06, Coat_Weight=1.0, Coat_Roughness=0.03)
+set_inputs(principled(material("Tel_Puerto")), Base_Color=(0.006, 0.006, 0.007, 1), Roughness=0.7)
+
+# Los mismos acabados de la vista 3D (src/builder/view3d/phoneModel.ts)
+GLASS = {
+    "brillante": dict(Roughness=0.1, Coat_Weight=1.0, Coat_Roughness=0.04),
+    "mate": dict(Roughness=0.46, Coat_Weight=0.12, Coat_Roughness=0.32),
+}
+FRAME_ROUGHNESS = {"aluminio": 0.44, "acero": 0.1, "titanio": 0.36, "titanio-pulido": 0.14}
+
+
+def srgb(hex_color):
+    """Color #rrggbb a lineal, como lo espera el material."""
+
+    def to_linear(value):
+        value /= 255
+        return value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
+
+    digits = hex_color.lstrip("#")
+    return tuple(to_linear(int(digits[i : i + 2], 16)) for i in (0, 2, 4))
+
+
+def mix(color, other, amount):
+    return tuple(a + (b - a) * amount for a, b in zip(color, other))
+
+
+def paint(spec, color):
+    """Pinta el iPhone con uno de sus colores oficiales."""
+    back, frame = srgb(color["back"]), srgb(color["frame"])
+    module = srgb(color.get("module", color["back"]))
+    set_inputs(back_node, Base_Color=(*back, 1), **GLASS[spec["back"]])
+    grain_bump.inputs["Strength"].default_value = 0.06 if spec["back"] == "mate" else 0.0
+    set_inputs(principled(material("Tel_Modulo")), Base_Color=(*module, 1), **GLASS[spec["moduleFinish"]])
+    set_inputs(principled(material("Tel_Marco")), Base_Color=(*frame, 1), Metallic=1.0, Roughness=FRAME_ROUGHNESS[spec["frame"]])
+    set_inputs(principled(material("Tel_AroLente")), Base_Color=(*frame, 1), Metallic=1.0, Roughness=0.2)
+    set_inputs(principled(material("Tel_Antena")), Base_Color=(*mix(frame, (0.147, 0.147, 0.156), 0.3), 1), Roughness=0.55)
+    set_inputs(principled(material("Tel_Logo")), Base_Color=(*mix(back, (0, 0, 0), 0.16), 1), Roughness=0.1, Coat_Weight=1.0, Coat_Roughness=0.03)
 
 lens_mat = bpy.data.materials["Tel_Lente"]
 lens_node = principled(lens_mat)
@@ -136,7 +187,8 @@ center.inputs[1].default_value = (0.5, 0.5, 0.5)
 l2.new(tc.outputs["Generated"], center.inputs[0])
 flat = n2.new("ShaderNodeVectorMath")
 flat.operation = "MULTIPLY"
-flat.inputs[1].default_value = tuple(0.0 if i == thin else 2.0 for i in range(3))
+# La pieza incluye el aro: el cristal ocupa el 80 % del diámetro
+flat.inputs[1].default_value = tuple(0.0 if i == thin else 2.5 for i in range(3))
 l2.new(center.outputs[0], flat.inputs[0])
 length = n2.new("ShaderNodeVectorMath")
 length.operation = "LENGTH"
@@ -187,7 +239,7 @@ set_inputs(principled(sensor_mat), Base_Color=(0.006, 0.006, 0.008, 1), Roughnes
 
 
 """---------- Pose: todos de frente y centrados ----------"""
-info = {c.name: prepare_model(c, c in selected, flash_mat, sensor_mat) for c in MODELS}
+info = {c.name: prepare_model(c, c in selected) for c in MODELS}
 bpy.context.view_layer.update()
 
 """---------- Estudio ----------"""
@@ -377,9 +429,9 @@ scene.view_settings.look = "AgX - Medium High Contrast"
 scene.view_settings.exposure = 0.0
 
 
-def image_box(obj):
-    """Caja del objeto en la imagen: fracciones (0–1) medidas desde arriba a la izquierda."""
-    points = [world_to_camera_view(scene, camera, obj.matrix_world @ Vector(c)) for c in obj.bound_box]
+def image_box(corners):
+    """Caja (de esquinas en el mundo) en la imagen: fracciones (0–1) medidas desde arriba a la izquierda."""
+    points = [world_to_camera_view(scene, camera, corner) for corner in corners]
     return {
         "x0": round(min(p.x for p in points), 4),
         "x1": round(max(p.x for p in points), 4),
@@ -395,33 +447,47 @@ if os.path.exists(manifest_path):
         manifest = json.load(fh)
 
 start = time.time()
+done = 0
 for index, collection in enumerate(selected, 1):
     for other in MODELS:
         other.hide_render = other is not collection
         other.hide_viewport = other is not collection
     bpy.context.view_layer.update()
     data = info[collection.name]
+    case = data["case"]
     name = slug(collection.name)
-    png = os.path.join(args.outdir, f"{name}.png")
     manifest[name] = {
         "name": collection.name,
-        "case": image_box(data["case"]),
-        "camera": image_box(data["module"]),
+        "case": image_box([case.matrix_world @ Vector(c) for c in case.bound_box]),
+        "camera": image_box(box_corners(case, *data["module_bounds"])),
         "lenses": len([o for o in collection.objects if o.name.startswith("TelLente_")]),
     }
     with open(manifest_path, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, indent=2, ensure_ascii=False)
-    if args.skip_existing and os.path.exists(png):
-        print(f"CASES saltado {name}", flush=True)
-        continue
     # Una toma nunca queda igual a la anterior: variación pequeña y reproducible por modelo
     seed = zlib.crc32(name.encode())
     jitter_x = ((seed & 0xFF) / 255 - 0.5) * 0.016
     jitter_z = (((seed >> 8) & 0xFF) / 255 - 0.5) * 0.016
     jitter_roll = (((seed >> 16) & 0xFF) / 255 - 0.5) * 7
     aim_card(card, (0.02 + jitter_x, 0.012 + jitter_z), -28 + jitter_roll)
-    scene.render.filepath = png
-    tic = time.time()
-    bpy.ops.render.render(write_still=True)
-    print(f"CASES {index}/{len(selected)} {name} {time.time() - tic:.0f}s (total {time.time() - start:.0f}s)", flush=True)
-print("CASES_OK", len(selected), flush=True)
+    spec = spec_for(name)
+    colors = spec["colors"]
+    if args.colors == "default":
+        chosen = colors[:1]
+    elif args.colors == "all":
+        chosen = colors
+    else:
+        chosen = [c for c in colors if c["id"] in args.colors.split(",")]
+    for color in chosen:
+        # El primer color es el de la foto principal del modelo
+        png = os.path.join(args.outdir, f"{name}.png" if color is colors[0] else f"{name}--{color['id']}.png")
+        if args.skip_existing and os.path.exists(png):
+            print(f"CASES saltado {os.path.basename(png)}", flush=True)
+            continue
+        paint(spec, color)
+        scene.render.filepath = png
+        tic = time.time()
+        bpy.ops.render.render(write_still=True)
+        done += 1
+        print(f"CASES {index}/{len(selected)} {os.path.basename(png)} {time.time() - tic:.0f}s (total {time.time() - start:.0f}s)", flush=True)
+print("CASES_OK", done, flush=True)

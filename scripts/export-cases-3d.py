@@ -1,9 +1,10 @@
-"""Exporta a GLB el modelo de cada forro con su celular, en la misma pose que los renders.
+"""Exporta a GLB el modelo de cada forro con su iPhone, en la misma pose que los renders.
 
 Uso: blender -b --factory-startup --disable-autoexec chunkea_sin_chunkis.blend --python export-cases-3d.py --
        --outdir carpeta [--models "iPhone 16 Pro,iPhone 15"]
 Después: npm run models:process -- carpeta
-Los materiales finales se crean en la página (src/builder/view3d/phoneModel.ts) según su nombre.
+Los materiales finales (y el color de cada iPhone) se crean en la página
+(src/builder/view3d/phoneModel.ts) según el nombre con que salen de aquí.
 """
 import argparse
 import os
@@ -26,21 +27,8 @@ MODELS = [c for c in bpy.data.collections if c.name.startswith("iPhone")]
 wanted = [m.strip() for m in args.models.split(",") if m.strip()]
 selected = [c for c in MODELS if not wanted or c.name in wanted]
 
-
-
-def simple_material(name, color):
-    # Colores distintos: si fueran iguales, la optimización los fusionaría en uno solo
-    material = bpy.data.materials.new(name)
-    material.use_nodes = True
-    next(n for n in material.node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Base Color"].default_value = color
-    return material
-
-
-flash_mat = simple_material("Render_Flash", (0.97, 0.9, 0.68, 1))
-sensor_mat = simple_material("Render_Sensor", (0.006, 0.006, 0.008, 1))
-
 for collection in selected:
-    prepare_model(collection, True, flash_mat, sensor_mat)
+    prepare_model(collection, True)
 bpy.context.view_layer.update()
 
 for collection in selected:

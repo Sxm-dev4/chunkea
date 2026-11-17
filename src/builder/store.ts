@@ -1,7 +1,7 @@
 import { DEFAULT_SIZE, MAX_BIG_CHUNKS, PRODUCTS, isSizeId, type SizeId } from '../config/site';
 import { CHUNKIS, chunkSize, isAvailable, type CategoryFilter, type ChunkSizeFilter } from '../data/chunkis';
 import type { Combo } from '../data/combos';
-import { OTHER_PHONE, PHONES, cameraZoneFor, getPhone, renderIdFor } from '../data/phones';
+import { OTHER_PHONE, PHONES, cameraZoneFor, getPhone, phoneLook, renderIdFor } from '../data/phones';
 import { defaultRng, randomBetween, type Rng } from '../lib/random';
 import { browserStorage, type KeyValueStore } from '../lib/storage';
 import { clampToCase, findFreeSpot } from './placement';
@@ -19,6 +19,8 @@ export interface BuilderState {
   size: SizeId;
   /** iPhone elegido, OTHER_PHONE para otra marca o null si aún no elige. */
   phoneId: string | null;
+  /** Color del iPhone (ver iphones.json); null es el primero de su lista. */
+  phoneColor: string | null;
   model: string;
   charms: PlacedCharm[];
   filter: CategoryFilter;
@@ -36,6 +38,7 @@ export type BuilderEvent =
   | { type: 'moved'; uid: number }
   | { type: 'size-changed'; trimmed: number }
   | { type: 'phone-changed'; trimmed: number }
+  | { type: 'color-changed' }
   | { type: 'filled'; added: number }
   | { type: 'cleared' }
   | { type: 'combo-loaded'; name: string }
@@ -51,6 +54,7 @@ const MAX_MODEL_LENGTH = 40;
 interface SavedDesign {
   size: SizeId;
   phoneId: string | null;
+  phoneColor: string | null;
   model: string;
   charms: { id: string; x: number; y: number; r: number }[];
 }
@@ -85,6 +89,7 @@ export function parseSavedDesign(raw: string | null): SavedDesign | null {
   const phone = getPhone(phoneId);
   const size = phone?.size ?? (isSizeId(d.size) ? d.size : DEFAULT_SIZE);
   const model = phone?.name ?? typedModel;
+  const phoneColor = phone && hasColor(phone.id, d.phoneColor) ? d.phoneColor : null;
   const zone = cameraZoneFor(renderIdFor(phoneId, size));
   const charms = (Array.isArray(d.charms) ? d.charms : [])
     .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
@@ -100,8 +105,12 @@ export function parseSavedDesign(raw: string | null): SavedDesign | null {
       return { id: c.id as string, x: pos.x, y: pos.y, r: isFiniteNumber(c.r) ? c.r : 0 };
     })
     .slice(0, PRODUCTS[size].maxCharms);
-  return { size, phoneId, model, charms };
+  return { size, phoneId, phoneColor, model, charms };
 }
+
+/** Ese color existe en ese iPhone. */
+const hasColor = (phoneId: string, colorId: unknown): colorId is string =>
+  typeof colorId === 'string' && phoneLook(phoneId).colors.some((c) => c.id === colorId);
 
 export interface StoreOptions {
   storage?: KeyValueStore;
@@ -117,6 +126,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
   const state: BuilderState = {
     size: DEFAULT_SIZE,
     phoneId: null,
+    phoneColor: null,
     model: '',
     charms: [],
     filter: 'todos',
@@ -128,6 +138,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
   if (saved) {
     state.size = saved.size;
     state.phoneId = saved.phoneId;
+    state.phoneColor = saved.phoneColor;
     state.model = saved.model;
     state.charms = saved.charms.map((c) => ({ ...c, uid: uidSeq++ }));
   }
@@ -142,6 +153,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
     const design: SavedDesign = {
       size: state.size,
       phoneId: state.phoneId,
+      phoneColor: state.phoneColor,
       model: state.model,
       charms: state.charms.map(({ id, x, y, r }) => ({ id, x, y, r })),
     };
@@ -253,6 +265,7 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
       const previousSize = state.size;
       const wasListed = !!getPhone(state.phoneId);
       state.phoneId = phone || id === OTHER_PHONE ? id : null;
+      state.phoneColor = null; // cada modelo tiene sus colores
       if (phone) {
         state.size = phone.size;
         state.model = phone.name;
@@ -274,11 +287,20 @@ export function createBuilderStore({ storage = browserStorage, rng = defaultRng 
       emit({ type: 'phone-changed', trimmed });
     },
 
+    /** Elige el color del iPhone (sólo cambia cómo se ve; el forro es transparente). */
+    setPhoneColor(colorId: string): void {
+      const phone = getPhone(state.phoneId);
+      if (!phone || !hasColor(phone.id, colorId) || colorId === state.phoneColor) return;
+      state.phoneColor = colorId;
+      emit({ type: 'color-changed' });
+    },
+
     setSize(size: SizeId): void {
       if (size === state.size) return;
       // Un iPhone tiene su tamaño: elegir otro significa que ya no es ese celular
       if (getPhone(state.phoneId)) {
         state.phoneId = null;
+        state.phoneColor = null;
         state.model = '';
       }
       state.size = size;

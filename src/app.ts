@@ -1,6 +1,5 @@
 import { mountCharmTools } from './builder/charmTools';
 import { mountControls } from './builder/controls';
-import { createMiniCase } from './builder/caseArt';
 import { buildOrderMessage, validateOrder, whatsappUrl } from './builder/order';
 import { createBuilderStore, type BuilderEvent, type BuilderStore } from './builder/store';
 import { mountView2D } from './builder/view2d';
@@ -8,9 +7,9 @@ import { mountView3D } from './builder/view3d';
 import type { SceneController } from './builder/view3d/scene';
 import { MAX_BIG_CHUNKS, PRODUCTS, isSizeId } from './config/site';
 import { COPY } from './copy';
-import { COMBOS } from './data/combos';
+import { COMBOS, comboPhoto } from './data/combos';
 import { REVIEWS, reviewPhoto } from './data/reviews';
-import { GENERIC_RENDER, OTHER_PHONE } from './data/phones';
+import { OTHER_PHONE } from './data/phones';
 import { mountAnimatedIcons } from './icons/animatedIcons';
 import { hydrateInlineIcons } from './icons/lineIcons';
 import { prefersReducedMotion, replayClass, requireEl } from './lib/env';
@@ -32,13 +31,7 @@ declare global {
 const scrollBehavior = (): ScrollBehavior => (prefersReducedMotion() ? 'auto' : 'smooth');
 
 function mountDecorations(): void {
-  const hero = document.getElementById('heroCase');
-  const first = COMBOS[0];
-  if (hero && first) {
-    hero.append(createMiniCase(GENERIC_RENDER[first.size], first.size, first.items, 7, true));
-  }
-
-  // Combos de "Inspírate": cada tarjeta muestra el forro armado
+  // Combos de "Inspírate": cada tarjeta muestra la foto real del forro
   const grid = document.getElementById('inspoGrid');
   if (!grid) return;
   COMBOS.forEach((combo, i) => {
@@ -47,7 +40,15 @@ function mountDecorations(): void {
     card.className = 'inspo-card reveal';
     card.dataset.combo = String(i);
     card.setAttribute('aria-label', `Cargar el combo ${combo.name} en el armador`);
-    card.append(createMiniCase(GENERIC_RENDER[combo.size], combo.size, combo.items, i + 3));
+    const photo = document.createElement('img');
+    photo.className = 'inspo-photo';
+    photo.src = comboPhoto(combo);
+    photo.alt = '';
+    photo.width = 400;
+    photo.height = 600;
+    photo.loading = 'lazy';
+    photo.decoding = 'async';
+    card.append(photo);
     const title = document.createElement('strong');
     title.textContent = combo.name;
     const desc = document.createElement('span');

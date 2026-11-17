@@ -1,0 +1,339 @@
+{
+  "iphone-17-pro-max": { "like": "iphone-17-pro" },
+  "iphone-17-pro": {
+    "edge": "contour",
+    "frame": "aluminio",
+    "back": "mate",
+    "moduleFinish": "mate",
+    "module": "meseta",
+    "unibody": true,
+    "front": "isla",
+    "bezel": 1.9,
+    "lidar": true,
+    "action": true,
+    "control": true,
+    "port": "usbc",
+    "colors": [
+      { "id": "naranja-cosmico", "name": "Naranja cósmico", "back": "#f39a5f", "frame": "#f47c30" },
+      { "id": "plata", "name": "Plata", "back": "#f4f4f1", "frame": "#e1e1de" },
+      { "id": "azul-profundo", "name": "Azul profundo", "back": "#3b4158", "frame": "#32374a" }
+    ]
+  },
+  "iphone-air": {
+    "edge": "contour",
+    "frame": "titanio-pulido",
+    "back": "mate",
+    "moduleFinish": "brillante",
+    "module": "meseta",
+    "front": "isla",
+    "bezel": 1.9,
+    "action": true,
+    "control": true,
+    "port": "usbc",
+    "colors": [
+      { "id": "azul-cielo", "name": "Azul cielo", "back": "#dce8f2", "frame": "#cfdde9" },
+      { "id": "oro-claro", "name": "Oro claro", "back": "#f3ead9", "frame": "#e6d8bd" },
+      { "id": "blanco-nube", "name": "Blanco nube", "back": "#f4f4f1", "frame": "#e6e5e1" },
+      { "id": "negro-espacial", "name": "Negro espacial", "back": "#2e2e30", "frame": "#3a3a3c" }
+    ]
+  },
+  "iphone-17": {
+    "edge": "contour",
+    "frame": "aluminio",
+    "back": "mate",
+    "moduleFinish": "mate",
+    "module": "pastilla",
+    "front": "isla",
+    "bezel": 1.9,
+    "action": true,
+    "control": true,
+    "port": "usbc",
+    "colors": [
+      { "id": "lavanda", "name": "Lavanda", "back": "#dfceea", "frame": "#dccbe7", "module": "#cdb4de" },
+      {
+        "id": "azul-neblina",
+        "name": "Azul neblina",
+        "back": "#a3b7d6",
+        "frame": "#9db2d0",
+        "module": "#869fc6"
+      },
+      { "id": "salvia", "name": "Salvia", "back": "#b0bc93", "frame": "#abb890", "module": "#97a676" },
+      { "id": "blanco", "name": "Blanco", "back": "#f6f5f1", "frame": "#e9e8e4", "module": "#efeeea" },
+      { "id": "negro", "name": "Negro", "back": "#35393b", "frame": "#3b3e41", "module": "#2a2d2f" }
+    ]
+  },
+  "iphone-17e": {
+    "like": "iphone-16e",
+    "colors": [
+      { "id": "rosa-suave", "name": "Rosa suave", "back": "#f3d9dc", "frame": "#efd2d6" },
+      { "id": "blanco", "name": "Blanco", "back": "#f9f9f7", "frame": "#e6e6e4" },
+      { "id": "negro", "name": "Negro", "back": "#2d2e30", "frame": "#333436" }
+    ]
+  },
+  "iphone-16-pro-max": { "like": "iphone-16-pro" },
+  "iphone-16-pro": {
+    "edge": "contour",
+    "frame": "titanio",
+    "back": "mate",
+    "moduleFinish": "mate",
+    "module": "cuadrado",
+    "front": "isla",
+    "bezel": 1.9,
+    "lidar": true,
+    "action": true,
+    "control": true,
+    "port": "usbc",
+    "colors": [
+      { "id": "titanio-desierto", "name": "Titanio desierto", "back": "#c4a994", "frame": "#c9ad94" },
+      { "id": "titanio-natural", "name": "Titanio natural", "back": "#c2bcb2", "frame": "#b8b2a7" },
+      { "id": "titanio-blanco", "name": "Titanio blanco", "back": "#f2f1ed", "frame": "#e3e1dc" },
+      { "id": "titanio-negro", "name": "Titanio negro", "back": "#3c3c3d", "frame": "#4a4a4b" }
+    ]
+  },
+  "iphone-16-plus": { "like": "iphone-16" },
+  "iphone-16": {
+    "edge": "contour",
+    "frame": "aluminio",
+    "back": "mate",
+    "moduleFinish": "mate",
+    "module": "pastilla",
+    "front": "isla",
+    "bezel": 2.4,
+    "action": true,
+    "control": true,
+    "port": "usbc",
+    "colors": [
+      {
+        "id": "ultramarino",
+        "name": "Ultramarino",
+        "back": "#9aadf6",
+        "frame": "#8ea3f0",
+        "module": "#6d86ea"
+      },
+      {
+        "id": "verde-azulado",
+        "name": "Verde azulado",
+        "back": "#b0d4d2",
+        "frame": "#a5cdcb",
+        "module": "#7dbcb9"
+      },
+      { "id": "rosa", "name": "Rosa", "back": "#f2adda", "frame": "#f0a6d6", "module": "#ec86c9" },
+      { "id": "blanco", "name": "Blanco", "back": "#fafafa", "frame": "#ecebe8", "module": "#f2f2f0" },
+      { "id": "negro", "name": "Negro", "back": "#3c4042", "frame": "#3d4042", "module": "#2b2e30" }
+    ]
+  },
+  "iphone-16e": {
+    "edge": "flat",
+    "frame": "aluminio",
+    "back": "mate",
+    "moduleFinish": "mate",
+    "module": "ninguno",
+    "front": "notch",
+    "bezel": 3.3,
+    "action": true,
+    "port": "usbc",
+    "colors": [
+      { "id": "blanco", "name": "Blanco", "back": "#f9f9f7", "frame": "#e6e6e4" },
+      { "id": "negro", "name": "Negro", "back": "#2d2e30", "frame": "#333436" }
+    ]
+  },
+  "iphone-15-pro-max": { "like": "iphone-15-pro" },
+  "iphone-15-pro": {
+    "edge": "contour",
+    "frame": "titanio",
+    "back": "mate",
+    "moduleFinish": "mate",
+    "module": "cuadrado",
+    "front": "isla",
+    "bezel": 2.2,
+    "lidar": true,
+    "action": true,
+    "port": "usbc",
+    "colors": [
+      { "id": "titanio-natural", "name": "Titanio natural", "back": "#8f8a83", "frame": "#a8a39a" },
+      { "id": "titanio-azul", "name": "Titanio azul", "back": "#2f3846", "frame": "#3f4856" },
+      { "id": "titanio-blanco", "name": "Titanio blanco", "back": "#f2f1ed", "frame": "#e3e1dc" },
+      { "id": "titanio-negro", "name": "Titanio negro", "back": "#3c3c3d", "frame": "#4a4a4b" }
+    ]
+  },
+  "iphone-15-plus": { "like": "iphone-15" },
+  "iphone-15": {
+    "edge": "contour",
+    "frame": "aluminio",
+    "back": "mate",
+    "moduleFinish": "mate",
+    "module": "cuadrado",
+    "front": "isla",
+    "bezel": 2.4,
+    "port": "usbc",
+    "colors": [
+      { "id": "rosa", "name": "Rosa", "back": "#e9cdd0", "frame": "#e6c7ca", "module": "#e4b3b8" },
+      { "id": "azul", "name": "Azul", "back": "#ced8df", "frame": "#c9d3da", "module": "#b6c6d1" },
+      { "id": "verde", "name": "Verde", "back": "#cdd7c8", "frame": "#c8d3c2", "module": "#b5c6ae" },
+      { "id": "amarillo", "name": "Amarillo", "back": "#ece2b4", "frame": "#e8ddab", "module": "#e5d68f" },
+      { "id": "negro", "name": "Negro", "back": "#35393b", "frame": "#3a3d40", "module": "#2b2e30" }
+    ]
+  },
+  "iphone-14-pro-max": { "like": "iphone-14-pro" },
+  "iphone-14-pro": {
+    "edge": "flat",
+    "frame": "acero",
+    "back": "mate",
+    "moduleFinish": "brillante",
+    "module": "cuadrado",
+    "front": "isla",
+    "bezel": 2.4,
+    "lidar": true,
+    "port": "lightning",
+    "colors": [
+      { "id": "morado-oscuro", "name": "Morado oscuro", "back": "#594f63", "frame": "#5c5266" },
+      { "id": "oro", "name": "Oro", "back": "#f4e8ce", "frame": "#e7d2a8" },
+      { "id": "plata", "name": "Plata", "back": "#f0f2f2", "frame": "#e4e5e2" },
+      { "id": "negro-espacial", "name": "Negro espacial", "back": "#403e3d", "frame": "#3a3837" }
+    ]
+  },
+  "iphone-14-plus": { "like": "iphone-14" },
+  "iphone-14": {
+    "edge": "flat",
+    "frame": "aluminio",
+    "back": "brillante",
+    "moduleFinish": "mate",
+    "module": "cuadrado",
+    "front": "notch",
+    "bezel": 3.3,
+    "port": "lightning",
+    "colors": [
+      { "id": "azul", "name": "Azul", "back": "#a0b4c7", "frame": "#a6b9cb" },
+      { "id": "malva", "name": "Malva", "back": "#e6ddeb", "frame": "#e2d8e8" },
+      { "id": "amarillo", "name": "Amarillo", "back": "#f9e479", "frame": "#f2dd7f" },
+      { "id": "medianoche", "name": "Medianoche", "back": "#222930", "frame": "#2a3038" },
+      { "id": "blanco-estrella", "name": "Blanco estrella", "back": "#faf6f2", "frame": "#eeeae4" },
+      { "id": "rojo", "name": "Rojo", "back": "#e11c2a", "frame": "#d8202c" }
+    ]
+  },
+  "iphone-13-pro-max": { "like": "iphone-13-pro" },
+  "iphone-13-pro": {
+    "edge": "flat",
+    "frame": "acero",
+    "back": "mate",
+    "moduleFinish": "brillante",
+    "module": "cuadrado",
+    "front": "notch",
+    "bezel": 3.3,
+    "lidar": true,
+    "port": "lightning",
+    "colors": [
+      { "id": "azul-sierra", "name": "Azul sierra", "back": "#a7c1d9", "frame": "#a9c0d6" },
+      { "id": "verde-alpino", "name": "Verde alpino", "back": "#576856", "frame": "#5d6e5b" },
+      { "id": "oro", "name": "Oro", "back": "#fae7cf", "frame": "#e9d3ae" },
+      { "id": "plata", "name": "Plata", "back": "#f1f2ed", "frame": "#e4e5e2" },
+      { "id": "grafito", "name": "Grafito", "back": "#54524f", "frame": "#4e4c49" }
+    ]
+  },
+  "iphone-13-mini": { "like": "iphone-13" },
+  "iphone-13": {
+    "edge": "flat",
+    "frame": "aluminio",
+    "back": "brillante",
+    "moduleFinish": "mate",
+    "module": "cuadrado",
+    "front": "notch",
+    "bezel": 3.3,
+    "port": "lightning",
+    "colors": [
+      { "id": "rosa", "name": "Rosa", "back": "#faddd7", "frame": "#f4d5cf" },
+      { "id": "azul", "name": "Azul", "back": "#276787", "frame": "#356f8d" },
+      { "id": "verde", "name": "Verde", "back": "#394c38", "frame": "#42553f" },
+      { "id": "medianoche", "name": "Medianoche", "back": "#232a31", "frame": "#2a3038" },
+      { "id": "blanco-estrella", "name": "Blanco estrella", "back": "#faf6f2", "frame": "#eeeae4" },
+      { "id": "rojo", "name": "Rojo", "back": "#bf0013", "frame": "#c41727" }
+    ]
+  },
+  "iphone-12-pro-max": { "like": "iphone-12-pro" },
+  "iphone-12-pro": {
+    "edge": "flat",
+    "frame": "acero",
+    "back": "mate",
+    "moduleFinish": "brillante",
+    "module": "cuadrado",
+    "front": "notch",
+    "bezel": 3.5,
+    "lidar": true,
+    "port": "lightning",
+    "colors": [
+      { "id": "azul-pacifico", "name": "Azul pacífico", "back": "#2d4e5c", "frame": "#3a5a69" },
+      { "id": "oro", "name": "Oro", "back": "#fcebd3", "frame": "#e6cfa9" },
+      { "id": "plata", "name": "Plata", "back": "#e3e4df", "frame": "#e5e5e2" },
+      { "id": "grafito", "name": "Grafito", "back": "#52514d", "frame": "#4b4a46" }
+    ]
+  },
+  "iphone-12-mini": { "like": "iphone-12" },
+  "iphone-12": {
+    "edge": "flat",
+    "frame": "aluminio",
+    "back": "brillante",
+    "moduleFinish": "mate",
+    "module": "cuadrado",
+    "front": "notch",
+    "bezel": 3.5,
+    "port": "lightning",
+    "colors": [
+      { "id": "malva", "name": "Malva", "back": "#b7afe6", "frame": "#b9b2e2" },
+      { "id": "azul", "name": "Azul", "back": "#023b63", "frame": "#11486f" },
+      { "id": "verde", "name": "Verde", "back": "#d8efd5", "frame": "#cfe6cc" },
+      { "id": "rojo", "name": "Rojo", "back": "#d82e2e", "frame": "#cf2a31" },
+      { "id": "blanco", "name": "Blanco", "back": "#f9f6ef", "frame": "#e6e6e4" },
+      { "id": "negro", "name": "Negro", "back": "#1f2020", "frame": "#2b2c2e" }
+    ]
+  },
+  "iphone-11-pro-max": { "like": "iphone-11-pro" },
+  "iphone-11-pro": {
+    "edge": "round",
+    "frame": "acero",
+    "back": "mate",
+    "moduleFinish": "brillante",
+    "module": "cuadrado",
+    "front": "notch",
+    "bezel": 4.2,
+    "port": "lightning",
+    "colors": [
+      { "id": "verde-noche", "name": "Verde noche", "back": "#4e5851", "frame": "#5b665e" },
+      { "id": "oro", "name": "Oro", "back": "#fad7bd", "frame": "#e8c9a9" },
+      { "id": "plata", "name": "Plata", "back": "#ebebe3", "frame": "#e6e6e3" },
+      { "id": "gris-espacial", "name": "Gris espacial", "back": "#535150", "frame": "#4a4948" }
+    ]
+  },
+  "iphone-11": {
+    "edge": "round",
+    "frame": "aluminio",
+    "back": "brillante",
+    "moduleFinish": "mate",
+    "module": "cuadrado",
+    "front": "notch",
+    "bezel": 5.2,
+    "port": "lightning",
+    "colors": [
+      { "id": "malva", "name": "Malva", "back": "#d1cdda", "frame": "#cfcbd8" },
+      { "id": "verde", "name": "Verde", "back": "#aee1cd", "frame": "#b4dccb" },
+      { "id": "amarillo", "name": "Amarillo", "back": "#ffe681", "frame": "#f3dc8d" },
+      { "id": "rojo", "name": "Rojo", "back": "#ba0c2e", "frame": "#c21f37" },
+      { "id": "blanco", "name": "Blanco", "back": "#f9f6ef", "frame": "#e3e4e5" },
+      { "id": "negro", "name": "Negro", "back": "#1f2020", "frame": "#2a2b2d" }
+    ]
+  },
+  "iphone-se": {
+    "edge": "round",
+    "frame": "aluminio",
+    "back": "brillante",
+    "moduleFinish": "brillante",
+    "module": "se",
+    "front": "home",
+    "bezel": 3.4,
+    "port": "lightning",
+    "colors": [
+      { "id": "blanco-estrella", "name": "Blanco estrella", "back": "#faf6f2", "frame": "#eeeae4" },
+      { "id": "medianoche", "name": "Medianoche", "back": "#232a31", "frame": "#2a3038" },
+      { "id": "rojo", "name": "Rojo", "back": "#bf0013", "frame": "#c41727" }
+    ]
+  }
+}

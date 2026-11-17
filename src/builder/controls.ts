@@ -9,7 +9,7 @@ import {
   isCategoryFilter,
   isChunkSizeFilter,
 } from '../data/chunkis';
-import { OTHER_PHONE, PHONES, getPhone } from '../data/phones';
+import { OTHER_PHONE, PHONES, getPhone, phoneColor, phoneLook } from '../data/phones';
 import { escapeHtml } from '../lib/html';
 import { requireEl } from '../lib/env';
 import { formatCOP } from './money';
@@ -27,6 +27,9 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
   const model = requireEl<HTMLInputElement>('#model', root);
   const phoneSelect = requireEl<HTMLSelectElement>('#phone', root);
   const phoneInfo = requireEl('#phoneInfo', root);
+  const phoneColors = requireEl('#phoneColors', root);
+  const phoneColorList = requireEl('#phoneColorList', root);
+  const phoneColorName = requireEl('#phoneColorName', root);
   const sizeArea = requireEl('#sizeArea', root);
   const modelField = requireEl('#modelField', root);
   const sumTitle = requireEl('#sumTitle', root);
@@ -108,6 +111,54 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
     store.setPhone(phoneSelect.value || null);
   });
 
+  /* ---------- Color del iPhone ---------- */
+  let swatchesFor: string | null = null;
+  phoneColorList.addEventListener('click', (e) => {
+    const id = (e.target as Element).closest<HTMLButtonElement>('button[data-color]')?.dataset.color;
+    if (id) store.setPhoneColor(id);
+  });
+  phoneColorList.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+    const buttons = [...phoneColorList.querySelectorAll<HTMLButtonElement>('button[data-color]')];
+    const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    if (index < 0) return;
+    e.preventDefault();
+    const step = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1;
+    const next = buttons[(index + step + buttons.length) % buttons.length];
+    next?.focus();
+    next?.click();
+  });
+  const renderColors = (state: Readonly<BuilderState>): void => {
+    const listed = getPhone(state.phoneId);
+    phoneColors.hidden = !listed;
+    if (!listed) return;
+    if (swatchesFor !== listed.id) {
+      swatchesFor = listed.id;
+      phoneColorList.replaceChildren(
+        ...phoneLook(listed.id).colors.map((c) => {
+          const swatch = document.createElement('button');
+          swatch.type = 'button';
+          swatch.className = 'swatch';
+          swatch.dataset.color = c.id;
+          swatch.title = c.name;
+          swatch.setAttribute('role', 'radio');
+          swatch.setAttribute('aria-label', c.name);
+          // Por CSSOM y no como atributo: la CSP no permite estilos en línea
+          swatch.style.setProperty('--swatch', c.back);
+          swatch.style.setProperty('--swatch-edge', c.frame);
+          return swatch;
+        }),
+      );
+    }
+    const current = phoneColor(listed.id, state.phoneColor);
+    phoneColorName.textContent = current.name;
+    phoneColorList.querySelectorAll<HTMLButtonElement>('button[data-color]').forEach((b) => {
+      const checked = b.dataset.color === current.id;
+      b.setAttribute('aria-checked', String(checked));
+      b.tabIndex = checked ? 0 : -1;
+    });
+  };
+
   /* ---------- Modelo escrito a mano (otras marcas) ---------- */
   model.addEventListener('input', () => {
     model.closest('.field')?.classList.remove('invalid');
@@ -136,6 +187,7 @@ export function mountControls(store: BuilderStore, root: HTMLElement = document.
     phoneInfo.textContent = listed
       ? `${product.name} · hasta ${product.maxCharms} chunks · ${formatCOP(product.price)}`
       : '';
+    renderColors(state);
     if (document.activeElement !== model && model.value !== state.model) model.value = state.model;
 
     // Con los grandes completos, los grandes del catálogo se ven apagados (al tocarlos se explica por qué)

@@ -11,6 +11,8 @@ import {
   cameraZoneFor,
   caseBox,
   getPhone,
+  phoneColor,
+  phoneLook,
   renderIdFor,
 } from '../../src/data/phones';
 import { seededRng } from '../../src/lib/random';
@@ -37,10 +39,53 @@ describe('PHONES', () => {
       const file = `src/assets/cases3d/${id}.glb`;
       expect(existsSync(file), file).toBe(true);
       const content = readFileSync(file).toString('latin1');
-      for (const part of ['Case_Transparente', 'Tel_Trasera', 'Tel_Modulo', 'Tel_Lente', 'Render_Flash']) {
+      // El módulo no se exige: los de una sola lente (16e, 17e, SE) la llevan directo en la tapa
+      for (const part of [
+        'Case_Transparente',
+        'Tel_Trasera',
+        'Tel_Marco',
+        'Tel_Lente',
+        'Tel_Logo',
+        'Tel_Pantalla',
+        'Render_Flash',
+      ]) {
         expect(content.includes(part), `${id}: ${part}`).toBe(true);
       }
     }
+  });
+
+  it('cada iPhone tiene sus colores, sin repetir y bien escritos', () => {
+    for (const { id } of PHONES) {
+      const { colors } = phoneLook(id);
+      expect(colors.length, id).toBeGreaterThanOrEqual(2);
+      expect(new Set(colors.map((c) => c.id)).size, id).toBe(colors.length);
+      for (const color of colors) {
+        for (const hex of [color.back, color.frame, color.module ?? color.back]) {
+          expect(hex, `${id} ${color.id}`).toMatch(/^#[0-9a-f]{6}$/);
+        }
+      }
+      expect(phoneColor(id, null)).toBe(colors[0]);
+      expect(phoneColor(id, 'no-existe')).toBe(colors[0]);
+    }
+    // Los Max y Plus heredan el acabado de su hermano
+    expect(phoneLook('iphone-17-pro-max')).toEqual(phoneLook('iphone-17-pro'));
+    expect(phoneLook('iphone-17e').front).toBe('notch');
+    expect(phoneLook('iphone-17e').colors.map((c) => c.id)).toContain('rosa-suave');
+  });
+
+  it('el color se guarda con el iPhone y se reinicia al cambiar de modelo', () => {
+    const storage = memoryStorage();
+    const store = createBuilderStore({ storage, rng: seededRng(3) });
+    store.setPhoneColor('plata'); // sin iPhone elegido no hay colores
+    expect(store.getState().phoneColor).toBeNull();
+    store.setPhone('iphone-17-pro');
+    store.setPhoneColor('no-existe');
+    expect(store.getState().phoneColor).toBeNull();
+    store.setPhoneColor('azul-profundo');
+    expect(store.getState().phoneColor).toBe('azul-profundo');
+    expect(createBuilderStore({ storage }).getState().phoneColor).toBe('azul-profundo');
+    store.setPhone('iphone-13');
+    expect(store.getState().phoneColor).toBeNull();
   });
 
   it('Plus, Pro Max y Air van como forro grande; el resto como pequeño', () => {

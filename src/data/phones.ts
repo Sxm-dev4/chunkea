@@ -1,5 +1,6 @@
 import { DEFAULT_SIZE, type SizeId } from '../config/site';
 import renders from './caseRenders.json';
+import iphones from './iphones.json';
 
 export interface Box {
   readonly x0: number;
@@ -73,6 +74,60 @@ export const GENERIC_RENDER: Readonly<Record<SizeId, string>> = {
 export const renderIdFor = (phoneId: string | null, size: SizeId = DEFAULT_SIZE): string =>
   getPhone(phoneId)?.id ?? GENERIC_RENDER[size];
 
+export type PhoneFinish = 'brillante' | 'mate';
+export type FrameMetal = 'aluminio' | 'acero' | 'titanio' | 'titanio-pulido';
+export type PhoneFront = 'isla' | 'notch' | 'home';
+
+/** Un color oficial del iPhone: tapa trasera, marco y (si es distinto) módulo de cámara. */
+export interface PhoneColor {
+  readonly id: string;
+  readonly name: string;
+  readonly back: string;
+  readonly frame: string;
+  readonly module?: string;
+}
+
+/** Cómo se ve un iPhone por fuera (ver iphones.json; la geometría sale de scripts/iphone_parts.py). */
+export interface PhoneLook {
+  readonly frame: FrameMetal;
+  readonly back: PhoneFinish;
+  readonly moduleFinish: PhoneFinish;
+  readonly front: PhoneFront;
+  readonly colors: readonly PhoneColor[];
+}
+
+type RawLook = Partial<PhoneLook> & { readonly like?: string };
+const LOOKS = iphones as unknown as Readonly<Record<string, RawLook>>;
+
+const FALLBACK_COLOR: PhoneColor = { id: 'negro', name: 'Negro', back: '#35393b', frame: '#3a3d40' };
+const FALLBACK_LOOK: PhoneLook = {
+  frame: 'aluminio',
+  back: 'mate',
+  moduleFinish: 'mate',
+  front: 'isla',
+  colors: [FALLBACK_COLOR],
+};
+
+/** Acabados y colores de un modelo; "like" hereda de otro (los Max y Plus del mismo año). */
+export function phoneLook(renderId: string): PhoneLook {
+  const raw = LOOKS[renderId];
+  if (!raw) return FALLBACK_LOOK;
+  const base = raw.like ? phoneLook(raw.like) : FALLBACK_LOOK;
+  return {
+    frame: raw.frame ?? base.frame,
+    back: raw.back ?? base.back,
+    moduleFinish: raw.moduleFinish ?? base.moduleFinish,
+    front: raw.front ?? base.front,
+    colors: raw.colors?.length ? raw.colors : base.colors,
+  };
+}
+
+/** El color elegido si existe en ese modelo; si no, el primero de su lista. */
+export function phoneColor(renderId: string, colorId: string | null): PhoneColor {
+  const colors = phoneLook(renderId).colors;
+  return colors.find((c) => c.id === colorId) ?? colors[0] ?? FALLBACK_COLOR;
+}
+
 interface RenderInfo {
   readonly case: Box;
   readonly camera: Box;
@@ -85,7 +140,14 @@ const images = import.meta.glob<string>('../assets/cases/*.webp', {
   import: 'default',
 });
 
-export const caseImageUrl = (renderId: string): string => images[`../assets/cases/${renderId}.webp`] ?? '';
+/**
+ * Foto del forro con el iPhone de ese color. La principal (`<modelo>.webp`) lleva el primer color;
+ * los demás van en `<modelo>--<color>.webp` y, si alguno falta, se muestra la principal.
+ */
+export const caseImageUrl = (renderId: string, colorId: string | null = null): string =>
+  (colorId ? images[`../assets/cases/${renderId}--${colorId}.webp`] : undefined) ??
+  images[`../assets/cases/${renderId}.webp`] ??
+  '';
 
 /** Dónde está el forro dentro de la imagen (fracciones 0–1 desde arriba a la izquierda). */
 export const caseBox = (renderId: string): Box =>
